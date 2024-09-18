@@ -1,0 +1,24 @@
+.ResponseCard {
+  border: 1px solid gray;
+  background-color: #1d1f25;
+  border-radius: 5px;
+  margin-top: 20px;
+  padding: 5px 20px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    &__name {
+      font-weight: bold;
+      color: aqua;
+    }
+    &__date {
+      color: gray;
+    }
+  }
+  &__content {
+    &__image {
+      height: 50vmin;
+    }
+  }
+}
