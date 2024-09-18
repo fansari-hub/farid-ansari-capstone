@@ -158,3 +158,8 @@ TBD
 * Ability to upload a text/CSV file for LLM analysis
 * Ability to receive a response from the LLM that is then converted to a text/CSV file
 * Ability for the user to "load" previous historical conversations, organized by tabs
+
+## Pre-feedback
+* Present Characters (or a team of roster (Software Developer, product engineer, tester)
+* Boardroom AI (Lawyer, accountant, whatever)
+* Generator avatar
