@@ -7,15 +7,15 @@
     "knex": "^3.1.0",
     "mysql2": "^3.11.3",
     "nodeman": "^1.1.2",
-    "nodemon": "^3.1.5"
+    "nodemon": "^3.1.5",
+    "uuid": "^10.0.0"
   },
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "start": "nodemon index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
