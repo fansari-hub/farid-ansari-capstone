@@ -7,12 +7,10 @@ require("dotenv").config();
 
 const PORT = process.env.HTTP_PORT || 5050;
 
-const rootRoutes = require('./routes/root-routes');
 const chatGTPRoutes = require('./routes/chatgpt-routes');
 
 app.use(express.static("public"));
 
-app.use('/', rootRoutes);
 app.use('/chatgpt', chatGTPRoutes);
 
 app.listen(PORT, () => {

@@ -43,35 +43,6 @@ const chatSend = async (tokens) => {
   }
 };
 
-const generateImage = async (tokens) => {
-  try {
-    const DISABLE_SAFE_PROMPT = "I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:";
-    const response = await axios.post(
-      "https://api.openai.com/v1/images/generations",
-      {
-        model: "dall-e-2",
-        prompt: tokens[tokens.length - 1].content,
-        n: 1,
-        size: "1024x1024",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const chatResponse = response.data.data[0];
-    console.log("OpenAI POST REQ: DALL-E-3 responded");
-    updateSessionInfo("user", tokens[tokens.length - 1].content);
-    updateSessionInfo("DALL-E", chatResponse);
-    return { reply: chatResponse.url, timestamp: Date.now(), revised_prompt : chatResponse.revised_prompt };
-  } catch (error) {
-    console.error("Error communicating with OpenAI API or Database update failed:", error);
-    return "Failed to fetch response from OpenAI API";
-  }
-};
-
 const chatReset = () => {
   updateSessionInfo("event", "ChatGPT was reset by user");
   console.log("Reseted ChatGPT.");
@@ -124,5 +95,4 @@ module.exports = {
   chatReset,
   getAllChatHistory,
   textToSpeech,
-  generateImage,
 };

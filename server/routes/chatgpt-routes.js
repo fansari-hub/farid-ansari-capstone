@@ -12,7 +12,4 @@ router.route("/tts")
 router.route("/vision")
 .post(chatgptController.httpVisonChat);
 
-router.route("/imagegen")
-.post(chatgptController.httpImageGeneretor);
-
 module.exports = router;
