@@ -68,17 +68,6 @@ export default function HomePage() {
     }
   };
 
-  const handleGenerateImage = async (event) => {
-    try {
-      const postURL = webapi.URL + "/chatgpt/imagegen";
-      const response = await axios.post(postURL, { message: userInput.current.value });
-      setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now(), image: null }, { name: "NodeGPT", content: response.data.revised_prompt, timestamp: response.data.timestamp, image: response.data.reply }]);
-    } catch (error) {
-      alert(`HomePage.handleSendChat() request failed with error: ${error}`);
-      return -1;
-    }
-  };
-
   return (
     <div className="HomePage">
       <div ref={chatDiv} className="HomePage__content">
@@ -97,9 +86,6 @@ export default function HomePage() {
             </button>
             <button id="TTSButton" onClick={handleGenerateTTS}>
               Say it!
-            </button>
-            <button id="TTSButton" onClick={handleGenerateImage}>
-              Image Generator
             </button>
             <div>
               <input ref={userImg} type="file" label="Use Vision" name="videoImg" accept="image/*" onChange={handleShowImage} />
