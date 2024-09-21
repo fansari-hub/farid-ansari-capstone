@@ -2,7 +2,6 @@ const chatgptModel = require("../models/chatgpt-model");
 const path = require("path");
 
 let conditioningPrompt = "You are a helpful assistant. Format response with HTML but only use tags between BODY without including the BODY tag. Incorporate emojis into your responses sparingly.";
-// let conditioningPrompt = "You are a helpful assistant. Incorporate emojis into your responses sparingly.";
 let chatHistory = [{ role: "system", content: conditioningPrompt }];
 
 const httpChatSend = async (req, res) => {
@@ -53,13 +52,6 @@ const httpGenerateTTS = async (_req, res) => {
   res.status(200).send({ audioURL: "http://localhost:8080/" + audioFile });
 };
 
-const httpImageGeneretor = async (req, res) => {
-  const userMessage = req.body.message;
-  const chatResponse = await chatgptModel.generateImage([...chatHistory, { role: "user", content: userMessage }]);
-  res.status(200).json(chatResponse);
-  chatHistory.push({ role: "user", content: userMessage });
-  chatHistory.push({ role: "assistant", content: chatResponse.revised_prompt });
-};
 
 module.exports = {
   httpChatSend,
@@ -67,5 +59,4 @@ module.exports = {
   httpChatHistory,
   httpGenerateTTS,
   httpVisonChat,
-  httpImageGeneretor
 };
