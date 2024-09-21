@@ -61,15 +61,17 @@ Individuals who want to experiment with LLMs and go beyond OpenAI's standard Cha
 
 ### Endpoints
 
-router.route("/")
+#### router.route("/")
 .post(chatgptController.httpChatSend) : Accepts user text input and returns ChatGPT response from openAI.
+
 .delete(chatgptController.httpChatReset): Forces the LLM to "Forget the current confirmation", basically resetting "state" by deleting previous tokens. 
+
 .get(chatgptController.httpChatHistory): Return all historical conversation saved in the server database accross all previous sessions. This endpoint will be used for one of the "nice to have" strech goals.
 
-router.route("/tts")
+#### router.route("/tts")
 .post(chatgptController.httpGenerateTTS); Takes last text output provided by chatGPT and returns an audio file from OpenAI (wav) to the front-end. This is a strech goal.
 
-router.route("/vision")
+#### router.route("/vision")
 .post(chatgptController.httpVisonChat); Accept user text input and a "base-64" string representation of a image uploaded by the front-end and returns the OpenAI response. This is a strech goal.
 
 
