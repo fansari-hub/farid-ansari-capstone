@@ -1,7 +1,4 @@
-# farid-ansari-capstone
-
-# Project Title
-Janus GPT 
+# Janus GPT
 ![screenshot](./janus-logo.webp)
 
 ## Overview
