@@ -2,6 +2,7 @@
 
 # Project Title
 Janus GPT 
+![./janus-logo.webp]
 
 ## Overview
 
