@@ -1,5 +1,5 @@
 # Janus GPT
-![screenshot](./janus-logo.webp)
+![screenshot](./janus-logo2.webp)
 
 ## Overview
 
@@ -7,17 +7,19 @@ Janus GPT: One AI, Multiple Perspectives -- Experience the power of multiple AI 
 
 ### Problem
 
-ChatGPT currently interacts with users using one AI "personality" at a time based on an assistant "conditioning" prompt. If the user wants the AI to change personality and "creativity temperature," they need to either start a new chat session with a different "conditioning" prompt or ask the AI to change its personality mid-conversation, which feels unnatural. "Janus GPT" addresses this problem by allowing the user to talk to multiple ChatGPT personalities simultaneously by acting as a conversation "director". These ChatGPT personalities can interact with each other, offering a broader perspective on the same question asked by the user. This has also the potential to generate hilarious meme-worthy LLM conversations.
+ChatGPT currently interacts with users using one AI "personality" at a time, based on an assistant "conditioning" prompt. If a user wants the ChatGPT to change its personality or "creativity temperature," they must either start a new chat session with a different conditioning prompt or ask the AI to change its personality mid-conversation, which can feel unnatural. 
+
+"Janus GPT" solves this issue by allowing users to engage with multiple ChatGPT personalities simultaneously, acting as a conversation "director." These ChatGPT personalities can also interact with one another, providing a broader perspective on the same question asked by the user. This setup also has the potential to create hilarious, meme-worthy LLM conversations.
 
 ### User Profile
 
-Individuals who would like to experiment with LLM and go beyond what OpenAI's standard ChatGPT to seek advice from the LLM with using broader "perspectives" simultenously.
+Individuals who want to experiment with LLMs and go beyond OpenAI's standard ChatGPT can use Janus GPT to seek advice from the LLM by getting broader "perspectives" simultaneously.
 
 ###  Features
 
-* Ability to Chat with one or more LLM "personality" at the same time.
-* User can send message to all personalities or a single personality (@username <message>).
-* LLM Personality "profile" page where the user can be able to provide a conditioning prompt and other parameters. The LLM can also generate its own "avatar" image to be used in the chat using the provided conditioning prompt.
+* Ability to chat with one or more LLM "personalities" at the same time.
+* User can send messages to all personalities or send a messsage to a single personality using @username.
+* A LLM Personality "profile" page where the user can provide a conditioning prompt and other parameters. The LLM can also generate its own "avatar" image based on the provided conditioning prompt.
 
 ## Implementation
 
@@ -49,15 +51,13 @@ Individuals who would like to experiment with LLM and go beyond what OpenAI's st
 
 ### Sitemap
 
-* A homepage where the user interacts with the LLM. This is really a single page application. 
+* A homepage where the user interacts with the LLM.
+* A profile page to configure the LLM personalities.
 
-### Mockups
-
-* I already have a working proof of concept application with a working backend that has the basic OpenAI features implemented and is able to communicate withe OpenAI. 
 
 ### Data
 
-* The database at this point will simply be used to store conversation history that can be recalled later by the user on the frontend. There will most likely be one or two tables to store the information. This is only needed if the "historical conversation with tabs" stretch goal (see nice-to-haves) is implemented. 
+* The database will simply be used to store conversation history that can be recalled later by the user on the frontend. There will most likely be one or two tables to store the information. This is only needed if the "historical conversation with tabs" stretch goal (see nice-to-haves) is implemented. 
 
 ### Endpoints
 
@@ -75,11 +75,12 @@ router.route("/vision")
 
 ### Research on Technical Risk / Unknown
 
-Based on research, it is possible to give the LLM multiple "personalities" presented as different "AIs" to the user in the same chat.
+Based on research, it is possible to give the LLM multiple "personalities" that are presented as different "AIs" to the user within the same chat. One of the key features of an LLM is that it has no persistent memory or state, therefore in order to create the illusion of an ongoing "conversation," previous chats need to be appended to each new request (combining old tokens with new tokens).
 
-A feature of an LLM is that it has no persistent memory or state, so in order to create the illusion of a "conversation," previous chats need to be appended to every new request (old tokens + new tokens).
+This stateless nature can be leveraged to introduce "multiple personalities" within the LLM, thus allowing the user to interact with different "personalities" at the same time. The server can achieve this by manipulating the token history and adjusting how the conversation history is presented to each LLM "personality." Even though the same OpenAI endpoint and API key are being used, each personality can be distinct in how it processes and responds.
 
-This stateless feature can be exploited: since the LLM has no memory we can actually use this to give it a split personality and allow the user to ask different personalities of the LLM to give their "opinion" or response. The server can achieve this by modifying the token history and changing the way it is presented to each LLM "personality," even though it's the same endpoint with the same API key. The server can moderate the LLM "conversation" by randomly choosing whether an LLM personality should respond and introducing a random "response" delay for each personality to shuffle the order of who talks when.
+Additionally, the server can moderate the conversation by deciding whether a specific LLM personality should respond and by introducing random response delays for each personality. This helps create a more natural and dynamic conversation experience.
+
 
 Here's an example of how this can be achieved, let's assume we have two AI "personalities" called Bob and Alice:
 
@@ -131,12 +132,12 @@ The application will not require authentication. However a paid open-AI developp
 
 ## Roadmap
 
-- Create client (will use existing functionality developed during research as starter-code)
-- Create server (will use existing functionality developed during research as starter-code)
+- Create client (will use existing functionality developed during research as starter-code).
+- Create server (will use existing functionality developed during research as starter-code).
 - Create db migrations.
 - Create nice SASS/CSS.
-- Bug fixes
-- Demo DAY
+- Bug fixes.
+- Demo DAY.
 
 
 ## Nice-to-haves
