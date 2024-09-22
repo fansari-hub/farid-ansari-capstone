@@ -1,5 +1,4 @@
 const chatgptModel = require("../models/chatgpt-model");
-const path = require("path");
 
 let conditioningPrompt = "You are a helpful assistant. Format response with HTML but only use tags between BODY without including the BODY tag. Incorporate emojis into your responses sparingly.";
 let chatHistory = [{ role: "system", content: conditioningPrompt }];
@@ -35,16 +34,6 @@ const httpVisonChat = async (req, res) => {
   chatHistory.push({ role: "assistant", content: chatResponse.reply });
 };
 
-const httpChatReset = async (_req, res) => {
-  chatgptModel.chatReset();
-  chatHistory = [{ role: "system", content: "You are a helpful assistant. Format all responses in HTML but only include the content inside the body tag without the body tag itself. Attempt to incorporate emojis in your response." }];
-  res.status(200).json({ reply: "NodeGPT has been reset and forgotten all previous conversations" });
-};
-
-const httpChatHistory = async (_req, res) => {
-  let allSessionsHistory = await chatgptModel.getAllChatHistory();
-  res.status(200).json(allSessionsHistory);
-};
 
 const httpGenerateTTS = async (_req, res) => {
   const audioFile = await chatgptModel.textToSpeech(chatHistory[chatHistory.length - 1].content);
@@ -55,8 +44,6 @@ const httpGenerateTTS = async (_req, res) => {
 
 module.exports = {
   httpChatSend,
-  httpChatReset,
-  httpChatHistory,
   httpGenerateTTS,
   httpVisonChat,
 };

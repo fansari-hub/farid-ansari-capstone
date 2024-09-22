@@ -1,13 +1,8 @@
 const axios = require("axios");
-const knex = require("knex")(require("../knexfile"));
-const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 const fs = require("fs");
-const { time } = require("console");
 const AUDIO_FILE_PATH = "./public/";
 
-let sessionID = uuidv4();
-//updateSessionInfo("event", "Server session started");
 
 const chatSend = async (tokens) => {
   try {
@@ -43,16 +38,6 @@ const chatSend = async (tokens) => {
   }
 };
 
-const chatReset = () => {
-  updateSessionInfo("event", "ChatGPT was reset by user");
-  console.log("Reseted ChatGPT.");
-};
-
-const getAllChatHistory = async () => {
-  let history = await knex("sessionHistory");
-  return history;
-};
-
 const textToSpeech = async (input) => {
   try {
     const response = await axios.post(
@@ -81,18 +66,8 @@ const textToSpeech = async (input) => {
   }
 };
 
-async function updateSessionInfo(role, content) {
-  try {
-    const id = await knex("sessionHistory").insert({ SessionID: sessionID, role: role, content: content, timestamp: Date.now() });
-  } catch (error) {
-    console.log("Could not update database with session information!");
-    console.log(error);
-  }
-}
 
 module.exports = {
   chatSend,
-  chatReset,
-  getAllChatHistory,
   textToSpeech,
 };
