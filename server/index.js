@@ -7,13 +7,13 @@ require("dotenv").config();
 
 const PORT = process.env.HTTP_PORT || 5050;
 
-const chatGTPRoutes = require('./routes/chatgpt-routes');
+//const chatGTPRoutes = require('./routes/chatgpt-routes');
 const personalityRoutes = require('./routes/personality-routes');
 const chatSessionRoutes = require('./routes/chatSession-routes');
 
 app.use(express.static("public"));
 
-app.use('/chatgpt', chatGTPRoutes);
+//app.use('/chatgpt', chatGTPRoutes);
 app.use('/personality', personalityRoutes);
 app.use('/chatsession', chatSessionRoutes);
 

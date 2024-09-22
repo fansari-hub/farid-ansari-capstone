@@ -1,11 +1,12 @@
-const chatSession = require("../models/chatSession-model");
+const chatSessionModel = require("../models/chatSession-model");
+const chatgptController = require("./chatgpt-controller");
 
 const chatSessions = [];
 
 async function initialize() {
-  let chatSessionList = await chatSession.ChatSession.getChatSessions();
+  let chatSessionList = await chatSessionModel.ChatSession.getChatSessions();
   chatSessionList.forEach((e) => {
-    chatSessions.push(new chatSession.ChatSession(e.sessionID));
+    chatSessions.push(new chatSessionModel.ChatSession(e.sessionID));
   });
 }
 initialize();
@@ -15,7 +16,7 @@ const httpCreateSession = async (req, res) => {
     res.status(500).json({ "Error Message": "Must provide a session name" });
     return -1;
   }
-  newIndex = chatSessions.push(new chatSession.ChatSession(req.body.name));
+  newIndex = chatSessions.push(new chatSessionModel.ChatSession(req.body.name));
   res.status(200).json(chatSessions[newIndex - 1].data);
 };
 
@@ -43,6 +44,8 @@ const httpInsertChat = async (req, res) => {
     return -1;
   }
   const addedMsg = chatSessions[sessionIndex].setChatGlobal(req.body.senderID, req.body.message);
+  chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id);
+
   res.status(200).json(addedMsg);
 };
 

@@ -7,6 +7,11 @@ class ChatSession {
     return queryResult;
   }
 
+  static async getChatSessionChatDetail(strSessionID) {
+    const queryResult = await knexops.selectDatabaseAll("chatSessionHist", {sessionId: strSessionID});
+    return queryResult;
+  }
+
   constructor(strSessionID, strName) {
     
     if (strSessionID && typeof strSessionID === "string") {
@@ -44,6 +49,7 @@ class ChatSession {
       receiverID: strReceiverID,
       message: strMessage,
       timestamp: Date.now(),
+      messageID: uuidv4()
     };
 
     this.data.currentSessionHistory.push(dataObj);
@@ -61,6 +67,7 @@ class ChatSession {
       receiverID: "",
       message: strMessage,
       timestamp: Date.now(),
+      messageID: uuidv4()
     };
 
     this.data.currentSessionHistory.push(dataObj);

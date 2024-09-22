@@ -1,5 +1,4 @@
 const knexops = require("./utils/knexops");
-const knex = require("knex")(require("../knexfile"));
 const { v4: uuidv4 } = require("uuid");
 
 class ChatPersonality {
@@ -7,6 +6,12 @@ class ChatPersonality {
     const queryResult = await knexops.selectDatabase("personalityID", "personalities");
     return queryResult;
   }
+
+  static async getPersonalityDetails() {
+    const queryResult = await knexops.selectDatabaseAll("personalities");
+    return queryResult;
+  }
+
 
   constructor(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt) {
     if (strPersonalityID && typeof strPersonalityID === "string") {
