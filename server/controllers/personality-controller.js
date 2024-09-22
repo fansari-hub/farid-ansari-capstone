@@ -62,7 +62,6 @@ const httpUpdatePersonality = async (req, res) => {
   }
 
   const personIndex = chatPersonalities.findIndex((o) => o.data.personalityID === req.params.id);
-  console.log(chatPersonalities[0].data);
   const updateObj = {
     name: req.body.name,
     avatarImg: req.body.avatarImg,

@@ -1,6 +1,16 @@
 const chatSession = require("../models/chatSession-model");
 
-let chatSessions = [new chatSession.ChatSession("Default")];
+const chatSessions = [];
+//let chatSessions = [new chatSession.ChatSession("", "Default")];
+
+async function initialize() {
+  let chatSessionList = await chatSession.ChatSession.getChatSessions();
+  //console.log(chatSessionList);
+  chatSessionList.forEach((e) => {
+    chatSessions.push(new chatSession.ChatSession(e.sessionID));
+  });
+}
+initialize();
 
 const httpCreateSession = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {

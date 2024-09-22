@@ -1,26 +1,19 @@
+const knexops = require("./utils/knexops");
 const knex = require("knex")(require("../knexfile"));
-
 const { v4: uuidv4 } = require("uuid");
 
 class ChatPersonality {
-  static existingSessions = [];
-
-  static async getPersonalityList(){
-    let result;
-    try{
-       result =  await knex.select('personalityID').from('personalities');
-    } catch{
-      console.log("Could not select from database");
-      console.log(error);
-    }
-    return result;
+  static async getPersonalityList() {
+    const queryResult = await knexops.selectDatabase("personalityID", "personalities");
+    return queryResult;
   }
-
 
   constructor(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt) {
     if (strPersonalityID && typeof strPersonalityID === "string") {
-      this.selectDatabase(strPersonalityID);
-
+      let queryResult = knexops.selectDatabaseAll("personalities", { personalityID: strPersonalityID });
+      queryResult.then((queryResult) => {
+        this.data = queryResult[0];
+      });
     } else {
       if (!strName || typeof strName !== "string") {
         throw Error("ChatPersonality: You must provide a personality name for the constructor");
@@ -50,7 +43,7 @@ class ChatPersonality {
         personalityID: uuidv4(),
       };
 
-      this.insertDatabase(this.data);
+      knexops.insertDatabase("personalities", this.data);
     }
 
     return this;
@@ -86,36 +79,7 @@ class ChatPersonality {
     this.data.temperature = updObj.temperature;
     this.data.conditionPrompt = updObj.conditionPrompt;
 
-    this.updateDatabase(this.data);
-  }
-
-  async insertDatabase(data) {
-    try {
-      const id = await knex("personalities").insert(data);
-    } catch (error) {
-      console.log("Could not update database!");
-      console.log(error);
-    }
-  }
-
-  async updateDatabase(data) {
-    try {
-      const id = await knex("personalities").update(data).where({ personalityID: data.personalityID });
-    } catch (error) {
-      console.log("Could not update database!");
-      console.log(error);
-    }
-  }
-
-  async selectDatabase(id) {
-    let result;
-    try {
-       result = await knex("personalities").where({personalityID : id});
-    } catch (error) {
-      console.log("Could not select from database");
-      console.log(error);
-    }
-    this.data = result[0];
+    knexops.updateDatabase("personalities", this.data, { personalityID: this.data.personalityID });
   }
 }
 

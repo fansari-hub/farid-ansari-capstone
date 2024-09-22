@@ -1,15 +1,29 @@
+const knexops = require("./utils/knexops");
+
 const { v4: uuidv4 } = require("uuid");
 
 class ChatSession {
-  constructor(name) {
-    if (!name) {
-      throw Error("ChatSession: You must provide a session name for the constructor");
-    }
+  static async getChatSessions() {
+    const queryResult = await knexops.selectDatabase("sessionID", "chatSessions");
+    return queryResult;
+  }
 
-    this.data = {
-      "sessionID" : uuidv4(),
-      "sessionName" : name,
-      "currentSessionHistory" : [],
+  constructor(strSessionID, strName) {
+    if (strSessionID && typeof strSessionID === "string") {
+      let queryResult = knexops.selectDatabaseAll("chatSessions", { sessionID: strSessionID });
+      queryResult.then((queryResult) => {
+        this.data = queryResult[0];
+      });
+    } else {
+      if (!strName) {
+        throw Error("ChatSession: You must provide a session name for the constructor to initate a new session!");
+      }
+      this.data = {
+        sessionID: uuidv4(),
+        sessionName: strName,
+        currentSessionHistory: [],
+      };
+      knexops.insertDatabase("chatSessions", { sessionID: this.data.sessionID, sessionName: this.data.sessionName });
     }
     return this;
   }
@@ -24,7 +38,7 @@ class ChatSession {
       receiver: strReceiverID,
       message: strMessage,
       timestamp: Date.now(),
-      message_id : uuidv4(),
+      message_id: uuidv4(),
     });
   }
 
@@ -39,10 +53,10 @@ class ChatSession {
       receiver: "",
       message: strMessage,
       timestamp: Date.now(),
-      message_id : uuidv4(),
+      message_id: uuidv4(),
     });
 
-    return this.data.currentSessionHistory[newIndex-1];
+    return this.data.currentSessionHistory[newIndex - 1];
   }
 
   getCurrentSessionChat(strSession_id) {
