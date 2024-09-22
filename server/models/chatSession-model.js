@@ -1,5 +1,4 @@
 const knexops = require("./utils/knexops");
-
 const { v4: uuidv4 } = require("uuid");
 
 class ChatSession {
@@ -9,11 +8,18 @@ class ChatSession {
   }
 
   constructor(strSessionID, strName) {
+    
     if (strSessionID && typeof strSessionID === "string") {
-      let queryResult = knexops.selectDatabaseAll("chatSessions", { sessionID: strSessionID });
+      const queryResult = knexops.selectDatabaseAll("chatSessions", { sessionID: strSessionID });
       queryResult.then((queryResult) => {
         this.data = queryResult[0];
+        this.data.currentSessionHistory = [];
       });
+      const queryResultSession = knexops.selectDatabaseAll("chatSessionHist", { sessionID: strSessionID });
+      queryResultSession.then((queryResultSession) => {
+        this.data.currentSessionHistory = queryResultSession;
+      });
+
     } else {
       if (!strName) {
         throw Error("ChatSession: You must provide a session name for the constructor to initate a new session!");
@@ -32,31 +38,34 @@ class ChatSession {
     if (!strReceiverID || !strSenderID || !strMessage) {
       throw Error("ChatSession.setChatPrivate: You must provide ReceiverID, SenderID and Message");
     }
-    this.data.currentSessionHistory.push({
-      session_id: this.sessionID,
-      sender: strSenderID,
-      receiver: strReceiverID,
+    const dataObj = {
+      sessionID: this.data.sessionID,
+      senderID: strSenderID,
+      receiverID: strReceiverID,
       message: strMessage,
       timestamp: Date.now(),
-      message_id: uuidv4(),
-    });
+    };
+
+    this.data.currentSessionHistory.push(dataObj);
+    knexops.insertDatabase("chatSessionHist", dataObj);
+    return dataObj;
   }
 
   setChatGlobal(strSenderID, strMessage) {
     if (!strSenderID || !strMessage) {
       throw Error("ChatSession.setChatglobal: You must provide SenderID and Message");
     }
-
-    let newIndex = this.data.currentSessionHistory.push({
-      session_id: this.sessionID,
-      sender: strSenderID,
-      receiver: "",
+    const dataObj = {
+      sessionID: this.data.sessionID,
+      senderID: strSenderID,
+      receiverID: "",
       message: strMessage,
       timestamp: Date.now(),
-      message_id: uuidv4(),
-    });
+    };
 
-    return this.data.currentSessionHistory[newIndex - 1];
+    this.data.currentSessionHistory.push(dataObj);
+    knexops.insertDatabase("chatSessionHist", dataObj);
+    return dataObj;
   }
 
   getCurrentSessionChat(strSession_id) {
