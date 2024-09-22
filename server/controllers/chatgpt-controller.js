@@ -4,18 +4,17 @@ const chatSessionModel = require("../models/chatSession-model");
 
 let personalityData = [];
 let chatHistoryData = [];
-let gptData = [];
 
-function generateGPTChat(strSenderID, strMessage, strSessionID){
-  if (!strSenderID && typeof strSenderID !== "string"){
+function generateGPTChat(strSenderID, strMessage, strSessionID) {
+  if (!strSenderID && typeof strSenderID !== "string") {
     throw Error("generateGPTChat: You must provide a strSenderID string!");
   }
 
-  if (!strMessage && typeof strMessage !== "string"){
+  if (!strMessage && typeof strMessage !== "string") {
     throw Error("generateGPTChat: You must provide a strMessage string!");
   }
 
-  if (!strSessionID && typeof strSessionID !== "string"){
+  if (!strSessionID && typeof strSessionID !== "string") {
     throw Error("generateGPTChat: You must provide a strSessionID string!");
   }
 
@@ -23,40 +22,32 @@ function generateGPTChat(strSenderID, strMessage, strSessionID){
     personalityData = await personalityModel.ChatPersonality.getPersonalityDetails();
     chatHistoryData = await chatSessionModel.ChatSession.getChatSessionChatDetail(strSessionID);
     return true;
-  }
-  
+  };
+
   getData().then(() => {
-    let chatHistory = [];
+    let chatHistory="" ;
     let senderName;
-    chatHistoryData.forEach(e => {
-      const nameIndex = personalityData.findIndex(o => o.personalityID === e.senderID);
-      if (nameIndex === -1){
-        senderName = "User"
-      } else
-      {
+    chatHistoryData.forEach((e) => {
+      const nameIndex = personalityData.findIndex((o) => o.personalityID === e.senderID);
+      if (nameIndex === -1) {
+        senderName = "User";
+      } else {
         senderName = personalityData[nameIndex].name;
       }
-      console.log(senderName);
-      
+      chatHistory += ` ${senderName} said: ${e.message}`
+    });
 
-      chatHistory.push({
-        "message" : e.message,
-        "sender"  : "Hello"
-      });
-    });
-    personalityData.forEach(e => {
-      const conditionPrompt = e.conditionPrompt;
-      const name = e.name;
-      const temperature = e.temperature;
-    });
-    // console.log(personalityData);
-    // console.log(chatHistoryData);
-  })
-  
+  const systemPrompt = `Your name is ${personalityData[0].name}. ${personalityData[0].conditionPrompt}`;
+  const gptData = [
+    {"role" : "system", "content": systemPrompt },
+    {"role" : "user", "content" : chatHistory}
+  ];
+
+  console.log(gptData);
+
+  });
+
 }
-
-
-
 
 // let conditioningPrompt = "You are a helpful assistant. Format response with HTML but only use tags between BODY without including the BODY tag. Incorporate emojis into your responses sparingly.";
 // let chatHistory = [{ role: "system", content: conditioningPrompt }];
@@ -92,16 +83,14 @@ function generateGPTChat(strSenderID, strMessage, strSessionID){
 //   chatHistory.push({ role: "assistant", content: chatResponse.reply });
 // };
 
-
 // const httpGenerateTTS = async (_req, res) => {
 //   const audioFile = await chatgptModel.textToSpeech(chatHistory[chatHistory.length - 1].content);
 //   //res.status(200).sendFile(path.resolve("./public/" + audioFile)); This sends the actual audio file, not URL. Only used for direct testing
 //   res.status(200).send({ audioURL: "http://localhost:8080/" + audioFile });
 // };
 
-
 module.exports = {
-  generateGPTChat
+  generateGPTChat,
   // httpChatSend,
   //httpGenerateTTS,
   //httpVisonChat,
