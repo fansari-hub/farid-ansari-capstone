@@ -1,6 +1,15 @@
 const chatPersonality = require("../models/personality-model");
 
-const chatPersonalities = [new chatPersonality.ChatPersonality("HR Director", "avatar.png", 0.5, "You are an HR Director providing business advice in a board meeting."), new chatPersonality.ChatPersonality("CEO", "avatar.png", 0.5, "You are an CEO providing business advice in a board meeting."), new chatPersonality.ChatPersonality("IT Director", "avatar.png", 0.5, "You are an IT director business advice in a board meeting.")];
+const chatPersonalities = [];
+
+async function initialize() {
+  let personalityList = await chatPersonality.ChatPersonality.getPersonalityList();
+  personalityList.forEach((e) => {
+    chatPersonalities.push(new chatPersonality.ChatPersonality(e.personalityID));
+  });
+}
+
+initialize();
 
 const httpCreatePersonality = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {
@@ -23,7 +32,7 @@ const httpCreatePersonality = async (req, res) => {
     return -1;
   }
 
-  let newIndex = chatPersonalities.push(new chatPersonality.ChatPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt));
+  let newIndex = chatPersonalities.push(new chatPersonality.ChatPersonality("", req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt));
   res.status(200).json(chatPersonalities[newIndex - 1].data);
 };
 
@@ -53,6 +62,7 @@ const httpUpdatePersonality = async (req, res) => {
   }
 
   const personIndex = chatPersonalities.findIndex((o) => o.data.personalityID === req.params.id);
+  console.log(chatPersonalities[0].data);
   const updateObj = {
     name: req.body.name,
     avatarImg: req.body.avatarImg,
@@ -61,7 +71,7 @@ const httpUpdatePersonality = async (req, res) => {
   };
 
   if (personIndex === -1) {
-    console.log(req.params.id);
+    //console.log(req.params.id);
     res.status(401).json({ error: "Personality ID not found" });
     return -1;
   }
