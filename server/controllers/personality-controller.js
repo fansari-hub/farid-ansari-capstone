@@ -24,8 +24,6 @@ const httpCreatePersonality = async (req, res) => {
   }
 
   let newIndex = chatPersonalities.push(new chatPersonality.ChatPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt));
-  console.log(newIndex);
-
   res.status(200).json(chatPersonalities[newIndex - 1].data);
 };
 
