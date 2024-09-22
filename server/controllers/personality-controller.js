@@ -19,6 +19,23 @@ const chatPersonalities = [
       .json(chatPersonalities[newIndex-1]);
     }
 
+    const httpGetPersonalities = async (req, res) => {
+      res.status(200).json(chatPersonalities);
+    };
+
+    const httpUpdatePersonality= async (req, res) => {
+      const personIndex = chatPersonalities.findIndex((o) => o.personalityID === req.params.id);
+      if (personIndex === -1){
+        res.status(401).json({"message": "error, personality not found"});
+        return -1;
+      }
+   //TDO UPDATE FUNCTION
+      res.status(200).json({"message": "success, found personality!"});
+    }
+    
+
     module.exports = {
         httpCreatePersonality,
+        httpGetPersonalities,
+        httpUpdatePersonality
       };

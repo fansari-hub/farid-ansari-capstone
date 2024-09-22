@@ -15,6 +15,7 @@ const httpInsertChat = async (req, res) => {
   const sessionIndex = chatSessions.findIndex((o) => o.sessionID === req.params.id);
   if (sessionIndex === -1){
     res.status(401).json({});
+    return -1;
   }
   chatSessions[sessionIndex].setChatGlobal(
     req.body.senderID,
