@@ -2,46 +2,66 @@ const { v4: uuidv4 } = require("uuid");
 
 class ChatPersonality {
   constructor(strName, strAvatarImg, floatTemperature, strConditionPrompt) {
-    this.response = {
-      status: 0,
-      message: "not set",
-    };
 
     if (!strName || typeof strName !== "string") {
-      this.response.status = 500;
-      this.response.message = "You must provide string for name!";
-      return this.response;
+      throw Error("ChatPersonality: You must provide a personality name for the constructor");
     }
 
     if (!strAvatarImg || typeof strAvatarImg !== "string") {
-      this.response.status = 500;
-      this.response.message = "You must provide string URL for avatar!";
-      return this.response;
+      throw Error("ChatPersonality: You must provide an avatarIMG URL string for the constructor");
     }
 
     if (!floatTemperature || typeof floatTemperature !== "number") {
-      if (floatTemperature > 1.0 || floatTemperature < 0.0) {
-        this.response.status = 500;
-        this.response.message = "You must provide numeric values between 0.0 and 1.0 for tempeature!";
-        return this.response;
-      }
+      throw Error("ChatPersonality: You must provide a temperature number between 0.0 and 1.0 for the constructor");
+    }
+
+    if (floatTemperature > 1.0 || floatTemperature < 0.0) {    
+      floatTemperature = 0.5;
     }
 
     if (!strConditionPrompt || typeof strConditionPrompt !== "string") {
-      this.response.status = 500;
-      this.response.message = "You must provide string for Condition Prompt!";
-      return this.response;
+      throw Error("ChatPersonality: You must provide a condition prompt for the constructor");
+    }
+    this.data ={
+      "name" : strName,
+      "avatarImg" : strAvatarImg,
+      "temperature" : floatTemperature,
+      "conditionPrompt" : strConditionPrompt,
+      "personalityID" : uuidv4(),
+    }
+    return this;
+  }
+
+  updatePersonality(updObj) {
+
+    if (typeof updObj !== "object"){
+      throw Error("ChatPersonality.updatePersonality: You must provide an update object!");
     }
 
-    this.name = strName;
-    this.avatarImg = strAvatarImg;
-    this.temperature = floatTemperature;
-    this.conditionPrompt = strConditionPrompt;
-    this.response.status = 200;
-    this.response.message = "Personality Created";
-    this.personalityID = uuidv4();
+    if (!updObj.name || typeof updObj.name !== "string") {
+      throw Error("ChatPersonality.updatePesonality: You must provide a personality name for the update object");
+    }
 
-    return this;
+    if (!updObj.avatarImg || typeof updObj.avatarImg  !== "string") {
+      throw Error("ChatPersonality.updatePesonality: You must provide an avatarIMG URL string for the update object");
+    }
+
+    if (!updObj.temperature || typeof updObj.temperature !== "number") {
+        throw Error("ChatPersonality.updatePesonality: You must provide a temperature number between 0.0 and 1.0 update object");
+    }
+
+    if (updObj.temperature> 1.0 || updObj.temperature < 0.0) {    
+      updObj.temperature = 0.5;
+    }
+
+    if (!updObj.conditionPrompt || typeof updObj.conditionPrompt !== "string") {
+      throw Error("ChatPersonality.updatePesonality: You must provide a condition prompt for the update object");
+    }
+
+    this.data.name = updObj.name;
+    this.data.avatarImg = updObj.avatarImg;
+    this.data.temperature = updObj.temperature;
+    this.data.conditionPrompt = updObj.conditionPrompt;
   }
 }
 
