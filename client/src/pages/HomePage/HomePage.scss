@@ -1,7 +1,13 @@
 .HomePage {
+  display: flex;
+  background-color: #282c34;
+
+  &__left{
+    background-color: black;
+  }
+  &__main{
     text-align: center;
-    margin: auto;
-    background-color: #282c34;
+    margin: auto;  
     min-height: 100vh;
     color: white;
     font-size: calc(10px + 1vmin);
@@ -13,5 +19,6 @@
       overflow: auto;
       text-align: left;
     }
+  }
   }
   

@@ -1,13 +1,14 @@
 import "./HomePage.scss";
 import ResponseList from "../../components/ResponseList/ResponseList";
 import ChatInput from "../../components/ChatInput/ChatInput";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([]);
+  let [sessions, setSessions] = useState([{sessionName: "Useless"}]);
   let [personalities, setPersonalities] = useState([]);
   let [activeSession, setActiveSession] = useState("");
   let [chatlog, setChatlog] = useState([]);
@@ -20,7 +21,6 @@ export default function HomePage() {
         const response = await axios.get(webapi.URL + "/chatsession");
         setSessions(response.data);
         setActiveSession(response.data[0].sessionID);
-        //setChatlog(response.data[0].currentSessionHistory);
       } catch (error) {
         alert(`HomePage.fetchSessions() request failed with error: ${error}`);
       }
@@ -89,7 +89,6 @@ export default function HomePage() {
       };
       return obj;
     });
-
     try {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
@@ -101,12 +100,23 @@ export default function HomePage() {
     }
   };
 
+  const handleSessionChange = async (sessionID) => {
+    setActiveSession(sessionID);
+  }
+
   return (
     <div className="HomePage">
-      <div ref={chatDiv} className="HomePage__content">
-        <ResponseList responses={responses} />
+      <div className="HomePage__side">
+        <Sidebar chatSessions ={sessions} switchSessionCallBack={handleSessionChange}/>
       </div>
-      <ChatInput callback={handleSendChat} userInput={userInput}/>
+      <div className="HomePage__main">
+        <div ref={chatDiv} className="HomePage__main__content">
+          <ResponseList responses={responses} />
+        </div>
+        <div className="HomePage__main__input">
+          <ChatInput callback={handleSendChat} userInput={userInput} />
+        </div>
+      </div>
     </div>
   );
 }
