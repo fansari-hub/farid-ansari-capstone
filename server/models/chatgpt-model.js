@@ -11,7 +11,7 @@ const chatSend = async (tokens) => {
       {
         model: "gpt-4o-mini", // Use your desired model here
         messages: tokens,
-        temperature: 0.5,
+       temperature: 1.5,
       },
       {
         headers: {
@@ -25,12 +25,12 @@ const chatSend = async (tokens) => {
 
     if (typeof tokens[tokens.length - 1].content === "string") {
       console.log("This was a non-vision request.");
-      updateSessionInfo("user", tokens[tokens.length - 1].content);
+     // updateSessionInfo("user", tokens[tokens.length - 1].content);
     } else {
-      updateSessionInfo("user", tokens[tokens.length - 1].content[0].text);
+   //   updateSessionInfo("user", tokens[tokens.length - 1].content[0].text);
       console.log("This is a vision request, not saving image base64 information in dbase");
     }
-    updateSessionInfo("assistant", chatResponse);
+    //updateSessionInfo("assistant", chatResponse);
     return { reply: chatResponse, timestamp: Date.now() };
   } catch (error) {
     console.error("Error communicating with OpenAI API or Database update failed:", error);

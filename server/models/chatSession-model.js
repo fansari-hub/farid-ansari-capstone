@@ -16,9 +16,12 @@ class ChatSession {
     
     if (strSessionID && typeof strSessionID === "string") {
       const queryResult = knexops.selectDatabaseAll("chatSessions", { sessionID: strSessionID });
+      this.data = {}; //a little trick to have the session ID available even if promise is not resolved yet.
+      this.data.sessionID = strSessionID;
+      this.data.currentSessionHistory = [];
+
       queryResult.then((queryResult) => {
-        this.data = queryResult[0];
-        this.data.currentSessionHistory = [];
+        this.data.sessionName = queryResult[0].sessionName;
       });
       const queryResultSession = knexops.selectDatabaseAll("chatSessionHist", { sessionID: strSessionID });
       queryResultSession.then((queryResultSession) => {

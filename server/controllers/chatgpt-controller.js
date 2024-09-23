@@ -5,6 +5,7 @@ const chatSessionModel = require("../models/chatSession-model");
 let personalityData = [];
 let chatHistoryData = [];
 
+
 function generateGPTChat(strSenderID, strMessage, strSessionID) {
   if (!strSenderID && typeof strSenderID !== "string") {
     throw Error("generateGPTChat: You must provide a strSenderID string!");
@@ -27,11 +28,17 @@ function generateGPTChat(strSenderID, strMessage, strSessionID) {
   const GPTPersonalityChats = [];
 
   getData().then(() => {
+    let membersPresent = "";
+    
+    personalityData.forEach((p) =>{
+      membersPresent += p.name + ', ';
+    })
+
     personalityData.forEach((p) => {
       let personalChatHistory = [];
 
       const currentPersonalityName = p.name;
-      const systemPrompt = `Your name is ${currentPersonalityName}. ${p.conditionPrompt}`;
+      const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} Individuals present in the meeting are: ${membersPresent.replace(currentPersonalityName, "yourself")}and the user. Please provide responses in first-person as ${currentPersonalityName}. Tags will be used in the data to identify which individual is speaking. Do not include tags in your responses.`;
       personalChatHistory.push({ role: "system", content: systemPrompt });
 
       chatHistoryData.forEach((e) => {
@@ -51,37 +58,36 @@ function generateGPTChat(strSenderID, strMessage, strSessionID) {
         }
 
         if (chatSenderName === "User") {
-          personalChatHistory.push({ role: "user", content: `I said:${e.message}` });
+          personalChatHistory.push({ role: "user", content: `<user>${e.message}</user>` });
         } else if (chatSenderName !== "You") {
-          personalChatHistory.push({ role: "user", content: `${chatSenderName} said:${e.message}` });
+          personalChatHistory.push({ role: "user", content: `<${chatSenderName}>${e.message}</${chatSenderName}>` });
         }
       });
       GPTPersonalityChats.push(personalChatHistory);
     });
-
-    sendOut(GPTPersonalityChats);
+    conversationManager(GPTPersonalityChats, strSessionID);
   });
 }
 
-function sendOut(gptData){
-  console.log(gptData);
-  //const chatResponse = await chatgptModel.chatSend(gptData);
+async function conversationManager(gptData, strSessionID) {
+  
+  const randomPick = Math.floor(Math.random() * 3);
+  //console.log(gptData[randomPick]);
+  const chatResponse = await chatgptModel.chatSend(gptData[randomPick]);
+  console.log(chatResponse);
+  const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
+  chatToInsert.setChatGlobal(personalityData[randomPick].personalityID, chatResponse.reply);
+  //const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
+  
+  
+  //console.log(strSessionID);
   
 
+  // const chatResponse1 = await chatgptModel.chatSend(gptData[1]);
+  // console.log(chatResponse1);
+  // const chatResponse2 = await chatgptModel.chatSend(gptData[2]);
+  // console.log(chatResponse2);
 }
-
-
-
-// let conditioningPrompt = "You are a helpful assistant. Format response with HTML but only use tags between BODY without including the BODY tag. Incorporate emojis into your responses sparingly.";
-// let chatHistory = [{ role: "system", content: conditioningPrompt }];
-
-// const httpChatSend = async (req, res) => {
-//   const userMessage = req.body.message;
-//   const chatResponse = await chatgptModel.chatSend([...chatHistory, { role: "user", content: userMessage }]);
-//   res.status(200).json(chatResponse);
-//   chatHistory.push({ role: "user", content: userMessage });
-//   chatHistory.push({ role: "assistant", content: chatResponse.reply });
-// };
 
 // const httpVisonChat = async (req, res) => {
 //   const userMessage = req.body.message;
