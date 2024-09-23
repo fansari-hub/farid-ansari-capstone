@@ -19,8 +19,8 @@ function generateGPTChat(strSenderID, strMessage, strSessionID, res) {
   }
 
   const getData = async () => {
-    personalityData = await personalityModel.ChatPersonality.getPersonalityDetails();
-    chatHistoryData = await chatSessionModel.ChatSession.getChatSessionChatDetail(strSessionID);
+    personalityData = await personalityModel.getPersonalityDetails();
+    chatHistoryData = await chatSessionModel.getChatSessionChatDetail(strSessionID);
     return true;
   };
 
@@ -64,7 +64,7 @@ function generateGPTChat(strSenderID, strMessage, strSessionID, res) {
       });
       GPTPersonalityChats.push(personalChatHistory);
     });
-    conversationManager(GPTPersonalityChats, strSessionID, res);
+     conversationManager(GPTPersonalityChats, strSessionID, res);
   });
 }
 
@@ -88,8 +88,7 @@ async function conversationManager(gptData, strSessionID, res) {
   const chatResponse = await chatgptModel.chatSend(gptData[randomPick]);
   console.log(`${personalityData[randomPick].name} is responding with:`);
   console.log(chatResponse.reply);
-  const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
-  openAIresponse = chatToInsert.setChatGlobal(personalityData[randomPick].personalityID, chatResponse.reply);
+  openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityData[randomPick].personalityID, chatResponse.reply);
   res.status(200).json(openAIresponse);
 
 }

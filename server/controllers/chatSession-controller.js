@@ -1,27 +1,28 @@
 const chatSessionModel = require("../models/chatSession-model");
 const chatgptController = require("./chatgpt-controller");
 
-const chatSessions = [];
-
-async function initialize() {
-  let chatSessionList = await chatSessionModel.ChatSession.getChatSessions();
-  chatSessionList.forEach((e) => {
-    chatSessions.push(new chatSessionModel.ChatSession(e.sessionID));
-  });
-}
-initialize();
 
 const httpCreateSession = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {
     res.status(500).json({ "Error Message": "Must provide a session name" });
     return -1;
   }
-  newIndex = chatSessions.push(new chatSessionModel.ChatSession(req.body.name));
-  res.status(200).json(chatSessions[newIndex - 1].data);
+  const result = chatSessionModel.createChatSession(req.body.name)
+  res.status(200).json(result);
 };
 
 const httpGetSessions = async (req, res) => {
-  res.status(200).json(chatSessions);
+const result = chatSessionModel.getChatSessions();
+result.then((result) => {
+  res.status(200).json(result);
+})
+};
+
+const httpGetSessionHistory = async (req, res) => {
+  const result = chatSessionModel.getChatSessionChatDetail(req.params.id);
+  result.then((result) => {
+    res.status(200).json(result);
+  })
 };
 
 const httpInsertChat = async (req, res) => {
@@ -34,39 +35,20 @@ const httpInsertChat = async (req, res) => {
     res.status(500).json({ error: "Must provide a message String" });
     return -1;
   }
-
-  const sessionIndex = chatSessions.findIndex((o) => o.data.sessionID === req.params.id);
-
-  if (sessionIndex === -1) {
-    res.status(401).json({
-      error: "Chat Session ID not found",
-    });
-    return -1;
-  }
-  chatSessions[sessionIndex].setChatGlobal(req.body.senderID, req.body.message);
+  chatSessionModel.setChatGlobal(req.params.id, req.body.senderID, req.body.message);
   // The HTTP response will be send by chatGPT controller. 
   chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
 };
 
 const httpForceBotChat = async (req, res) => {
-  const sessionIndex = chatSessions.findIndex((o) => o.data.sessionID === req.params.id);
-
-  if (sessionIndex === -1) {
-    res.status(401).json({
-      error: "Chat Session ID not found",
-    });
-    return -1;
-  }
-
   // The HTTP response will be send by chatGPT controller. 
   chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
-  
-
-}
+};
 
 module.exports = {
   httpCreateSession,
   httpGetSessions,
   httpInsertChat,
-  httpForceBotChat
+  httpForceBotChat,
+  httpGetSessionHistory
 };
