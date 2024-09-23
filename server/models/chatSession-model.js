@@ -42,24 +42,6 @@ class ChatSession {
     return this;
   }
 
-  setChatPrivate(strReceiverID, strSenderID, strMessage) {
-    if (!strReceiverID || !strSenderID || !strMessage) {
-      throw Error("ChatSession.setChatPrivate: You must provide ReceiverID, SenderID and Message");
-    }
-    const dataObj = {
-      sessionID: this.data.sessionID,
-      senderID: strSenderID,
-      receiverID: strReceiverID,
-      message: strMessage,
-      timestamp: Date.now(),
-      messageID: uuidv4()
-    };
-
-    this.data.currentSessionHistory.push(dataObj);
-    knexops.insertDatabase("chatSessionHist", dataObj);
-    return dataObj;
-  }
-
   setChatGlobal(strSenderID, strMessage) {
     if (!strSenderID || !strMessage) {
       throw Error("ChatSession.setChatglobal: You must provide SenderID and Message");
