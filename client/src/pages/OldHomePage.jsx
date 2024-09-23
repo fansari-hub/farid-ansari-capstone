@@ -1,11 +1,11 @@
-import "./HomePage.scss";
+import "./OldHomePage.scss";
 import logo from "../logo.svg";
 import ResponseList from "../components/ResponseList/ResponseList";
 import axios from "axios";
 import webapi from "../utils/webapi";
 import { useState, useRef, useEffect } from "react";
 
-export default function HomePage() {
+export default function OldHomePage() {
   let [responses, setResponses] = useState([]);
 
   let userInput = useRef();
@@ -69,15 +69,15 @@ export default function HomePage() {
   };
 
   return (
-    <div className="HomePage">
-      <div ref={chatDiv} className="HomePage__content">
+    <div className="OldHomePage">
+      <div ref={chatDiv} className="OldHomePage__content">
         <ResponseList responses={responses} />
       </div>
-      <div className="HomePage__interface">
-        <img src={logo} className="HomePage__interface__logo" alt="logo" />
-        <div className="HomePage__interface__input">
+      <div className="OldHomePage__interface">
+        <img src={logo} className="OldHomePage__interface__logo" alt="logo" />
+        <div className="OldHomePage__interface__input">
           <textarea ref={userInput} id="userInput" rows="4" cols="50" placeholder="Type your message here and GPT away!"></textarea>
-          <div className="HomePage__interface__input__buttons">
+          <div className="OldHomePage__interface__input__buttons">
             <button id="sendButton" onClick={handleSendChat}>
               Send
             </button>
