@@ -43,7 +43,8 @@ const httpInsertChat = async (req, res) => {
     });
     return -1;
   }
-  const addedMsg = chatSessions[sessionIndex].setChatGlobal(req.body.senderID, req.body.message);
+  //const addedMsg = chatSessions[sessionIndex].setChatGlobal(req.body.senderID, req.body.message);
+  const addedMsg = {};
   chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id);
 
   res.status(200).json(addedMsg);

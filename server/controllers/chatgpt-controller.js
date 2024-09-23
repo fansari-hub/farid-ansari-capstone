@@ -24,30 +24,53 @@ function generateGPTChat(strSenderID, strMessage, strSessionID) {
     return true;
   };
 
+  const GPTPersonalityChats = [];
+
   getData().then(() => {
-    let chatHistory="" ;
-    let senderName;
-    chatHistoryData.forEach((e) => {
-      const nameIndex = personalityData.findIndex((o) => o.personalityID === e.senderID);
-      if (nameIndex === -1) {
-        senderName = "User";
-      } else {
-        senderName = personalityData[nameIndex].name;
-      }
-      chatHistory += ` ${senderName} said: ${e.message}`
+    personalityData.forEach((p) => {
+      let personalChatHistory = [];
+
+      const currentPersonalityName = p.name;
+      const systemPrompt = `Your name is ${currentPersonalityName}. ${p.conditionPrompt}`;
+      personalChatHistory.push({ role: "system", content: systemPrompt });
+
+      chatHistoryData.forEach((e) => {
+        let chatSenderName = "";
+
+        const nameIndex = personalityData.findIndex((o) => o.personalityID === e.senderID);
+        if (nameIndex === -1) {
+          chatSenderName = "User";
+        } else if (personalityData[nameIndex].name === currentPersonalityName) {
+          chatSenderName = "You";
+        } else {
+          chatSenderName = personalityData[nameIndex].name;
+        }
+
+        if (chatSenderName === "You") {
+          personalChatHistory.push({ role: "assistant", content: e.message });
+        }
+
+        if (chatSenderName === "User") {
+          personalChatHistory.push({ role: "user", content: `I said:${e.message}` });
+        } else if (chatSenderName !== "You") {
+          personalChatHistory.push({ role: "user", content: `${chatSenderName} said:${e.message}` });
+        }
+      });
+      GPTPersonalityChats.push(personalChatHistory);
     });
 
-  const systemPrompt = `Your name is ${personalityData[0].name}. ${personalityData[0].conditionPrompt}`;
-  const gptData = [
-    {"role" : "system", "content": systemPrompt },
-    {"role" : "user", "content" : chatHistory}
-  ];
-
-  console.log(gptData);
-
+    sendOut(GPTPersonalityChats);
   });
+}
+
+function sendOut(gptData){
+  console.log(gptData);
+  //const chatResponse = await chatgptModel.chatSend(gptData);
+  
 
 }
+
+
 
 // let conditioningPrompt = "You are a helpful assistant. Format response with HTML but only use tags between BODY without including the BODY tag. Incorporate emojis into your responses sparingly.";
 // let chatHistory = [{ role: "system", content: conditioningPrompt }];
