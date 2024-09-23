@@ -19,8 +19,8 @@ export default function HomePage() {
       try {
         const response = await axios.get(webapi.URL + "/chatsession");
         setSessions(response.data);
-        setActiveSession(response.data[0].data.sessionID);
-        setChatlog(response.data[0].data.currentSessionHistory);
+        setActiveSession(response.data[0].sessionID);
+        //setChatlog(response.data[0].currentSessionHistory);
       } catch (error) {
         alert(`HomePage.fetchSessions() request failed with error: ${error}`);
       }
@@ -32,21 +32,32 @@ export default function HomePage() {
         const response = await axios.get(webapi.URL + "/personality");
         setPersonalities(response.data);
       } catch (error) {
-        alert(`HomePage.fetchSessions() request failed with error: ${error}`);
+        alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
       }
     };
     fetchPersonalities();
   }, []);
 
   useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
+        setChatlog(response.data);
+      } catch (error) {
+        alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
+      }
+    };
+    fetchChatHistory();
+  }, [activeSession]);
+
+  useEffect(() => {
     const personalitiesList = personalities.map((e) => {
       const obj = {
-        name: e.data.name,
-        personalityID: e.data.personalityID,
+        name: e.name,
+        personalityID: e.personalityID,
       };
       return obj;
     });
-
     const sessionChat = chatlog.map((e) => {
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === e.senderID);
 
@@ -64,7 +75,7 @@ export default function HomePage() {
       return obj;
     });
     setResponses(sessionChat);
-  }, [activeSession]);
+  }, [chatlog]);
 
   useEffect(() => {
     chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" });
@@ -73,15 +84,15 @@ export default function HomePage() {
   const handleSendChat = async (event) => {
     const personalitiesList = personalities.map((e) => {
       const obj = {
-        name: e.data.name,
-        personalityID: e.data.personalityID,
+        name: e.name,
+        personalityID: e.personalityID,
       };
       return obj;
     });
 
     try {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
-      const response = await axios.post(postURL, { "senderID" : "User", "message": userInput.current.value });
+      const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp }]);
     } catch (error) {
