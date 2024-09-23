@@ -5,13 +5,14 @@ const AUDIO_FILE_PATH = "./public/";
 
 
 const chatSend = async (tokens) => {
+  console.log("****** Sending Request to Open AI*****");
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
         model: "gpt-4o-mini", // Use your desired model here
         messages: tokens,
-       temperature: 1.5,
+       temperature: 1,
       },
       {
         headers: {
@@ -21,16 +22,14 @@ const chatSend = async (tokens) => {
       }
     );
     const chatResponse = response.data.choices[0].message.content;
-    console.log("OpenAI POST REQ: ChatGPT responded");
+    console.log("****** OpenAI POST REQ: ChatGPT responded*****");
+    console.log("                                              ");
 
     if (typeof tokens[tokens.length - 1].content === "string") {
-      console.log("This was a non-vision request.");
-     // updateSessionInfo("user", tokens[tokens.length - 1].content);
+   //   console.log("This was a non-vision request.");
     } else {
-   //   updateSessionInfo("user", tokens[tokens.length - 1].content[0].text);
-      console.log("This is a vision request, not saving image base64 information in dbase");
+    //  console.log("This is a vision request, not saving image base64 information in dbase");
     }
-    //updateSessionInfo("assistant", chatResponse);
     return { reply: chatResponse, timestamp: Date.now() };
   } catch (error) {
     console.error("Error communicating with OpenAI API or Database update failed:", error);

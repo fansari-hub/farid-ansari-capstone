@@ -5,7 +5,6 @@ const chatSessionModel = require("../models/chatSession-model");
 let personalityData = [];
 let chatHistoryData = [];
 
-
 function generateGPTChat(strSenderID, strMessage, strSessionID) {
   if (!strSenderID && typeof strSenderID !== "string") {
     throw Error("generateGPTChat: You must provide a strSenderID string!");
@@ -29,16 +28,16 @@ function generateGPTChat(strSenderID, strMessage, strSessionID) {
 
   getData().then(() => {
     let membersPresent = "";
-    
-    personalityData.forEach((p) =>{
-      membersPresent += p.name + ', ';
-    })
+
+    personalityData.forEach((p) => {
+      membersPresent += p.name + ", ";
+    });
 
     personalityData.forEach((p) => {
       let personalChatHistory = [];
 
       const currentPersonalityName = p.name;
-      const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} Individuals present in the meeting are: ${membersPresent.replace(currentPersonalityName, "yourself")}and the user. Please provide responses in first-person as ${currentPersonalityName}. Tags will be used in the data to identify which individual is speaking. Do not include tags in your responses.`;
+      const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")}and the user. Please provide responses in first-person as ${currentPersonalityName}. <> Tags will be used in the data to identify which individual is speaking. Do not include <> tags in your responses. When speaking to one of the individuals directly, precede their name with the @ symbole.`;
       personalChatHistory.push({ role: "system", content: systemPrompt });
 
       chatHistoryData.forEach((e) => {
@@ -70,23 +69,27 @@ function generateGPTChat(strSenderID, strMessage, strSessionID) {
 }
 
 async function conversationManager(gptData, strSessionID) {
-  
-  const randomPick = Math.floor(Math.random() * 3);
-  //console.log(gptData[randomPick]);
+  const getlastMessage = gptData[0][gptData[0].length - 1].content;
+  let directRecipientIndex = -1;
+  let randomPick = 0;
+
+  personalityData.forEach((e, i) => {
+    if (getlastMessage.includes(`@${e.name}`)) {
+      directRecipientIndex = i;
+    }
+  });
+
+  if (directRecipientIndex === -1) {
+    randomPick = Math.floor(Math.random() * 3);
+  } else {
+    randomPick = directRecipientIndex;
+  }
+
   const chatResponse = await chatgptModel.chatSend(gptData[randomPick]);
-  console.log(chatResponse);
+  console.log(`${personalityData[randomPick].name} is responding with:`);
+  console.log(chatResponse.reply);
   const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
   chatToInsert.setChatGlobal(personalityData[randomPick].personalityID, chatResponse.reply);
-  //const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
-  
-  
-  //console.log(strSessionID);
-  
-
-  // const chatResponse1 = await chatgptModel.chatSend(gptData[1]);
-  // console.log(chatResponse1);
-  // const chatResponse2 = await chatgptModel.chatSend(gptData[2]);
-  // console.log(chatResponse2);
 }
 
 // const httpVisonChat = async (req, res) => {
