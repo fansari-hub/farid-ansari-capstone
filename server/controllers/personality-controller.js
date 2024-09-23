@@ -1,11 +1,11 @@
-const chatPersonality = require("../models/personality-model");
+const chatPersonalityModel = require("../models/personality-model");
 
 const chatPersonalities = [];
 
 async function initialize() {
-  let personalityList = await chatPersonality.ChatPersonality.getPersonalityList();
+  let personalityList = await chatPersonalityModel.ChatPersonality.getPersonalityList();
   personalityList.forEach((e) => {
-    chatPersonalities.push(new chatPersonality.ChatPersonality(e.personalityID));
+    chatPersonalities.push(new chatPersonalityModel.ChatPersonality(e.personalityID));
   });
 }
 
@@ -32,7 +32,7 @@ const httpCreatePersonality = async (req, res) => {
     return -1;
   }
 
-  let newIndex = chatPersonalities.push(new chatPersonality.ChatPersonality("", req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt));
+  let newIndex = chatPersonalities.push(new chatPersonalityModel.ChatPersonality("", req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt));
   res.status(200).json(chatPersonalities[newIndex - 1].data);
 };
 

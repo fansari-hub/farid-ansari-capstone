@@ -3,8 +3,6 @@ const chatgptController = require("../controllers/chatgpt-controller");
 
 router.route("/")
 .post(chatgptController.httpChatSend)
-.delete(chatgptController.httpChatReset)
-.get(chatgptController.httpChatHistory);
 
 router.route("/tts")
 .post(chatgptController.httpGenerateTTS);

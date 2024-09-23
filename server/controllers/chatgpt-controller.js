@@ -1,62 +1,131 @@
 const chatgptModel = require("../models/chatgpt-model");
-const path = require("path");
+const personalityModel = require("../models/personality-model");
+const chatSessionModel = require("../models/chatSession-model");
 
-let conditioningPrompt = "You are a helpful assistant. Format response with HTML but only use tags between BODY without including the BODY tag. Incorporate emojis into your responses sparingly.";
-let chatHistory = [{ role: "system", content: conditioningPrompt }];
+let personalityData = [];
+let chatHistoryData = [];
 
-const httpChatSend = async (req, res) => {
-  const userMessage = req.body.message;
-  const chatResponse = await chatgptModel.chatSend([...chatHistory, { role: "user", content: userMessage }]);
-  res.status(200).json(chatResponse);
-  chatHistory.push({ role: "user", content: userMessage });
-  chatHistory.push({ role: "assistant", content: chatResponse.reply });
-};
+function generateGPTChat(strSenderID, strMessage, strSessionID, res) {
+  if (!strSenderID && typeof strSenderID !== "string") {
+    throw Error("generateGPTChat: You must provide a strSenderID string!");
+  }
 
-const httpVisonChat = async (req, res) => {
-  const userMessage = req.body.message;
-  const chatResponse = await chatgptModel.chatSend([
-    ...chatHistory,
-    {
-      role: "user",
-      content: [
-        { type: "text", text: userMessage },
-        { type: "image_url", image_url: { url: req.body.imgBase64 } },
-      ],
-    },
-  ]);
-  res.status(200).json(chatResponse);
-  chatHistory.push({
-    role: "user",
-    content: [
-      { type: "text", text: userMessage },
-      { type: "image_url", image_url: { url: req.body.imgBase64 } },
-    ],
+  if (!strMessage && typeof strMessage !== "string") {
+    throw Error("generateGPTChat: You must provide a strMessage string!");
+  }
+
+  if (!strSessionID && typeof strSessionID !== "string") {
+    throw Error("generateGPTChat: You must provide a strSessionID string!");
+  }
+
+  const getData = async () => {
+    personalityData = await personalityModel.ChatPersonality.getPersonalityDetails();
+    chatHistoryData = await chatSessionModel.ChatSession.getChatSessionChatDetail(strSessionID);
+    return true;
+  };
+
+  const GPTPersonalityChats = [];
+
+  getData().then(() => {
+    let membersPresent = "";
+
+    personalityData.forEach((p) => {
+      membersPresent += p.name + ", ";
+    });
+
+    personalityData.forEach((p) => {
+      let personalChatHistory = [];
+
+      const currentPersonalityName = p.name;
+      const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")}and the user. Please provide responses in first-person as ${currentPersonalityName}. <> Tags will be used in the data to identify which individual is speaking. Do not include <> tags in your responses. When speaking to one of the individuals directly, precede their name with the @ symbole.`;
+      personalChatHistory.push({ role: "system", content: systemPrompt });
+
+      chatHistoryData.forEach((e) => {
+        let chatSenderName = "";
+
+        const nameIndex = personalityData.findIndex((o) => o.personalityID === e.senderID);
+        if (nameIndex === -1) {
+          chatSenderName = "User";
+        } else if (personalityData[nameIndex].name === currentPersonalityName) {
+          chatSenderName = "You";
+        } else {
+          chatSenderName = personalityData[nameIndex].name;
+        }
+
+        if (chatSenderName === "You") {
+          personalChatHistory.push({ role: "assistant", content: e.message });
+        }
+
+        if (chatSenderName === "User") {
+          personalChatHistory.push({ role: "user", content: `<user>${e.message}</user>` });
+        } else if (chatSenderName !== "You") {
+          personalChatHistory.push({ role: "user", content: `<${chatSenderName}>${e.message}</${chatSenderName}>` });
+        }
+      });
+      GPTPersonalityChats.push(personalChatHistory);
+    });
+    conversationManager(GPTPersonalityChats, strSessionID, res);
   });
-  chatHistory.push({ role: "assistant", content: chatResponse.reply });
-};
+}
 
-const httpChatReset = async (_req, res) => {
-  chatgptModel.chatReset();
-  chatHistory = [{ role: "system", content: "You are a helpful assistant. Format all responses in HTML but only include the content inside the body tag without the body tag itself. Attempt to incorporate emojis in your response." }];
-  res.status(200).json({ reply: "NodeGPT has been reset and forgotten all previous conversations" });
-};
+async function conversationManager(gptData, strSessionID, res) {
+  const getlastMessage = gptData[0][gptData[0].length - 1].content;
+  let directRecipientIndex = -1;
+  let randomPick = 0;
 
-const httpChatHistory = async (_req, res) => {
-  let allSessionsHistory = await chatgptModel.getAllChatHistory();
-  res.status(200).json(allSessionsHistory);
-};
+  personalityData.forEach((e, i) => {
+    if (getlastMessage.includes(`@${e.name}`)) {
+      directRecipientIndex = i;
+    }
+  });
 
-const httpGenerateTTS = async (_req, res) => {
-  const audioFile = await chatgptModel.textToSpeech(chatHistory[chatHistory.length - 1].content);
-  //res.status(200).sendFile(path.resolve("./public/" + audioFile)); This sends the actual audio file, not URL. Only used for direct testing
-  res.status(200).send({ audioURL: "http://localhost:8080/" + audioFile });
-};
+  if (directRecipientIndex === -1) {
+    randomPick = Math.floor(Math.random() * 3);
+  } else {
+    randomPick = directRecipientIndex;
+  }
 
+  const chatResponse = await chatgptModel.chatSend(gptData[randomPick]);
+  console.log(`${personalityData[randomPick].name} is responding with:`);
+  console.log(chatResponse.reply);
+  const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
+  openAIresponse = chatToInsert.setChatGlobal(personalityData[randomPick].personalityID, chatResponse.reply);
+  res.status(200).json(openAIresponse);
+
+}
+
+// const httpVisonChat = async (req, res) => {
+//   const userMessage = req.body.message;
+//   const chatResponse = await chatgptModel.chatSend([
+//     ...chatHistory,
+//     {
+//       role: "user",
+//       content: [
+//         { type: "text", text: userMessage },
+//         { type: "image_url", image_url: { url: req.body.imgBase64 } },
+//       ],
+//     },
+//   ]);
+//   res.status(200).json(chatResponse);
+//   chatHistory.push({
+//     role: "user",
+//     content: [
+//       { type: "text", text: userMessage },
+//       { type: "image_url", image_url: { url: req.body.imgBase64 } },
+//     ],
+//   });
+//   chatHistory.push({ role: "assistant", content: chatResponse.reply });
+// };
+
+// const httpGenerateTTS = async (_req, res) => {
+//   const audioFile = await chatgptModel.textToSpeech(chatHistory[chatHistory.length - 1].content);
+//   //res.status(200).sendFile(path.resolve("./public/" + audioFile)); This sends the actual audio file, not URL. Only used for direct testing
+//   res.status(200).send({ audioURL: "http://localhost:8080/" + audioFile });
+// };
 
 module.exports = {
-  httpChatSend,
-  httpChatReset,
-  httpChatHistory,
-  httpGenerateTTS,
-  httpVisonChat,
+  generateGPTChat,
+  // httpChatSend,
+  //httpGenerateTTS,
+  //httpVisonChat,
 };
