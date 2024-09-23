@@ -10,7 +10,7 @@ exports.up = function (knex) {
       table.string("sessionID").notNullable();
       table.string("senderID").notNullable();
       table.string("receiverID").notNullable();
-      table.string("message").notNullable();
+      table.text("message").notNullable();
       table.biginteger("timestamp").notNullable();
       table.string("MessageID").notNullable();
       table.foreign("sessionID").references("sessionID").inTable("chatSessions").onUpdate("CASCADE").onDelete("CASCADE");
