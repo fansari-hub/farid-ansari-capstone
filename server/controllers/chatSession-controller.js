@@ -43,15 +43,30 @@ const httpInsertChat = async (req, res) => {
     });
     return -1;
   }
-  //const addedMsg = chatSessions[sessionIndex].setChatGlobal(req.body.senderID, req.body.message);
-  const addedMsg = {};
-  chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id);
-
-  res.status(200).json(addedMsg);
+  chatSessions[sessionIndex].setChatGlobal(req.body.senderID, req.body.message);
+  // The HTTP response will be send by chatGPT controller. 
+  chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
 };
+
+const httpForceBotChat = async (req, res) => {
+  const sessionIndex = chatSessions.findIndex((o) => o.data.sessionID === req.params.id);
+
+  if (sessionIndex === -1) {
+    res.status(401).json({
+      error: "Chat Session ID not found",
+    });
+    return -1;
+  }
+
+  // The HTTP response will be send by chatGPT controller. 
+  chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
+  
+
+}
 
 module.exports = {
   httpCreateSession,
   httpGetSessions,
   httpInsertChat,
+  httpForceBotChat
 };

@@ -5,7 +5,7 @@ const chatSessionModel = require("../models/chatSession-model");
 let personalityData = [];
 let chatHistoryData = [];
 
-function generateGPTChat(strSenderID, strMessage, strSessionID) {
+function generateGPTChat(strSenderID, strMessage, strSessionID, res) {
   if (!strSenderID && typeof strSenderID !== "string") {
     throw Error("generateGPTChat: You must provide a strSenderID string!");
   }
@@ -64,11 +64,11 @@ function generateGPTChat(strSenderID, strMessage, strSessionID) {
       });
       GPTPersonalityChats.push(personalChatHistory);
     });
-    conversationManager(GPTPersonalityChats, strSessionID);
+    conversationManager(GPTPersonalityChats, strSessionID, res);
   });
 }
 
-async function conversationManager(gptData, strSessionID) {
+async function conversationManager(gptData, strSessionID, res) {
   const getlastMessage = gptData[0][gptData[0].length - 1].content;
   let directRecipientIndex = -1;
   let randomPick = 0;
@@ -89,7 +89,9 @@ async function conversationManager(gptData, strSessionID) {
   console.log(`${personalityData[randomPick].name} is responding with:`);
   console.log(chatResponse.reply);
   const chatToInsert = new chatSessionModel.ChatSession(strSessionID);
-  chatToInsert.setChatGlobal(personalityData[randomPick].personalityID, chatResponse.reply);
+  openAIresponse = chatToInsert.setChatGlobal(personalityData[randomPick].personalityID, chatResponse.reply);
+  res.status(200).json(openAIresponse);
+
 }
 
 // const httpVisonChat = async (req, res) => {

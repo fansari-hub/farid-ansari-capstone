@@ -5,6 +5,7 @@ router.route("/")
 .get(ChatSessionController.httpGetSessions)
 .post(ChatSessionController.httpCreateSession);
 router.route("/:id")
-.post(ChatSessionController.httpInsertChat);
+.post(ChatSessionController.httpInsertChat)
+.get(ChatSessionController.httpForceBotChat);
 
 module.exports = router;
