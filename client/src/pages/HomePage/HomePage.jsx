@@ -1,6 +1,6 @@
 import "./HomePage.scss";
-import logo from "../../logo.svg";
 import ResponseList from "../../components/ResponseList/ResponseList";
+import ChatInput from "../../components/ChatInput/ChatInput";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
@@ -75,7 +75,7 @@ export default function HomePage() {
       return obj;
     });
     setResponses(sessionChat);
-  }, [chatlog]);
+  }, [chatlog, personalities]);
 
   useEffect(() => {
     chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" });
@@ -101,36 +101,12 @@ export default function HomePage() {
     }
   };
 
-  const handleResetChat = async (event) => {
-    try {
-      const delURL = webapi.URL + "/chatgpt";
-      const response = await axios.delete(delURL);
-      setResponses([]);
-    } catch (error) {
-      alert(`HomePage.handleResetChat() request failed with error: ${error}`);
-      return -1;
-    }
-  };
-
   return (
     <div className="HomePage">
       <div ref={chatDiv} className="HomePage__content">
         <ResponseList responses={responses} />
       </div>
-      <div className="HomePage__interface">
-        <img src={logo} className="HomePage__interface__logo" alt="logo" />
-        <div className="HomePage__interface__input">
-          <textarea ref={userInput} id="userInput" rows="4" cols="50" placeholder="Type your message here and GPT away!"></textarea>
-          <div className="HomePage__interface__input__buttons">
-            <button id="sendButton" onClick={handleSendChat}>
-              Send
-            </button>
-            <button id="resetButton" onClick={handleResetChat}>
-              Reset NodeGPT
-            </button>
-          </div>
-        </div>
-      </div>
+      <ChatInput callback={handleSendChat} userInput={userInput}/>
     </div>
   );
 }
