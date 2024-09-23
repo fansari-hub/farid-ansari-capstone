@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import HomePage from "./pages/HomePage";
+import OldHomePage from "./pages/OldHomePage";
+import HomePage from "./pages/HomePage/HomePage";
+import PersonalitiesPage from "./pages/PersonalitiesPage/PersonalitiesPage";
 
 
 function App() {
@@ -8,7 +10,9 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
+      <Route path="/old" element={<OldHomePage/>} />
       <Route path="/" element={<HomePage/>} />
+      <Route path="/setup" element={<PersonalitiesPage/>} />
     </Routes>
     </BrowserRouter>
   );
