@@ -125,7 +125,4 @@ async function conversationManager(gptData, strSessionID, res) {
 
 module.exports = {
   generateGPTChat,
-  // httpChatSend,
-  //httpGenerateTTS,
-  //httpVisonChat,
 };
