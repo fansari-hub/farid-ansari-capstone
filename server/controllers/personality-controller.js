@@ -1,15 +1,5 @@
 const chatPersonalityModel = require("../models/personality-model");
 
-const chatPersonalities = [];
-
-async function initialize() {
-  let personalityList = await chatPersonalityModel.ChatPersonality.getPersonalityList();
-  personalityList.forEach((e) => {
-    chatPersonalities.push(new chatPersonalityModel.ChatPersonality(e.personalityID));
-  });
-}
-
-initialize();
 
 const httpCreatePersonality = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {
@@ -32,12 +22,15 @@ const httpCreatePersonality = async (req, res) => {
     return -1;
   }
 
-  let newIndex = chatPersonalities.push(new chatPersonalityModel.ChatPersonality("", req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt));
-  res.status(200).json(chatPersonalities[newIndex - 1].data);
+  const result = chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt);
+  res.status(200).json(result);
 };
 
 const httpGetPersonalities = async (req, res) => {
-  res.status(200).json(chatPersonalities);
+  const result = chatPersonalityModel.getPersonalityDetails();
+  result.then((result) => {
+    res.status(200).json(result);
+  });
 };
 
 const httpUpdatePersonality = async (req, res) => {
@@ -61,21 +54,8 @@ const httpUpdatePersonality = async (req, res) => {
     return -1;
   }
 
-  const personIndex = chatPersonalities.findIndex((o) => o.data.personalityID === req.params.id);
-  const updateObj = {
-    name: req.body.name,
-    avatarImg: req.body.avatarImg,
-    temperature: req.body.temperature,
-    conditionPrompt: req.body.conditionPrompt,
-  };
-
-  if (personIndex === -1) {
-    //console.log(req.params.id);
-    res.status(401).json({ error: "Personality ID not found" });
-    return -1;
-  }
-  chatPersonalities[personIndex].updatePersonality(updateObj);
-  res.status(200).json(chatPersonalities[personIndex].data);
+  const result = chatPersonalityModel.updatePersonality(req.params.id, req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt);
+  res.status(200).json(result);
 };
 
 module.exports = {
