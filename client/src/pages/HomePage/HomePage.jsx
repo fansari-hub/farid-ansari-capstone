@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from "react";
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([{sessionName: "Useless"}]);
+  let [sessions, setSessions] = useState([{sessionName: "Blank"}]);
   let [personalities, setPersonalities] = useState([]);
   let [activeSession, setActiveSession] = useState("");
   let [chatlog, setChatlog] = useState([]);
