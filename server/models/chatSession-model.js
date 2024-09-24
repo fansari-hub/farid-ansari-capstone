@@ -41,5 +41,20 @@ function setChatGlobal(strSession_id, strSenderID, strMessage) {
   return dataObj;
 }
 
+function deleteSession(strSessionID) {
+  if (!strSessionID || typeof strSessionID !== "string") {
+    throw Error("ChatSession.deleteSession: You must provide a Session ID");
+  }
+  const result = knexops.deleteDatabase("chatSessions", { sessionID: strSessionID });
+  return result;
+}
 
-module.exports = { getChatSessions, getChatSessionChatDetail, createChatSession, setChatGlobal };
+function updateSession(strSessionID, strName){
+  if (!strSessionID || typeof strSessionID !== "string") {
+    throw Error("ChatSession.deleteSession: You must provide a Session ID");
+  }
+  const result = knexops.updateDatabase("chatSessions", {"sessionName" : strName}, {sessionID: strSessionID});
+  return result;
+}
+
+module.exports = { getChatSessions, getChatSessionChatDetail, createChatSession, setChatGlobal, deleteSession, updateSession };

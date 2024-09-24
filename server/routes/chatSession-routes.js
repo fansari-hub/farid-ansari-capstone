@@ -6,7 +6,9 @@ router.route("/")
 .post(ChatSessionController.httpCreateSession);
 router.route("/:id")
 .post(ChatSessionController.httpInsertChat)
-.get(ChatSessionController.httpGetSessionHistory);
+.get(ChatSessionController.httpGetSessionHistory)
+.delete(ChatSessionController.httpDeleteSession)
+.put(ChatSessionController.httpUpdateSession);
 router.route("/:id/auto")
 .get(ChatSessionController.httpForceBotChat);
 
