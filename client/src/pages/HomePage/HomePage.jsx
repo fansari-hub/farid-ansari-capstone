@@ -8,13 +8,23 @@ import { useState, useRef, useEffect } from "react";
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([{sessionName: "Blank"}]);
+  let [sessions, setSessions] = useState([{ sessionName: "Blank" }]);
   let [personalities, setPersonalities] = useState([]);
   let [activeSession, setActiveSession] = useState("");
   let [chatlog, setChatlog] = useState([]);
   let userInput = useRef();
   let chatDiv = useRef();
 
+  async function refetchSessionData(){
+    try {
+      const response = await axios.get(webapi.URL + "/chatsession");
+      setSessions(response.data);
+      setActiveSession(response.data[0].sessionID);
+    } catch (error) {
+      alert(`HomePage.fetchSessions() request failed with error: ${error}`);
+    }
+  }
+  
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -102,12 +112,34 @@ export default function HomePage() {
 
   const handleSessionChange = async (sessionID) => {
     setActiveSession(sessionID);
-  }
+  };
+
+  const handleAddSession = async () => {
+    try {
+      const postURL = webapi.URL + "/chatsession";
+      const response = await axios.post(postURL, { sessionName: "New Session" });
+      refetchSessionData();
+    } catch (error) {
+      alert(`HomePage.handleAddSesion() request failed with error: ${error}`);
+      return -1;
+    }
+  };
+
+  const handleDeleteSession = async (sessionID) => {
+    try {
+      const delURL = webapi.URL + "/chatsession/" + sessionID;
+      const response = await axios.delete(delURL);
+      refetchSessionData();
+    } catch (error) {
+      alert(`HomePage.handleAddSesion() request failed with error: ${error}`);
+      return -1;
+    }
+  };
 
   return (
     <div className="HomePage">
       <div className="HomePage__side">
-        <Sidebar chatSessions ={sessions} switchSessionCallBack={handleSessionChange}/>
+        <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} />
       </div>
       <div className="HomePage__main">
         <div ref={chatDiv} className="HomePage__main__content">

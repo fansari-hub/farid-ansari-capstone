@@ -3,11 +3,11 @@ const chatgptController = require("./chatgpt-controller");
 
 
 const httpCreateSession = async (req, res) => {
-  if (!req.body.name || typeof req.body.name !== "string") {
+  if (!req.body.sessionName || typeof req.body.sessionName !== "string") {
     res.status(500).json({ "Error Message": "Must provide a session name" });
     return -1;
   }
-  const result = chatSessionModel.createChatSession(req.body.name)
+  const result = chatSessionModel.createChatSession(req.body.sessionName)
   res.status(200).json(result);
 };
 
@@ -45,10 +45,16 @@ const httpForceBotChat = async (req, res) => {
   chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
 };
 
+const httpDeleteSession = async (req, res) => {
+  const result = chatSessionModel.deleteSession(req.params.id);
+  res.status(200).json(result);
+}
+
 module.exports = {
   httpCreateSession,
   httpGetSessions,
   httpInsertChat,
   httpForceBotChat,
-  httpGetSessionHistory
+  httpGetSessionHistory,
+  httpDeleteSession
 };
