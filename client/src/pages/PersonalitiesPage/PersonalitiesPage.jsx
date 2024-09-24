@@ -7,7 +7,7 @@ import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
 
 export default function PersonalitiesPage() {
-  let [personalities, setPersonalities] = useState([{ name: "", avatarImg: "", temperature: 0, conditionPrompt: "", personalityID: "" }]);
+  let [personalities, setPersonalities] = useState([]);
 
   useEffect(() => {
     const fetchPersonalities = async () => {
@@ -24,14 +24,35 @@ export default function PersonalitiesPage() {
   const handleUpdatePersonality = async (personalityObj) => {
     try {
       const updateURL = webapi.URL + "/personality/" + personalityObj.personalityID;
-      console.log(updateURL);
-      const response = await axios.put(updateURL, {personalityObj});
-      console.log(response.data);
+      const response = await axios.put(updateURL, personalityObj);
     } catch (error) {
       alert(`PersonalitiesPage.handleUpdatePersonality() request failed with error: ${error}`);
       return -1;
     }
   };
+
+  const handleDeletePersonality = async (personalityID) => {
+    try{
+      const deleteURL = webapi.URL + "/personality/" + personalityID;
+      const response = await axios.delete(deleteURL);
+    } catch (error){
+      alert(`PersonalitiesPage.handleDeletePersonality() request failed with error: ${error}`);
+      return -1;
+    }
+  }
+
+  const handleAddPersonality = async () =>{
+    try{
+      const newPersonalityObj = {"name": "New Person", "avatarImg" : "SomeURL", "temperature" : 1, "conditionPrompt" :"You are a useful assistant."}
+      const postURL = webapi.URL + "/personality";
+     const response = await axios.post(postURL, newPersonalityObj );
+      setPersonalities([...personalities, newPersonalityObj]);
+    }catch(error){
+      alert(`PersonalitiesPage.handleAddPersonality() request failed with error: ${error}`);
+      return -1;
+    }
+
+  }
 
   return (
     <div className="PersonalitiesPage">
@@ -41,9 +62,14 @@ export default function PersonalitiesPage() {
       <div className="PersonalitiesPage__main">
         <div className="PersonalitiesPage__main__content">
           {personalities.map((i) => (
-            <PersonalityConfig personalityObj={i} updateCallBack={handleUpdatePersonality} />
+            <PersonalityConfig personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} />
           ))}
+          <div className="PersonalitiesPage__main__content__bottom">
+        <button onClick={handleAddPersonality}>Add New Slot</button>
         </div>
+        </div>
+        
+        
       </div>
     </div>
   );

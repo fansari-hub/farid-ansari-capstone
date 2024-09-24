@@ -58,8 +58,15 @@ const httpUpdatePersonality = async (req, res) => {
   res.status(200).json(result);
 };
 
+const httpDeletePersonality = async (req, res) => {
+  const result = chatPersonalityModel.deletePersonality(req.params.id);
+  res.status(200).json(result);
+
+}
+
 module.exports = {
   httpCreatePersonality,
   httpGetPersonalities,
   httpUpdatePersonality,
+  httpDeletePersonality,
 };

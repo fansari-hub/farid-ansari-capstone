@@ -7,6 +7,7 @@ router.route("/")
 
 
 router.route("/:id")
-.put(pesonalityController.httpUpdatePersonality);
+.put(pesonalityController.httpUpdatePersonality)
+.delete(pesonalityController.httpDeletePersonality);
 
 module.exports = router;
