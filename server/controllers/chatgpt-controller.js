@@ -5,14 +5,7 @@ const chatSessionModel = require("../models/chatSession-model");
 let personalityData = [];
 let chatHistoryData = [];
 
-function generateGPTChat(strSenderID, strMessage, strSessionID, res) {
-  if (!strSenderID && typeof strSenderID !== "string") {
-    throw Error("generateGPTChat: You must provide a strSenderID string!");
-  }
-
-  if (!strMessage && typeof strMessage !== "string") {
-    throw Error("generateGPTChat: You must provide a strMessage string!");
-  }
+function generateGPTChat(strSessionID, res) {
 
   if (!strSessionID && typeof strSessionID !== "string") {
     throw Error("generateGPTChat: You must provide a strSessionID string!");

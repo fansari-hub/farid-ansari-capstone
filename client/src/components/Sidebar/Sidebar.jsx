@@ -1,9 +1,10 @@
 import "./Sidebar.scss";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-export default function Sidebar({ chatSessions, switchSessionCallBack, addSessionCallback, deleteSessionCallback }) {
+export default function Sidebar({ chatSessions, switchSessionCallBack, addSessionCallback, deleteSessionCallback, updateSessionCallback }) {
   const fieldListRef = useRef();
+  const [formData, setFormData] = useState(null);
 
   function handleEditButton(button_name) {
     const targetField = fieldListRef.current.querySelector(`input[name='${button_name}']`);
@@ -11,9 +12,15 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
     targetField.focus();
   }
 
-  function handleUpdateName(button_name) {
+  function handleUpdateName(button_name, sessionID) {
     const targetField = fieldListRef.current.querySelector(`input[name='${button_name}']`);
     targetField.disabled = true;
+    updateSessionCallback(sessionID, targetField.value);
+  }
+
+  const handleChange = (e) => {
+    // const { name, value } = e.target;
+    // setFormData([...formData, {"name": name, "value": value}]);
   }
 
   return (
@@ -44,9 +51,9 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
                     type="text"
                     className="Sidebar__sessionList__list__group__item"
                     onBlur={() => {
-                      handleUpdateName(`session_${x}`);
+                      handleUpdateName(`session_${x}`, i.sessionID);
                     }}
-                    value={i.sessionName}
+                    onChange={handleChange} defaultValue={i.sessionName}
                     disabled
                   />
                 </div>
@@ -62,7 +69,7 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
                 ) : (
                   <></>
                 )}
-                {deleteSessionCallback ? (
+                {updateSessionCallback ? (
                   <button
                     className="Sidebar__sessionList__list__group__edit"
                     onClick={(e) => {

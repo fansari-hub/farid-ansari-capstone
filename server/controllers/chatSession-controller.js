@@ -37,16 +37,25 @@ const httpInsertChat = async (req, res) => {
   }
   chatSessionModel.setChatGlobal(req.params.id, req.body.senderID, req.body.message);
   // The HTTP response will be send by chatGPT controller. 
-  chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
+  chatgptController.generateGPTChat(req.params.id, res);
 };
 
 const httpForceBotChat = async (req, res) => {
   // The HTTP response will be send by chatGPT controller. 
-  chatgptController.generateGPTChat(req.body.senderID, req.body.message, req.params.id, res);
+  chatgptController.generateGPTChat(req.params.id, res);
 };
 
 const httpDeleteSession = async (req, res) => {
   const result = chatSessionModel.deleteSession(req.params.id);
+  res.status(200).json(result);
+}
+
+const httpUpdateSession = async (req, res) => {
+  if (!req.body.sessionName || typeof req.body.sessionName !== "string") {
+    res.status(500).json({ error: "Must provide a Session Name String" });
+    return -1;
+  }
+  const result = chatSessionModel.updateSession(req.params.id, req.body.sessionName);
   res.status(200).json(result);
 }
 
@@ -56,5 +65,6 @@ module.exports = {
   httpInsertChat,
   httpForceBotChat,
   httpGetSessionHistory,
-  httpDeleteSession
+  httpDeleteSession,
+  httpUpdateSession
 };

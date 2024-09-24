@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from "react";
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([{ sessionName: "Blank" }]);
+  let [sessions, setSessions] = useState([]);
   let [personalities, setPersonalities] = useState([]);
   let [activeSession, setActiveSession] = useState("");
   let [chatlog, setChatlog] = useState([]);
@@ -136,17 +136,47 @@ export default function HomePage() {
     }
   };
 
+  const handleUpdateSession = async (sessionID, sessionName) => {
+    try {
+      const putURL = webapi.URL + "/chatsession/" + sessionID;
+      const response = await axios.put(putURL, {"sessionName" : sessionName});
+      refetchSessionData();
+    } catch (error) {
+      alert(`HomePage.handleUpdateSession() request failed with error: ${error}`);
+      return -1;
+    }
+  };
+
+  const handleSendSkip = async (event) => {
+    const personalitiesList = personalities.map((e) => {
+      const obj = {
+        name: e.name,
+        personalityID: e.personalityID,
+      };
+      return obj;
+    });
+    try {
+      const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
+      const response = await axios.get(getURL);
+      const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
+      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp }]);
+    } catch (error) {
+      alert(`HomePage.handleSendSkip() request failed with error: ${error}`);
+      return -1;
+    }
+  };
+
   return (
     <div className="HomePage">
       <div className="HomePage__side">
-        <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} />
+        <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} />
       </div>
       <div className="HomePage__main">
         <div ref={chatDiv} className="HomePage__main__content">
           <ResponseList responses={responses} />
         </div>
         <div className="HomePage__main__input">
-          <ChatInput callback={handleSendChat} userInput={userInput} />
+          <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} />
         </div>
       </div>
     </div>
