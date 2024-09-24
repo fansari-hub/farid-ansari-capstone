@@ -1,0 +1,23 @@
+.Sidebar{
+    a{
+        text-decoration: none;
+        color: aqua;
+    }
+    background-color: none;
+    margin-left: 10px;
+    &__settings{
+        color: aqua;
+    }
+    &__sessionList{
+        &__title{
+            color: mediumseagreen;
+        }
+        &__list{
+            color: white;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+       
+    }
+}

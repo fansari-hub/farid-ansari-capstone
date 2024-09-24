@@ -11,12 +11,22 @@ async function updateDatabase(strTable, objData, objCondition) {
     return result
   }
   
+
+async function deleteDatabase(strTable, objCondition){
+  let result;
+  try{
+    result = await knex(strTable).delete().where(objCondition);
+  } catch (error){
+    console.log("Could not delete from database!")
+    console.error;
+  }
+}
   async function insertDatabase(strTable, objData) {
     let result;
     try {
       result = await knex(strTable).insert(objData);
     } catch (error) {
-      console.log("Could not update database!");
+      console.log("Could not insert into database!");
       console.log(error);
     }
     return result;
@@ -49,10 +59,10 @@ async function updateDatabase(strTable, objData, objCondition) {
       }
 
     } catch (error) {
-      console.log("Could not select from database");
+      console.log("Could not select ALL from database");
       console.log(error);
     }
     return result;
   }
 
-  module.exports = { updateDatabase, insertDatabase, selectDatabaseAll, selectDatabase};
+  module.exports = { updateDatabase, insertDatabase, selectDatabaseAll, selectDatabase, deleteDatabase};

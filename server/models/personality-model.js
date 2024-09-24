@@ -45,7 +45,6 @@ function createPersonality(strName, strAvatarImg, floatTemperature, strCondition
 }
 
 function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt) {
-
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
     throw Error("ChatPersonality.updatePesonality: You must provide a personality ID");
   }
@@ -66,14 +65,20 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
     throw Error("ChatPersonality.updatePesonality: You must provide a condition prompt for the update object");
   }
   const data = {
-  "name" : strName,
-  "avatarImg" : strAvatarImg,
-  "temperature" : floatTemperature,
-  "conditionPrompt" : strConditionPrompt,
-  }
+    name: strName,
+    avatarImg: strAvatarImg,
+    temperature: floatTemperature,
+    conditionPrompt: strConditionPrompt,
+  };
   knexops.updateDatabase("personalities", data, { personalityID: strPersonalityID });
   return data;
 }
 
+function deletePersonality(strPersonalityID) {
+  if (!strPersonalityID || typeof strPersonalityID !== "string") {
+    throw Error("ChatPersonality.updatePesonality: You must provide a personality ID");
+  }
+  knexops.deleteDatabase("personalities", { personalityID: strPersonalityID });
+}
 
-module.exports = { getPersonalityList, getPersonalityDetails, createPersonality, updatePersonality };
+module.exports = { getPersonalityList, getPersonalityDetails, createPersonality, updatePersonality, deletePersonality };

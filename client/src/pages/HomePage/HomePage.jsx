@@ -1,13 +1,14 @@
 import "./HomePage.scss";
-import logo from "../../logo.svg";
 import ResponseList from "../../components/ResponseList/ResponseList";
+import ChatInput from "../../components/ChatInput/ChatInput";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([]);
+  let [sessions, setSessions] = useState([{sessionName: "Blank"}]);
   let [personalities, setPersonalities] = useState([]);
   let [activeSession, setActiveSession] = useState("");
   let [chatlog, setChatlog] = useState([]);
@@ -20,7 +21,6 @@ export default function HomePage() {
         const response = await axios.get(webapi.URL + "/chatsession");
         setSessions(response.data);
         setActiveSession(response.data[0].sessionID);
-        //setChatlog(response.data[0].currentSessionHistory);
       } catch (error) {
         alert(`HomePage.fetchSessions() request failed with error: ${error}`);
       }
@@ -75,7 +75,7 @@ export default function HomePage() {
       return obj;
     });
     setResponses(sessionChat);
-  }, [chatlog]);
+  }, [chatlog, personalities]);
 
   useEffect(() => {
     chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" });
@@ -89,7 +89,6 @@ export default function HomePage() {
       };
       return obj;
     });
-
     try {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
@@ -101,34 +100,21 @@ export default function HomePage() {
     }
   };
 
-  const handleResetChat = async (event) => {
-    try {
-      const delURL = webapi.URL + "/chatgpt";
-      const response = await axios.delete(delURL);
-      setResponses([]);
-    } catch (error) {
-      alert(`HomePage.handleResetChat() request failed with error: ${error}`);
-      return -1;
-    }
-  };
+  const handleSessionChange = async (sessionID) => {
+    setActiveSession(sessionID);
+  }
 
   return (
     <div className="HomePage">
-      <div ref={chatDiv} className="HomePage__content">
-        <ResponseList responses={responses} />
+      <div className="HomePage__side">
+        <Sidebar chatSessions ={sessions} switchSessionCallBack={handleSessionChange}/>
       </div>
-      <div className="HomePage__interface">
-        <img src={logo} className="HomePage__interface__logo" alt="logo" />
-        <div className="HomePage__interface__input">
-          <textarea ref={userInput} id="userInput" rows="4" cols="50" placeholder="Type your message here and GPT away!"></textarea>
-          <div className="HomePage__interface__input__buttons">
-            <button id="sendButton" onClick={handleSendChat}>
-              Send
-            </button>
-            <button id="resetButton" onClick={handleResetChat}>
-              Reset NodeGPT
-            </button>
-          </div>
+      <div className="HomePage__main">
+        <div ref={chatDiv} className="HomePage__main__content">
+          <ResponseList responses={responses} />
+        </div>
+        <div className="HomePage__main__input">
+          <ChatInput callback={handleSendChat} userInput={userInput} />
         </div>
       </div>
     </div>

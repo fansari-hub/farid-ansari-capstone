@@ -1,9 +1,26 @@
 .PersonalitiesPage {
+  display: flex;
+  background-color: #282c34;
+
+  &__left {
+    background-color: #282c34;
+  }
+  &__main {
     text-align: center;
     margin: auto;
-    background-color: #282c34;
     min-height: 100vh;
     color: white;
     font-size: calc(10px + 1vmin);
+    flex-grow: 1;
+
+    &__content {
+      margin: auto;
+      max-width: 1024px;
+      text-align: left;
+
+      &__bottom {
+        margin-bottom: 20px;
+      }
+    }
   }
-  
+}
