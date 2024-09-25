@@ -34,7 +34,7 @@
   @media (min-width: $breakpoint-desktop-s) {
     animation: linear reveal-up both;
     animation-timeline: --revealing-element;
-    animation-range: entry 50% cover 20%;
+    animation-range: entry 50% cover 10%;
   }
 
   @media (min-width: $breakpoint-tablet-s) and (max-width: $breakpoint-tablet-e) {
