@@ -2,7 +2,8 @@ exports.up = function (knex) {
   return (
     knex.schema
       .createTable('chatSessions', (table) => {
-        table.string('sessionID').primary();
+        table.increments('id').primary();
+        table.string('sessionID').notNullable().unique();
         table.string('sessionName').notNullable();
       })
       .createTable("chatSessionHist",(table) => {
@@ -12,7 +13,7 @@ exports.up = function (knex) {
       table.string("receiverID").notNullable();
       table.text("message").notNullable();
       table.biginteger("timestamp").notNullable();
-      table.string("MessageID").notNullable();
+      table.string("MessageID").notNullable().unique();
       table.foreign("sessionID").references("sessionID").inTable("chatSessions").onUpdate("CASCADE").onDelete("CASCADE");
     })
   );
