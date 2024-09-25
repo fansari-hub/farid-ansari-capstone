@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import OldHomePage from "./pages/OldHomePage";
 import HomePage from "./pages/HomePage/HomePage";
 import PersonalitiesPage from "./pages/PersonalitiesPage/PersonalitiesPage";
+import "./App.scss";
 
 
 function App() {

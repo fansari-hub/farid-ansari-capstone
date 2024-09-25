@@ -1,0 +1,23 @@
+@use "anims" as *;
+@use "colors" as *;
+
+a {
+  text-decoration: none;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+html {
+  margin: 0px;
+  padding: 0px;
+}
+
+hr {
+  border: 1px solid $colSecondary-MutedBorder;
+}
+
+* {
+  box-sizing: border-box;
+}

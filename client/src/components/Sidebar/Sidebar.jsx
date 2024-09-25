@@ -1,6 +1,6 @@
 import "./Sidebar.scss";
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import SessionItem from "../SessionItem/SessionItem";
 
 export default function Sidebar({ chatSessions, switchSessionCallBack, addSessionCallback, deleteSessionCallback, updateSessionCallback }) {
@@ -11,7 +11,7 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
       <div className="Sidebar">
         <div className="Sidebar__settings">
           <Link to="/setup">
-            <p>Personality Settings</p>
+            <p className="Sidebar__settings__item">Personality Settings</p>
           </Link>
         </div>
         <br></br>

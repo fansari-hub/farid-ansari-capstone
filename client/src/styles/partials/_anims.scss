@@ -1,0 +1,77 @@
+@use "colors" as *;
+@use "variables" as *;
+@use "mixins" as *;
+
+// Animations in Use for this project
+
+@keyframes reveal-side {
+  from {
+    opacity: 0;
+    transform: translate(-75%, 0px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0px, 0px);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translate(0px, 30%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0px, 0px);
+  }
+}
+
+@mixin revealing-animation {
+  //Begin revealing-animation mixin
+  view-timeline-name: --revealing-element;
+  view-timeline-axis: block;
+
+  @media (min-width: $breakpoint-desktop-s) {
+    animation: linear reveal-up both;
+    animation-timeline: --revealing-element;
+    animation-range: entry 50% cover 20%;
+  }
+
+  @media (min-width: $breakpoint-tablet-s) and (max-width: $breakpoint-tablet-e) {
+    animation: linear reveal-side both;
+    animation-timeline: --revealing-element;
+    animation-range: entry 50% cover 25%;
+  }
+
+  @media (min-width: $breakpoint-mobile-s) and (max-width: $breakpoint-mobile-e) {
+    animation: linear reveal-side both;
+    animation-timeline: --revealing-element;
+    animation-range: entry 50% cover 25%;
+  }
+  //end revealing-animation mixin
+}
+
+@mixin revealing-animation-slideupOnly {
+  //Begin revealing-animation mixin
+  view-timeline-name: --revealing-element;
+  view-timeline-axis: block;
+
+  @media (min-width: $breakpoint-desktop-s) {
+    animation: linear reveal-up both;
+    animation-timeline: --revealing-element;
+    animation-range: entry 50% cover 10%;
+  }
+
+  @media (min-width: $breakpoint-tablet-s) and (max-width: $breakpoint-tablet-e) {
+    animation: linear reveal-up both;
+    animation-timeline: --revealing-element;
+    animation-range: entry 50% cover 10%;
+  }
+
+  @media (min-width: $breakpoint-mobile-s) and (max-width: $breakpoint-mobile-e) {
+    animation: linear reveal-up both;
+    animation-timeline: --revealing-element;
+    animation-range: entry 50% cover 10%;
+  }
+  //end revealing-animation mixin
+}

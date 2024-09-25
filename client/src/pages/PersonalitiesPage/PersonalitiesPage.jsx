@@ -65,11 +65,9 @@ export default function PersonalitiesPage() {
             <PersonalityConfig personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} />
           ))}
           <div className="PersonalitiesPage__main__content__bottom">
-        <button onClick={handleAddPersonality}>Add New Slot</button>
+        <button className="PersonalitiesPage__main__content__bottom__add" onClick={handleAddPersonality}>Add New Slot</button>
         </div>
         </div>
-        
-        
       </div>
     </div>
   );

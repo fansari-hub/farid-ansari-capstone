@@ -1,3 +1,5 @@
+@use "../../styles/partials/colors" as *;
+
 .SessionItem {
   &__group {
     display: flex;
@@ -22,23 +24,23 @@
       }
     }
     &__delete {
-      border: 1px solid darkred;
+      border: 1px solid $colSecondary-NegativeAction;
       background-color: transparent;
-      color: red;
+      color: $colSecondary-NegativeActionText;
       &:hover {
         cursor: pointer;
-        background-color: darkred;
-        color: orangered;
+        background-color: $colSecondary-NegativeAction;
+        color: $colSecondary-NegativeActionTextHover;
       }
     }
     &__edit {
-      border: 1px solid darkgreen;
+      border: 1px solid $colSecondary-PositiveAction;
       background-color: transparent;
-      color: green;
+      color: $colSecondary-PositiveActionText;
       &:hover {
         cursor: pointer;
-        background-color: darkgreen;
-        color: greenyellow;
+        background-color: $colSecondary-PositiveAction;
+        color: $colSecondary-PositiveActionTextHover;
       }
     }
   }
