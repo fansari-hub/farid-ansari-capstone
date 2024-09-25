@@ -20,8 +20,10 @@
     justify-content: flex;
     &__textbox{
     border-radius: 5px;
+    font-size: 1rem;
     padding: 0.5rem;
     margin: 10px;
+    width: 100%;
     border: thick ridge $colSecondary-MutedBorder;
     background-color: $colPrimary-ItemFill;
     color: $colPrimary-MainText;

@@ -16,8 +16,8 @@
     display: flex;
     justify-content: space-between;
     &__name {
-      font-weight: bold;
-      color: aqua;
+      font-weight: 400;
+      color: $colPrimary-LabelText;
     }
     &__date {
       color: $colPrimary-MutedText;
