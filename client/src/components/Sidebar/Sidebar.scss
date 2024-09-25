@@ -1,62 +1,34 @@
-.Sidebar{
-    a{
-        text-decoration: none;
-        color: aqua;
+@use "../../styles/partials/colors" as *;
+
+.Sidebar {
+  background-color: none;
+  margin-left: 10px;
+  margin-right: 20px;
+  &__settings {
+    &__item {
+      color: cadetblue;
+      &:hover {
+        color: cyan;
+      }
     }
-    background-color: none;
-    margin-left: 10px;
-    &__settings{
-        color: aqua;
+  }
+  &__sessionList {
+    &__title {
+      color: $colSecondary-PositiveActionText;
+      &:hover {
+        color: $colSecondary-PositiveActionTextHover;
+      }
     }
-    &__sessionList{
-        &__title{
-            color: mediumseagreen;
-        }
-        &__list{
-            color: white;
-            margin-bottom: 1rem;
-            &__group{
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                &__itemContainer{
-                    pointer-events:all;
-                    &:hover{
-                        cursor: pointer;
-                    }
-                }
-                &__item{
-                    background-color: none;
-                    width: 100px;
-                    margin-top: 0.5rem;
-                    margin-bottom: 0.5rem;
-                    
-                    
-                    &:disabled{
-                        background-color: transparent;
-                        color: white;
-                        border: none;
-                        pointer-events: none;
-                    }
-                }
-                &__delete{
-                    border: 1px solid darkred;
-                    background-color: transparent;
-                    color: red;
-                    &:hover{
-                        cursor: pointer;
-                    }
-                }
-                &__edit{
-                    border: 1px solid darkgreen;
-                    background-color: transparent;
-                    color: green;
-                    &:hover{
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
-       
+  }
+  &__edit {
+    margin-top: 10px;
+    border: 1px solid green;
+    background-color: transparent;
+    color: green;
+    &:hover {
+      cursor: pointer;
+      background-color: darkgreen;
+      color: greenyellow;
     }
+  }
 }

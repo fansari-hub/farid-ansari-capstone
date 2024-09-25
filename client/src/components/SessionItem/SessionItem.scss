@@ -1,0 +1,47 @@
+@use "../../styles/partials/colors" as *;
+
+.SessionItem {
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    &__itemContainer {
+      pointer-events: all;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &__item {
+      background-color: none;
+      width: 100px;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      &:disabled {
+        background-color: transparent;
+        color: white;
+        border: none;
+        pointer-events: none;
+      }
+    }
+    &__delete {
+      border: 1px solid $colSecondary-NegativeAction;
+      background-color: transparent;
+      color: $colSecondary-NegativeActionText;
+      &:hover {
+        cursor: pointer;
+        background-color: $colSecondary-NegativeAction;
+        color: $colSecondary-NegativeActionTextHover;
+      }
+    }
+    &__edit {
+      border: 1px solid $colSecondary-PositiveAction;
+      background-color: transparent;
+      color: $colSecondary-PositiveActionText;
+      &:hover {
+        cursor: pointer;
+        background-color: $colSecondary-PositiveAction;
+        color: $colSecondary-PositiveActionTextHover;
+      }
+    }
+  }
+}

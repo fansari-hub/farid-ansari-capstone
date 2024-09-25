@@ -1,19 +1,26 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles/partials/anims" as *;
+
 .ResponseCard {
-  border: 1px solid gray;
-  background-color: #1d1f25;
-  border-radius: 5px;
+  @include revealing-animation;
+  color: $colPrimary-MainText;
+  border: 1px dashed $colSecondary-MutedBorder;
+  background-color: $colPrimary-ItemFill;
+  border-radius: 15px;
   margin-top: 20px;
-  padding: 5px 20px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 2rem;
 
   &__header {
     display: flex;
     justify-content: space-between;
     &__name {
-      font-weight: bold;
-      color: aqua;
+      font-weight: 400;
+      color: $colPrimary-LabelText;
     }
     &__date {
-      color: gray;
+      color: $colPrimary-MutedText;
     }
   }
   &__content {

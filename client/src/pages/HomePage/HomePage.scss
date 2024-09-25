@@ -1,23 +1,26 @@
+@use "../../styles/partials/colors" as *;
+
 .HomePage {
   display: flex;
-  background-color: #282c34;
+  background-color: $colPrimary-Background;
 
   &__left{
-    background-color: black;
+    background-color: none;
   }
   &__main{
-    text-align: center;
     margin: auto;  
     min-height: 100vh;
-    color: white;
-    font-size: calc(10px + 1vmin);
+    font-size: 1rem;;
   
     &__content {
       margin: auto;
-      max-width: 1024px;
+      max-width: 1280px;
       height: 80vh;
-      overflow: auto;
+      overflow:auto;
+      padding-right: 1rem;
       text-align: left;
+      scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
+      scrollbar-width: thin;
     }
   }
   }

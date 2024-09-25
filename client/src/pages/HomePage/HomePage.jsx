@@ -17,6 +17,7 @@ export default function HomePage() {
 
   async function refetchSessionData(){
     try {
+      setSessions([]);
       const response = await axios.get(webapi.URL + "/chatsession");
       setSessions(response.data);
       setActiveSession(response.data[0].sessionID);

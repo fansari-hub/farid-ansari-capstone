@@ -1,27 +1,53 @@
-.PersonalityConfig{
-    background-color: rgba(47, 79, 79, 0.195);
-    margin : 20px;
-    padding: 20px;
-    border: 1px gray solid;
-    border-radius: 15px;
-    max-width: 800px;
-    &__group{
-        margin-top: 20px;
-        display: flex;
-        &__label{
-            color: aqua;
-            width: 200px;
-        }
-        &__data{
-            flex-grow: 1;
-            font-size: 1rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            width: 100%;
-            background-color: transparent;
-            color: white;
-            border: 1px aqua solid;
-            border-radius: 10px;
-        }
+@use "../../styles/partials/colors" as *;
+@use "../../styles/partials/anims" as *;
+
+.PersonalityConfig {
+  @include revealing-animation;
+  background-color: $colPrimary-ItemFill;
+  margin: 20px;
+  padding: 20px;
+  border: 1px $colSecondary-MutedBorder dashed;
+  border-radius: 15px;
+  max-width: 800px;
+  &__group {
+    margin-top: 20px;
+    display: flex;
+    &__label {
+      font-size: 1rem;
+      color: $colPrimary-MainText;
+      width: 200px;
     }
+    &__data {
+      flex-grow: 1;
+      font-size: 1rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      width: 100%;
+      background-color: $colPrimary-Background;
+      color: $colPrimary-MainText;
+      border: 1px $colSecondary-MutedBorder solid;
+      border-radius: 10px;
+    }
+    &__save {
+      border: 1px solid $colSecondary-PositiveAction;
+      background-color: transparent;
+      color: $colSecondary-PositiveActionText;
+      &:hover {
+        cursor: pointer;
+        background-color: $colSecondary-PositiveAction;
+        color: $colSecondary-PositiveActionTextHover;
+      }
+    }
+    &__delete {
+      margin-left: 1rem;
+      border: 1px solid $colSecondary-NegativeAction;
+      background-color: transparent;
+      color: $colSecondary-NegativeActionText;
+      &:hover {
+        cursor: pointer;
+        background-color: $colSecondary-NegativeAction;
+        color: $colSecondary-NegativeActionTextHover;
+      }
+    }
+  }
 }

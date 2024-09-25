@@ -1,15 +1,17 @@
+@use "../../styles/partials/colors" as *;
+
 .PersonalitiesPage {
   display: flex;
-  background-color: #282c34;
+  background-color: $colPrimary-Background;
 
   &__left {
-    background-color: #282c34;
+    background-color: $colPrimary-Background;
   }
   &__main {
     text-align: center;
     margin: auto;
     min-height: 100vh;
-    color: white;
+    color: $colPrimary-MainText;
     font-size: calc(10px + 1vmin);
     flex-grow: 1;
 
@@ -19,7 +21,18 @@
       text-align: left;
 
       &__bottom {
+        margin-left: 40px;
         margin-bottom: 20px;
+        &__add {
+          border: 1px solid $colSecondary-PositiveAction;
+          background-color: transparent;
+          color: $colSecondary-PositiveActionText;
+          &:hover {
+            cursor: pointer;
+            background-color: $colSecondary-PositiveAction;
+            color: $colSecondary-PositiveActionTextHover;
+          }
+        }
       }
     }
   }
