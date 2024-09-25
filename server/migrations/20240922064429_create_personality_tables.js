@@ -2,7 +2,8 @@ exports.up = function (knex) {
     return (
       knex.schema
         .createTable('personalities', (table) => {
-          table.string('personalityID').primary();
+          table.increments('id').primary();
+          table.string('personalityID').notNullable().unique();
           table.string('name').notNullable();
           table.string('avatarImg').notNullable();
           table.float('temperature').notNullable();
