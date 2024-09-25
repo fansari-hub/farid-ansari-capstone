@@ -1,5 +1,5 @@
 import "./ChatInput.scss";
-import logo from "../../logo.svg";
+import logo from "../../assets/images/logo.webp";
 
 export default function ChatInput({ sendChatCallBack, userInput, skipCallBack }) {
   return (
