@@ -50,19 +50,19 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
   }
 
   if (!strAvatarImg || typeof strAvatarImg !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide an avatarIMG URL string for the update object");
+    throw Error("ChatPersonality.updatePesonality: You must provide an avatarIMG URL string.");
   }
 
   if (!floatTemperature || typeof floatTemperature !== "number") {
-    throw Error("ChatPersonality.updatePesonality: You must provide a temperature number between 0.0 and 1.0 update object");
+    throw Error("ChatPersonality.updatePesonality: You must provide a temperature number between 0.0 and 2.0");
   }
 
-  if (floatTemperature > 1.0 || floatTemperature < 0.0) {
-    updObj.temperature = 0.5;
+  if (floatTemperature > 2.0 || floatTemperature < 0.0) {
+    floatTemperature = 1.0;
   }
 
   if (!strConditionPrompt || typeof strConditionPrompt !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide a condition prompt for the update object");
+    throw Error("ChatPersonality.updatePesonality: You must provide a condition prompt.");
   }
   const data = {
     name: strName,
