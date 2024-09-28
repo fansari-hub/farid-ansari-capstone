@@ -1,7 +1,6 @@
 const ttsmodel = require("../models/tts-model");
 
 const httpGenerateTTS = async (req, res) => {
-  console.log(req.body);
 if (!req.body.text || typeof req.body.text !== "string") {
   res.status(500).json({ error: "Must provide a text String" });
   return -1;
@@ -20,9 +19,16 @@ const result = await ttsmodel.textToSpeech(req.body.voice, req.body.text, req.bo
 res.status(200).send({ result });
 };
 
+const httpGetSingleAudio = async (req, res) => {
+const result = await ttsmodel.getSingleFile(req.params.id);
+res.status(200).send( result );
+
+}
+
 
 
 module.exports = {
     httpGenerateTTS,
+    httpGetSingleAudio
   };
   

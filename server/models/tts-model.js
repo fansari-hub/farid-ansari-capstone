@@ -39,7 +39,15 @@ const textToSpeech = async (voice , input, messageID) => {
   }
 };
 
+const getSingleFile = async (messageID) => {
+  if(typeof messageID === "string"){
+    const result = await knexops.selectDatabase("ttsAudioFile", "chatSessionHist", {messageID: messageID});
+    return result[0];
+  }
+
+}
 
 module.exports = {
   textToSpeech,
+  getSingleFile
 };

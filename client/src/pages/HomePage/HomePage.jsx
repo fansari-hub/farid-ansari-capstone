@@ -55,7 +55,6 @@ export default function HomePage() {
       try {
         const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
         setChatlog(response.data);
-        console.log(response.data);
       } catch (error) {
         alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
       }
@@ -88,6 +87,7 @@ export default function HomePage() {
         content: e.message,
         timestamp: e.timestamp,
         messageID : e.messageID,
+        ttsAudioFile: e.ttsAudioFile
       };
       return obj;
     });
@@ -173,7 +173,7 @@ export default function HomePage() {
       const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID  }]);
+      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
       if (inputTTSflag.current.value === "on"){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
@@ -199,7 +199,21 @@ export default function HomePage() {
       alert(`HomePage.getAndPlayTTS() request failed with error: ${error}`);
       return -1;
     }
-    
+  }
+
+  const handleSingleAudioPlayback = async (messageID) => {
+    try{
+      const getURL = webapi.URL + "/ttsgen/" + messageID
+      const response = await axios.get(getURL);
+      if (response.data.ttsAudioFile){
+        const audio = new Audio();
+        audio.src = webapi.URL + "/" + response.data.ttsAudioFile;
+        audio.play();
+      }
+    }catch (error){
+      alert(`HomePage.handleSingleAudioPlayback() request failed with error: ${error}`);
+      return -1;
+    }
   }
 
   return (
@@ -209,7 +223,7 @@ export default function HomePage() {
       </div>
       <div className="HomePage__main">
         <div ref={chatDiv} className="HomePage__main__content">
-          <ResponseList responses={responses} />
+          <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
         <div className="HomePage__main__input">
           <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} />
