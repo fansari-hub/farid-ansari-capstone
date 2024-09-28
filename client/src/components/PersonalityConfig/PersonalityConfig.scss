@@ -9,6 +9,39 @@
   border: 1px $colSecondary-MutedBorder dashed;
   border-radius: 15px;
   max-width: 800px;
+  &__avatar{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    &__picture{
+      height: 8rem;
+      border-radius: 100px;
+    }
+    &__generate{
+      border: 1px solid $colSecondary-MutedBorder;
+      border-radius: 5px;
+      background-color: $colPrimary-ItemFill;
+      height: 4rem;
+      color: $colPrimary-MutedText;
+      &:hover {
+        cursor: pointer;
+        background-color: $colPrimary-MutedText;
+        color: $colPrimary-MainText;
+      }
+    }
+    &__prompt{
+      height: 8rem;
+      flex-grow: 1;
+      font-size: 1rem;
+      padding: 1rem;
+      width: 100%;
+      background-color: $colPrimary-Background;
+      color: $colPrimary-MainText;
+      border: 1px $colSecondary-MutedBorder solid;
+      border-radius: 10px;
+    }
+  }
   &__group {
     margin-top: 20px;
     display: flex;
@@ -17,11 +50,23 @@
       color: $colPrimary-MainText;
       width: 200px;
     }
+  
     &__data {
       flex-grow: 1;
       font-size: 1rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      width: 100%;
+      background-color: $colPrimary-Background;
+      color: $colPrimary-MainText;
+      border: 1px $colSecondary-MutedBorder solid;
+      border-radius: 10px;
+    }
+    &__prompt{
+      height: 8rem;
+      flex-grow: 1;
+      font-size: 1rem;
+      padding: 1rem;
       width: 100%;
       background-color: $colPrimary-Background;
       color: $colPrimary-MainText;

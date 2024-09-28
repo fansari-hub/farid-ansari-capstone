@@ -7,7 +7,7 @@ const httpCreatePersonality = async (req, res) => {
     return -1;
   }
 
-  if (!req.body.avatarImg || typeof req.body.avatarImg !== "string") {
+  if (typeof req.body.avatarImg !== "string") {
     res.status(500).json({ error: "Must provide an avatarImg URL string" });
     return -1;
   }
@@ -39,7 +39,7 @@ const httpUpdatePersonality = async (req, res) => {
     return -1;
   }
 
-  if (!req.body.avatarImg || typeof req.body.avatarImg !== "string") {
+  if (typeof req.body.avatarImg !== "string") {
     res.status(500).json({ error: "Must provide an avatarImg URL string" });
     return -1;
   }

@@ -1,12 +1,24 @@
+import webapi from "../../utils/webapi";
+
 import "./PersonalityConfig.scss";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect} from "react";
+import defaultLogo from "../../assets/images/logo.webp"
 
-export default function PersonalityConfig({ personalityObj, updateCallBack , deleteCallBack}) {
+export default function PersonalityConfig({ personalityObj, updateCallBack , deleteCallBack, generateImgCallBack}) {
   const [formData, setFormData] = useState( {...personalityObj} );
-
+  const [avatarImage, setAvatarImage] = useState(defaultLogo);
   const userInputName = useRef();
   const userInputTemperature = useRef();
   const userInputPrompt = useRef();
+  const userAvatarPrompt = useRef();
+
+  useEffect(() => {
+    if (personalityObj.avatarImg && personalityObj.avatarImg !==""){
+      setAvatarImage(webapi.URL + "/" +  personalityObj.avatarImg);
+    }
+  }, [])
+  
+  
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -14,12 +26,19 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
      userInputName.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)"
      userInputTemperature.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)"
      userInputPrompt.current.style.backgroundColor="rgba(47, 79, 79, 0.195)";
-     console.log(userInputPrompt.current.style.backgroundColor);
   };
 
   const handleDelete = (e) => {
+    e.preventDefault();
     deleteCallBack( personalityObj.personalityID);
   };
+
+  const handleGenerate = (e) => {
+    e.preventDefault();
+    setAvatarImage(defaultLogo);
+    generateImgCallBack(userAvatarPrompt.current.value, personalityObj.personalityID);
+    userAvatarPrompt.current.style.backgroundColor="rgba(47, 79, 79, 0.195)";
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,13 +46,19 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
     e.target.style.backgroundColor = "#4d2e02";
   }
 
+
   return (
     <>
       <div className="PersonalityConfig">
         <form id={personalityObj.personalityID}>
+          <div className="PersonalityConfig__avatar">
+            <img className="PersonalityConfig__avatar__picture" src={avatarImage} alt="profile_pic"/>
+            <textarea ref={userAvatarPrompt} name="avatarPrompt" placeholder="Enter prompt to describe avatar profile picture and then press Generate Avatar " className="PersonalityConfig__avatar__prompt" value={formData.avatarPrompt} onChange={handleChange} ></textarea>
+            <button className="PersonalityConfig__avatar__generate" onClick={handleGenerate}>Generate Avatar</button>
+          </div>          
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Name</p>
-            <input ref={userInputName} name="name" className="PersonalityConfig__group__data" type="text" value={formData.name} onChange={handleChange}></input>
+            <input ref={userInputName} name="name" className="PersonalityConfig__group__data" placeholder="Enter a name" type="text" value={formData.name} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Temperature</p>
@@ -41,7 +66,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Prompt</p>
-            <input ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__data" type="text" value={formData.conditionPrompt} onChange={handleChange}></input>
+            <textarea ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
           </div>
           <div className="PersonalityConfig__group">
             <button className="PersonalityConfig__group__save" type="submit" onClick={handleSave}>Save</button>

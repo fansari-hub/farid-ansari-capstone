@@ -7,7 +7,7 @@ export default function ResponseList({ responses, _callback }) {
     <>
       <div className="ResponseList">
         {responses.map((i, x) => (
-          <ResponseCard name={i.name} content={i.content} timestamp={utils.getRelativeTime(i.timestamp)} image={i.image} key={x}/>
+          <ResponseCard name={i.name} avatarImg={i.avatarImg} content={i.content} timestamp={utils.getRelativeTime(i.timestamp)} key={x}/>
         ))}
       </div>
     </>

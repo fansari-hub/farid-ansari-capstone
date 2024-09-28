@@ -1,5 +1,8 @@
 const knexops = require("./utils/knexops");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
+const IMAGE_FILE_BASE = "./public/";
+const IMAGE_FILE_PATH = "avatarImg/"
 
 async function getPersonalityList() {
   const queryResult = await knexops.selectDatabase("personalityID", "personalities");
@@ -16,7 +19,7 @@ function createPersonality(strName, strAvatarImg, floatTemperature, strCondition
     throw Error("ChatPersonality: You must provide a personality name");
   }
 
-  if (!strAvatarImg || typeof strAvatarImg !== "string") {
+  if (typeof strAvatarImg !== "string") {
     throw Error("ChatPersonality: You must provide an avatarIMG URL string");
   }
 
@@ -49,7 +52,7 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
     throw Error("ChatPersonality.updatePesonality: You must provide a personality ID");
   }
 
-  if (!strAvatarImg || typeof strAvatarImg !== "string") {
+  if (typeof strAvatarImg !== "string") {
     throw Error("ChatPersonality.updatePesonality: You must provide an avatarIMG URL string.");
   }
 
@@ -81,4 +84,19 @@ function deletePersonality(strPersonalityID) {
   knexops.deleteDatabase("personalities", { personalityID: strPersonalityID });
 }
 
-module.exports = { getPersonalityList, getPersonalityDetails, createPersonality, updatePersonality, deletePersonality };
+function updatePersonalityAvatar(strPersonalityID, strAvatarImg) {
+  if (!strPersonalityID || typeof strPersonalityID !== "string") {
+    throw Error("ChatPersonality.updatePersonalityAvatar: You must provide a personality ID");
+  }
+
+  if (!strAvatarImg) {
+    throw Error("ChatPersonality.updatePersonalityAvatar: You must provide an image buffer!");
+  }
+
+  const filename = uuidv4() + ".png";
+  fs.writeFileSync(IMAGE_FILE_BASE + IMAGE_FILE_PATH + filename, strAvatarImg);
+  knexops.updateDatabase("personalities", {avatarImg: IMAGE_FILE_PATH + filename}, {personalityID: strPersonalityID});
+  return IMAGE_FILE_PATH + filename;
+}
+
+module.exports = { getPersonalityList, getPersonalityDetails, createPersonality, updatePersonality, deletePersonality, updatePersonalityAvatar };

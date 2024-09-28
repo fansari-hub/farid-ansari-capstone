@@ -5,7 +5,7 @@ exports.up = function (knex) {
           table.increments('id').primary();
           table.string('personalityID').notNullable().unique();
           table.string('name').notNullable();
-          table.string('avatarImg').notNullable();
+          table.string('avatarImg');
           table.float('temperature').notNullable();
           table.string('conditionPrompt').notNullable();
         })
