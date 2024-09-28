@@ -59,6 +59,7 @@ export default function PersonalitiesPage() {
       const newPersonalityObj = {"name": "New Person", "avatarImg" : "", "temperature" : 1, "conditionPrompt" :"You are a useful assistant."}
       const postURL = webapi.URL + "/personality";
       const response = await axios.post(postURL, newPersonalityObj );
+      setPersonalities([]);
       refetchPersonalities();
     }catch(error){
       alert(`PersonalitiesPage.handleAddPersonality() request failed with error: ${error}`);
@@ -70,6 +71,7 @@ export default function PersonalitiesPage() {
     try{
       const postURL = webapi.URL + "/imagegen/avatar/" + personalityID
       const response = await axios.post(postURL, {"prompt" : avatarPrompt});
+      setPersonalities([]);
       refetchPersonalities();
     }catch(error){
       alert(`PersonalitiesPage.handleGenerateAvatarImg() request failed with error: ${error}`);

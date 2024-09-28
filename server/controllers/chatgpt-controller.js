@@ -30,7 +30,7 @@ function generateGPTChat(strSessionID, res) {
       let personalChatHistory = [];
 
       const currentPersonalityName = p.name;
-      const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")}and the user. Please provide responses in first-person as ${currentPersonalityName}. <> Tags will be used in the data to identify which individual is speaking. Do not include <> tags in your responses. When speaking to one of the individuals directly, precede their name with the @ symbole.`;
+      const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")} and User. Please provide responses in first-person as ${currentPersonalityName}. <> Tags will be used in the data to identify which individual is speaking. Do not include <> tags in your responses. When speaking to one of the individuals directly, precede their name with the @ symbole. Incorporate Emojis in your responses.`;
       personalChatHistory.push({ role: "system", content: systemPrompt });
 
       chatHistoryData.forEach((e) => {
