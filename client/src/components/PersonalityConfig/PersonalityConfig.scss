@@ -2,7 +2,7 @@
 @use "../../styles/partials/anims" as *;
 
 .PersonalityConfig {
-  @include revealing-animation;
+  // @include revealing-animation;
   background-color: $colPrimary-ItemFill;
   margin: 20px;
   padding: 20px;

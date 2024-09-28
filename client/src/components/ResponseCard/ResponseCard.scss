@@ -2,7 +2,7 @@
 @use "../../styles/partials/anims" as *;
 
 .ResponseCard {
-  @include revealing-animation;
+  // @include revealing-animation;
   margin-bottom: 50px;
   display: flex;
   align-items: flex-end;
