@@ -189,6 +189,9 @@ export default function HomePage() {
       }
       const getURL = webapi.URL + "/ttsgen";
       const response = await axios.post(getURL, ttsObj);
+      const audio = new Audio();
+      audio.src = webapi.URL + "/" + response.data.result;
+      audio.play();
     }catch (error){
       alert(`HomePage.getAndPlayTTS() request failed with error: ${error}`);
       return -1;
