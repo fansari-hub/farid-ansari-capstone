@@ -6,8 +6,8 @@ if (!req.body.text || typeof req.body.text !== "string") {
   return -1;
 }
 
-if (typeof req.body.voice !== "string") {
-  res.status(500).json({ error: "Voice can only be a string" });
+if (!req.body.voice || typeof req.body.voice !== "string") {
+  res.status(500).json({ error: "You must provide a voice selectiion in string format. Valid choices are : alloy, echo, fable, onyx, nova, and shimme" });
   return -1;
 }
 

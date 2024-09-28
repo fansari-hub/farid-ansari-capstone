@@ -6,7 +6,7 @@ const AUDIO_FILE_BASE = "./public/";
 const AUDIO_FILE_PATH = "TTS/"
 
 
-const textToSpeech = async (voice = "alloy", input) => {
+const textToSpeech = async (voice , input) => {
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/audio/speech",
