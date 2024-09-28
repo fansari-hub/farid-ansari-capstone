@@ -1,7 +1,7 @@
 import "./ChatInput.scss";
 import logo from "../../assets/images/logo.webp";
 
-export default function ChatInput({ sendChatCallBack, userInput, skipCallBack }) {
+export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, skipCallBack }) {
   return (
     <>
       <div className="ChatInput">
@@ -15,6 +15,11 @@ export default function ChatInput({ sendChatCallBack, userInput, skipCallBack })
             <button className="ChatInput__input__buttons__button" id="sendButton" onClick={skipCallBack}>
               Pass
             </button>
+            <div className="ChatInput__input__buttons__group">
+            <input ref={inputTTSflag} className="ChatInput__input__buttons__group__control" id="tts" name="tts" type="checkbox"/>
+            <p className="ChatInput__input__buttons__group__label">Enable TTS</p>
+            </div>
+            
           </div>
         </div>
       </div>

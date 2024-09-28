@@ -14,7 +14,7 @@ async function getPersonalityDetails() {
   return queryResult;
 }
 
-function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt) {
+function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
   if (!strName || typeof strName !== "string") {
     throw Error("ChatPersonality: You must provide a personality name");
   }
@@ -35,11 +35,22 @@ function createPersonality(strName, strAvatarImg, floatTemperature, strCondition
     throw Error("ChatPersonality: You must provide a condition prompt");
   }
 
+  if (!strAvatarPrompt || typeof strAvatarPrompt !== "string") {
+    throw Error("ChatPersonality: You must provide an avatar prompt");
+  }
+
+  if (!strVoice || typeof strVoice !== "string") {
+    throw Error("ChatPersonality: You must provide voice string");
+  }
+
+
   const data = {
     name: strName,
     avatarImg: strAvatarImg,
     temperature: floatTemperature,
     conditionPrompt: strConditionPrompt,
+    avatarPrompt: strAvatarPrompt,
+    voice: strVoice,
     personalityID: uuidv4(),
   };
 
@@ -47,7 +58,7 @@ function createPersonality(strName, strAvatarImg, floatTemperature, strCondition
   return data;
 }
 
-function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt) {
+function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
     throw Error("ChatPersonality.updatePesonality: You must provide a personality ID");
   }
@@ -67,11 +78,23 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
   if (!strConditionPrompt || typeof strConditionPrompt !== "string") {
     throw Error("ChatPersonality.updatePesonality: You must provide a condition prompt.");
   }
+
+  if (!strAvatarPrompt || typeof strAvatarPrompt !== "string") {
+    throw Error("ChatPersonality.updatePesonality: You must provide an avatar prompt.");
+  }
+
+  if (!strVoice || typeof strVoice !== "string") {
+    throw Error("ChatPersonality: You must provide voice string");
+  }
+
+
   const data = {
     name: strName,
     avatarImg: strAvatarImg,
     temperature: floatTemperature,
     conditionPrompt: strConditionPrompt,
+    avatarPrompt : strAvatarPrompt,
+    voice: strVoice
   };
   knexops.updateDatabase("personalities", data, { personalityID: strPersonalityID });
   return data;
