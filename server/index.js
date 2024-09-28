@@ -21,6 +21,7 @@ const PORT = process.env.HTTP_PORT || 5050;
 const personalityRoutes = require('./routes/personality-routes');
 const chatSessionRoutes = require('./routes/chatSession-routes');
 const dallERoutes = require('./routes/dalle-routes');
+const ttsRoutes = require('./routes/tts-routes');
 
 app.use(express.static("public"));
 
@@ -28,6 +29,7 @@ app.use(express.static("public"));
 app.use('/personality', personalityRoutes);
 app.use('/chatsession', chatSessionRoutes);
 app.use('/imagegen', dallERoutes);
+app.use('/ttsgen', ttsRoutes);
 
 app.listen(PORT, () => {
   console.log(`running at http://localhost:${PORT}`);

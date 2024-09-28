@@ -19,34 +19,6 @@ function base64ToBlob(base64Str){
 return bufferValue;
 }
 
-//Source code for this function is from https://www.geeksforgeeks.org/how-to-convert-base64-to-blob-in-javascript/
-// Function to convert Base64 string to Blob
-// function base64ToBlob(base64, contentType = "",
-//   sliceSize = 512) {
-//   const byteCharacters = atob(base64.split(",")[1]);
-//   const byteArrays = [];
-
-//   for (let offset = 0; offset < byteCharacters.length;
-//       offset += sliceSize) {
-//       const slice = byteCharacters.slice(
-//           offset, offset + sliceSize);
-
-//       const byteNumbers = new Array(slice.length);
-//       for (let i = 0; i < slice.length; i++) {
-//           byteNumbers[i] = slice.charCodeAt(i);
-//       }
-
-//       const byteArray = new Uint8Array(byteNumbers);
-//       byteArrays.push(byteArray);
-//   }
-
-//   const blob = new Blob(byteArrays, { type: contentType });
-//   return blob;
-// }
-
-
-
-
 module.exports = {
     generateAvatar,
   };

@@ -1,7 +1,5 @@
 const axios = require("axios");
 require("dotenv").config();
-const fs = require("fs");
-const AUDIO_FILE_PATH = "./public/";
 
 
 const chatSend = async (tokens) => {
@@ -37,36 +35,6 @@ const chatSend = async (tokens) => {
   }
 };
 
-const textToSpeech = async (input) => {
-  try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/audio/speech",
-      {
-        model: "tts-1",
-        voice: "alloy",
-        input: input,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        responseType: "arraybuffer", //for audio data
-      }
-    );
-
-    console.log("Received TTS Audio");
-    const filename = uuidv4() + ".wav";
-    fs.writeFileSync(AUDIO_FILE_PATH + filename, response.data);
-    return filename;
-  } catch (error) {
-    console.error("Error generating speech:", error);
-    return "Failed to Generate TTS!";
-  }
-};
-
-
 module.exports = {
   chatSend,
-  textToSpeech,
 };
