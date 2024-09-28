@@ -66,20 +66,23 @@ export default function HomePage() {
       const obj = {
         name: e.name,
         personalityID: e.personalityID,
+        avatarImg: e.avatarImg
       };
       return obj;
     });
     const sessionChat = chatlog.map((e) => {
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === e.senderID);
 
-      let senderName;
+      let senderName, avatarImg;
       if (senderNameIndex !== -1) {
         senderName = personalitiesList[senderNameIndex].name;
+        avatarImg = personalitiesList[senderNameIndex].avatarImg;
       } else {
         senderName = "You";
       }
       const obj = {
         name: senderName,
+        avatarImg: webapi.URL + "/" + avatarImg,
         content: e.message,
         timestamp: e.timestamp,
       };
@@ -97,6 +100,7 @@ export default function HomePage() {
       const obj = {
         name: e.name,
         personalityID: e.personalityID,
+        avatarImg : webapi.URL + "/" + e.avatarImg
       };
       return obj;
     });
@@ -104,7 +108,7 @@ export default function HomePage() {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp }]);
+      setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg }]);
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
       return -1;
@@ -153,6 +157,7 @@ export default function HomePage() {
       const obj = {
         name: e.name,
         personalityID: e.personalityID,
+        avatarImg : webapi.URL + "/" + e.avatarImg
       };
       return obj;
     });
@@ -160,7 +165,7 @@ export default function HomePage() {
       const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp }]);
+      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg  }]);
     } catch (error) {
       alert(`HomePage.handleSendSkip() request failed with error: ${error}`);
       return -1;
