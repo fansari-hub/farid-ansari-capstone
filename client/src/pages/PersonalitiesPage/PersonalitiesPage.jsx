@@ -56,7 +56,7 @@ export default function PersonalitiesPage() {
 
   const handleAddPersonality = async () =>{
     try{
-      const newPersonalityObj = {"name": "New Person", "avatarImg" : "", "temperature" : 1, "conditionPrompt" :"You are a useful assistant."}
+      const newPersonalityObj = {"name": "New Person", "avatarImg" : "", "temperature" : 1, "conditionPrompt" :"You are a useful assistant.", "avatarPrompt": "A profile picture of a useful assistant", "voice": "alloy"}
       const postURL = webapi.URL + "/personality";
       const response = await axios.post(postURL, newPersonalityObj );
       setPersonalities([]);

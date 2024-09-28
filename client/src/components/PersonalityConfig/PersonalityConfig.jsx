@@ -11,6 +11,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
   const userInputTemperature = useRef();
   const userInputPrompt = useRef();
   const userAvatarPrompt = useRef();
+  const userInputVoice = useRef();
 
   useEffect(() => {
     if (personalityObj.avatarImg && personalityObj.avatarImg !==""){
@@ -22,10 +23,12 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
 
   const handleSave = (e) => {
     e.preventDefault();
-     updateCallBack({ "personalityID": personalityObj.personalityID, "name": userInputName.current.value,  "avatarImg": personalityObj.avatarImg, "temperature": +userInputTemperature.current.value, "conditionPrompt": userInputPrompt.current.value });
+     updateCallBack({ "personalityID": personalityObj.personalityID, "name": userInputName.current.value,  "avatarImg": personalityObj.avatarImg, "temperature": +userInputTemperature.current.value, "conditionPrompt": userInputPrompt.current.value, "avatarPrompt" : userAvatarPrompt.current.value, "voice" : userInputVoice.current.value });
      userInputName.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)"
      userInputTemperature.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)"
      userInputPrompt.current.style.backgroundColor="rgba(47, 79, 79, 0.195)";
+     userAvatarPrompt.current.style.backgroundColor="rgba(47, 79, 79, 0.195)";
+     userInputVoice.current.style.backgroundColor="rgba(47, 79, 79, 0.195)";
   };
 
   const handleDelete = (e) => {
@@ -67,6 +70,10 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Prompt</p>
             <textarea ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
+          </div>
+          <div className="PersonalityConfig__group">
+            <p className="PersonalityConfig__group__label">TTS Voice</p>
+            <input ref={userInputVoice} name="voice" className="PersonalityConfig__group__data" placeholder="Enter a valid voice value: Valid choices are : alloy, echo, fable, onyx, nova, and shimme " type="text" value={formData.voice} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group">
             <button className="PersonalityConfig__group__save" type="submit" onClick={handleSave}>Save</button>
