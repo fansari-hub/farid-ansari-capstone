@@ -13,7 +13,8 @@ exports.up = function (knex) {
       table.string("receiverID").notNullable();
       table.text("message").notNullable();
       table.biginteger("timestamp").notNullable();
-      table.string("MessageID").notNullable().unique();
+      table.string("messageID").notNullable().unique();
+      table.string("ttsAudioFile");
       table.foreign("sessionID").references("sessionID").inTable("chatSessions").onUpdate("CASCADE").onDelete("CASCADE");
     })
   );

@@ -55,6 +55,7 @@ export default function HomePage() {
       try {
         const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
         setChatlog(response.data);
+        console.log(response.data);
       } catch (error) {
         alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
       }
@@ -86,6 +87,7 @@ export default function HomePage() {
         avatarImg: webapi.URL + "/" + avatarImg,
         content: e.message,
         timestamp: e.timestamp,
+        messageID : e.messageID,
       };
       return obj;
     });
@@ -110,9 +112,9 @@ export default function HomePage() {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg }]);
+      setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
       if (inputTTSflag.current.value === "on"){
-        getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice );
+        getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
@@ -171,9 +173,9 @@ export default function HomePage() {
       const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg  }]);
+      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID  }]);
       if (inputTTSflag.current.value === "on"){
-        getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice );
+        getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
     } catch (error) {
       alert(`HomePage.handleSendSkip() request failed with error: ${error}`);
@@ -181,11 +183,12 @@ export default function HomePage() {
     }
   };
 
-  const getAndPlayTTS = async (strText, strVoice) => {
+  const getAndPlayTTS = async (strText, strVoice, strMessageID) => {
     try{
       const ttsObj = {
         "text": strText,
-        "voice":  strVoice
+        "voice":  strVoice,
+        "messageID" : strMessageID
       }
       const getURL = webapi.URL + "/ttsgen";
       const response = await axios.post(getURL, ttsObj);
