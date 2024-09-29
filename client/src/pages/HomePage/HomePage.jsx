@@ -113,7 +113,7 @@ export default function HomePage() {
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
-      if (inputTTSflag.current.value === "on"){
+      if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
     } catch (error) {
@@ -174,7 +174,7 @@ export default function HomePage() {
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
-      if (inputTTSflag.current.value === "on"){
+      if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
     } catch (error) {

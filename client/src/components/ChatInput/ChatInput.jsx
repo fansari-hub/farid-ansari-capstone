@@ -2,6 +2,7 @@ import "./ChatInput.scss";
 import logo from "../../assets/images/logo.webp";
 
 export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, skipCallBack }) {
+
   return (
     <>
       <div className="ChatInput">
