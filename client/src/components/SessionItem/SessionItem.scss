@@ -1,4 +1,5 @@
 @use "../../styles/partials/colors" as *;
+@use "../../styles//partials//mixins" as *;
 
 .SessionItem {
   &__group {
@@ -24,9 +25,17 @@
       }
     }
     &__delete {
+      height: 1.5rem;
+      width: 1.5rem;
+      border-radius: 5px;
       border: 1px solid $colSecondary-NegativeAction;
       background-color: transparent;
       color: $colSecondary-NegativeActionText;
+      @include displayMobile{
+        height: 2rem;
+        width: 2rem;
+        margin-top: 5px
+      }
       &:hover {
         cursor: pointer;
         background-color: $colSecondary-NegativeAction;
@@ -34,9 +43,17 @@
       }
     }
     &__edit {
+      height: 1.5rem;
+      width: 1.5rem;
+      border-radius: 5px;
       border: 1px solid $colSecondary-PositiveAction;
       background-color: transparent;
       color: $colSecondary-PositiveActionText;
+      @include displayMobile{
+        height: 2rem;
+        width: 2rem;
+        margin-top: 5px;
+      }
       &:hover {
         cursor: pointer;
         background-color: $colSecondary-PositiveAction;

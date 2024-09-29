@@ -1,26 +1,50 @@
 @use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
 
 .HomePage {
-  display: flex;
+  display: flex; 
   background-color: $colPrimary-Background;
+  min-height: 100vh;
+
+  @include displayMobile{
+    flex-direction: column;
+  }
 
   &__left{
     background-color: none;
   }
   &__main{
-    margin: auto;  
-    min-height: 100vh;
-    font-size: 1rem;;
+    flex-grow: 1;
+    background-color: none; 
+    
+    font-size: 1rem;
   
     &__content {
+      background-color: none;
       margin: auto;
       max-width: 1280px;
-      height: 80vh;
-      overflow:auto;
+      //height: 80vh;
+      //overflow:hidden;
       padding-right: 1rem;
-      text-align: left;
-      scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
-      scrollbar-width: thin;
+      //scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
+      //scrollbar-width: thin;
+      padding-bottom: 220px;
+      @include displayMobile{
+        padding-bottom: 200px;
+      }
+    }
+    &__input{
+      padding-bottom: 20px;
+      padding-left: 160px;
+      background-color: $colPrimary-Background;
+      width: 100vw;
+      position: fixed;
+      bottom:0;
+      left: 0;
+      @include displayMobile{
+        padding-left: 0;
+
+      }
     }
   }
   }

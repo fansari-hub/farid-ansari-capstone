@@ -1,6 +1,6 @@
 const webapi = {
     "KEY" : "",
-    "URL" : "http://localhost:8080",
+    "URL" : "http://192.168.1.138:8080",
 }
 
 export default webapi;
