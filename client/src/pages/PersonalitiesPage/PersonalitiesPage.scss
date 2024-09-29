@@ -12,6 +12,10 @@
   &__left {
     background-color: $colPrimary-Background;
     background-color: none;
+    position: fixed;
+    @include displayMobile{
+      position: relative;
+    }
   }
   &__main {
     text-align: center;
@@ -22,9 +26,13 @@
     flex-grow: 1;
 
     &__content {
-      margin: auto;
-      max-width: 1024px;
+      padding-left: 150px;
+      //margin: auto;
+      max-width: 1280px;
       text-align: left;
+      @include displayMobile{
+        padding-left: 0;
+      }
 
       &__bottom {
         margin-bottom: 20px;

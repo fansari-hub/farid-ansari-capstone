@@ -16,7 +16,7 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
         </div>
         <div className="Sidebar__sessionList">
           <Link to="/">
-            <p className="Sidebar__sessionList__title">Chats:</p>
+            <p className="Sidebar__sessionList__title">Chats</p>
           </Link>
           <div className="Sidebar__sessionList__list">
             {chatSessions.map((i, x) => {
