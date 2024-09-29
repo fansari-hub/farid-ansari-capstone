@@ -95,7 +95,8 @@ export default function HomePage() {
   }, [chatlog, personalities]);
 
   useEffect(() => {
-    chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" });
+    //chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" });
+    window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
   }, [responses]);
 
   const handleSendChat = async (event) => {
