@@ -21,7 +21,9 @@
       order: 0;
     }
     &__item {
-      color: cadetblue;
+      color: $colPrimary-MutedText;
+      font-family: monospace;
+      font-size: 1rem;
       &:hover {
         color: cyan;
       }
@@ -44,9 +46,18 @@
       
     }
     &__title {
-      color: $colSecondary-PositiveActionText;
+      color: $colPrimary-MutedText;
+      font-family: monospace;
+      font-size: 1rem;
       &:hover {
         color: $colSecondary-PositiveActionTextHover;
+      }
+    }
+    &__ruler{
+      width: 100%;
+      border: thin inset $colSecondary-MutedBorder;
+      @include displayMobile{
+        display: none;
       }
     }
     &__list {
@@ -57,24 +68,25 @@
     }
   }
   &__add {
-    margin-left: 10px;
     width: 100%;
     order: 2;
-    border: 1px solid green;
-    background-color: transparent;
+    border: thin outset $colSecondary-MutedBorder;
+    box-shadow: 1px 1px black;
+    background-color: $colPrimary-ItemFill;
     color: green;
     border-radius: 20px;
     font-size: 1rem;
     height: 1.5rem;
+    margin-top: 20px;
 
     @include displayMobile{
-      margin-left: 0;
       flex-grow: 1;
       padding-right: 0px;
       padding-left: 0px;
       order: 2;
       align-self: center;
       height: 2rem;
+      margin-top: 0;
     }
     &:hover {
       cursor: pointer;

@@ -24,7 +24,6 @@
         pointer-events: none;
       }
       &:enabled {
-        //background-color: $colPrimary-MutedText;
         color: $colPrimary-ItemFill;
       }
       &--active{
@@ -36,8 +35,9 @@
       height: 1.5rem;
       width: 1.5rem;
       border-radius: 5px;
-      border: 1px solid $colSecondary-NegativeAction;
-      background-color: transparent;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      background-color: $colPrimary-Background;
       color: $colSecondary-NegativeActionText;
       @include displayMobile{
         height: 2rem;
@@ -54,8 +54,9 @@
       height: 1.5rem;
       width: 1.5rem;
       border-radius: 5px;
-      border: 1px solid $colSecondary-PositiveAction;
-      background-color: transparent;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      background-color: $colPrimary-Background;
       color: $colSecondary-PositiveActionText;
       @include displayMobile{
         height: 2rem;

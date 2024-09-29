@@ -25,7 +25,7 @@
     border-radius: 20px;
     height: 100px;
     pointer-events: none;
-    border: 2px solid $colSecondary-MutedBorder;
+    border: thick inset $colSecondary-MutedBorder;
     @include displayMobile {
       display: none;
     }
@@ -50,7 +50,7 @@
       padding-left: 1rem;
       margin: 10px;
       width: 90%;
-      border: 2px solid $colSecondary-MutedBorder;
+      border: thin inset $colSecondary-MutedBorder;
       background-color: $colPrimary-ItemFill;
       color: $colPrimary-MainText;
       resize: none;
@@ -89,8 +89,8 @@
         margin-top: 10px;
         background-color: $colPrimary-ItemFill;
         color: $colPrimary-MainText;
-        border: 1px solid $colSecondary-MutedBorder;
-        border-radius: 3px;
+        border-width: thin;
+        border-radius: 5px;
         &:hover {
           background-color: $colPrimary-MutedText;
           cursor: pointer;

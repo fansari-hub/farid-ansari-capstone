@@ -16,8 +16,9 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
         </div>
         <div className="Sidebar__sessionList">
           <Link to="/">
-            <p className="Sidebar__sessionList__title">Chats</p>
+          {(chatSessions.length > 0) ? (<></>) : (<p className="Sidebar__sessionList__title">Chats</p>)}
           </Link>
+          <hr className="Sidebar__sessionList__ruler"/>
           <div className="Sidebar__sessionList__list">
             {chatSessions.map((i, x) => {
               return <SessionItem chatSession={i} switchSessionCallBack={switchSessionCallBack} deleteSessionCallback={deleteSessionCallback} updateSessionCallback={updateSessionCallback} activeSession={activeSession} key={x} />;
