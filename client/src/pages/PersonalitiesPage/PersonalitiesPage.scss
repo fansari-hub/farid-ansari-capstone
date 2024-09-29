@@ -1,11 +1,17 @@
 @use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
 
 .PersonalitiesPage {
   display: flex;
   background-color: $colPrimary-Background;
 
+  @include displayMobile{
+    flex-direction: column;
+  }
+
   &__left {
     background-color: $colPrimary-Background;
+    background-color: none;
   }
   &__main {
     text-align: center;
@@ -21,12 +27,20 @@
       text-align: left;
 
       &__bottom {
-        margin-left: 40px;
         margin-bottom: 20px;
         &__add {
+          margin-left: 20px;
           border: 1px solid $colSecondary-PositiveAction;
+          border-radius: 20px;
           background-color: transparent;
           color: $colSecondary-PositiveActionText;
+          height: 2rem;
+          width: 10rem;
+          @include displayMobile{
+            margin-top: 20px;
+            margin-left: 0px;
+            width: 100%;
+          }
           &:hover {
             cursor: pointer;
             background-color: $colSecondary-PositiveAction;

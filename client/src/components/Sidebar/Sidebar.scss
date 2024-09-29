@@ -1,10 +1,21 @@
 @use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
 
 .Sidebar {
+  display: flex;
+  flex-direction: column;
   background-color: none;
   margin-left: 10px;
-  margin-right: 20px;
+  margin-right: 30px;
+  gap: 10px;
+
+  @include displayMobile {
+    flex-direction: row;
+    gap: 10px;
+  }
+
   &__settings {
+    order: 0;
     &__item {
       color: cadetblue;
       &:hover {
@@ -13,18 +24,48 @@
     }
   }
   &__sessionList {
+    margin-top: 50px;
+    order: 1;
+    background-color: none;
+    display: flex;
+    flex-direction: column;
+    
+    @include displayMobile{
+      flex-direction: row;
+      flex-grow: 1;
+      order: 1;
+      justify-content: flex-end;
+      margin-top: 0px;
+      margin-left: 10px;
+      
+    }
     &__title {
       color: $colSecondary-PositiveActionText;
       &:hover {
         color: $colSecondary-PositiveActionTextHover;
       }
     }
+    &__list {
+      margin-top: 10px;
+      margin-left: 10px;
+    }
   }
-  &__edit {
-    margin-top: 10px;
+  &__add {
+    margin-left: auto;
+    width: 55px;
+    order: 2;
     border: 1px solid green;
     background-color: transparent;
     color: green;
+
+    @include displayMobile{
+      width: 1.25rem;
+      height: 1.25rem;
+      padding-right: 0px;
+      padding-left: 0px;
+      order: 2;
+      align-self: center;
+    }
     &:hover {
       cursor: pointer;
       background-color: darkgreen;

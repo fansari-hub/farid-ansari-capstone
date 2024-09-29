@@ -1,5 +1,6 @@
 @use "../../styles/partials/colors" as *;
 @use "../../styles/partials/anims" as *;
+@use "../../styles//partials/mixins" as *;
 
 .PersonalityConfig {
   // @include revealing-animation;
@@ -9,14 +10,23 @@
   border: 1px $colSecondary-MutedBorder dashed;
   border-radius: 15px;
   max-width: 800px;
+  @include displayMobile{
+    margin: 10px;
+  }
   &__avatar{
     margin-top: 20px;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 2.3rem;
+    @include displayMobile{
+      gap: 0.6rem;
+    }
     &__picture{
       height: 8rem;
       border-radius: 100px;
+      @include displayMobile{
+        height: 5rem;
+      }
     }
     &__generate{
       border: 1px solid $colSecondary-MutedBorder;
@@ -40,15 +50,27 @@
       color: $colPrimary-MainText;
       border: 1px $colSecondary-MutedBorder solid;
       border-radius: 10px;
+      @include displayMobile{
+        font-size: 0.8rem;
+        height: 6rem;
+        padding: 0.8rem;
+      }
     }
   }
   &__group {
     margin-top: 20px;
     display: flex;
+    @include displayMobile{
+      margin-top: 10px;
+    }
     &__label {
       font-size: 1rem;
       color: $colPrimary-MainText;
-      width: 200px;
+      width: 14rem;
+      @include displayMobile{
+        font-size: 0.8rem;
+        width: 7rem;
+      }
     }
   
     &__data {
@@ -61,6 +83,11 @@
       color: $colPrimary-MainText;
       border: 1px $colSecondary-MutedBorder solid;
       border-radius: 10px;
+      @include displayMobile{
+        font-size: 0.8rem;
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+      }
     }
     &__prompt{
       height: 8rem;
@@ -72,11 +99,23 @@
       color: $colPrimary-MainText;
       border: 1px $colSecondary-MutedBorder solid;
       border-radius: 10px;
+      @include displayMobile{
+        font-size: 0.8rem;
+        height: 6rem;
+        padding: 0.5rem;
+      }
     }
     &__save {
       border: 1px solid $colSecondary-PositiveAction;
       background-color: transparent;
       color: $colSecondary-PositiveActionText;
+      height: 2rem;
+      border-radius: 20px;
+      @include displayMobile{
+        margin-top: 10px;
+        width: 50%;
+        height: 2rem;
+      }
       &:hover {
         cursor: pointer;
         background-color: $colSecondary-PositiveAction;
@@ -88,6 +127,13 @@
       border: 1px solid $colSecondary-NegativeAction;
       background-color: transparent;
       color: $colSecondary-NegativeActionText;
+      height: 2rem;
+      border-radius: 20px;
+      @include displayMobile{
+        margin-top: 10px;
+        width: 50%;
+        height: 2rem;
+      }
       &:hover {
         cursor: pointer;
         background-color: $colSecondary-NegativeAction;

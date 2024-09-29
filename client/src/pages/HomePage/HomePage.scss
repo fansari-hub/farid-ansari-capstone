@@ -1,24 +1,32 @@
 @use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
 
 .HomePage {
-  display: flex;
+  display: flex; 
   background-color: $colPrimary-Background;
+  min-height: 100vh;
+  min-width: 100vw;
+
+  @include displayMobile{
+    flex-direction: column;
+  }
 
   &__left{
     background-color: none;
   }
   &__main{
-    margin: auto;  
-    min-height: 100vh;
+    flex-grow: 1;
+    background-color: none; 
+    
     font-size: 1rem;;
   
     &__content {
+      background-color: none;
       margin: auto;
       max-width: 1280px;
       height: 80vh;
       overflow:auto;
       padding-right: 1rem;
-      text-align: left;
       scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
       scrollbar-width: thin;
     }

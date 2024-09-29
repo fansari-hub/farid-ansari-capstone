@@ -7,7 +7,7 @@ export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, s
       <div className="ChatInput">
         <img src={logo} className="ChatInput__logo" alt="logo" />
         <div className="ChatInput__input">
-          <textarea className="ChatInput__input__textbox" ref={userInput} id="userInput" rows="4" cols="50" placeholder="Type your message here to Janus GPT here."></textarea>
+          <textarea className="ChatInput__input__textbox" ref={userInput} id="userInput" rows="4"  placeholder="Type your message here to Janus GPT here."></textarea>
           <div className="ChatInput__input__buttons">
             <button className="ChatInput__input__buttons__button" id="sendButton" onClick={sendChatCallBack}>
               Send

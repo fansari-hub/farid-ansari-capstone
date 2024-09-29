@@ -1,9 +1,11 @@
 @use "../../styles/partials/colors" as *;
 @use "../../styles/partials/anims" as *;
+@use "../../styles//partials/mixins" as *;
 
 .ResponseCard {
   // @include revealing-animation;
-  margin-bottom: 50px;
+  background-color: none;
+  margin-bottom: 25px;
   display: flex;
   align-items: flex-end;
   &__left {
@@ -13,8 +15,14 @@
       border: 1px solid $colSecondary-MutedBorder;
       margin-right:10px;
       position: relative;
+      margin-left: -60px;
       top: 30px;
-      left: 60px
+      left: 60px;
+      @include displayMobile{
+        height: 60px;
+        left: 70px;
+        top: 35px;
+      }
     }
   }
   &__right {
@@ -44,7 +52,10 @@
     }
     &__content {
       flex-grow: 1;
-      padding-left: 50px;
+      padding-left: 30px;
+      @include displayMobile{
+        padding-left: 10px;
+      }
     }
   }
 }
