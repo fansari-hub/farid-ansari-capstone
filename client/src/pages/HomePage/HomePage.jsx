@@ -5,13 +5,16 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
+let autoScroll = false;
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
   let [sessions, setSessions] = useState([]);
   let [personalities, setPersonalities] = useState([]);
   let [activeSession, setActiveSession] = useState("");
+  let [activeSessionTitle, setActiveSessionTitle] = useState("");
   let [chatlog, setChatlog] = useState([]);
+  
   let userInput = useRef();
   let inputTTSflag = useRef();
   let chatDiv = useRef();
@@ -55,10 +58,19 @@ export default function HomePage() {
       try {
         const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
         setChatlog(response.data);
+        setSessionTitle();
       } catch (error) {
         alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
       }
     };
+
+    const setSessionTitle = () => {
+      const titleIndex = sessions.findIndex((o) => o.sessionID === activeSession);
+      if (titleIndex !== -1) {
+        setActiveSessionTitle(sessions[titleIndex].sessionName)
+      }
+    }
+
     fetchChatHistory();
   }, [activeSession]);
 
@@ -95,8 +107,10 @@ export default function HomePage() {
   }, [chatlog, personalities]);
 
   useEffect(() => {
-    //chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" });
-    window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
+    if (autoScroll){
+      window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
+    }
+      
   }, [responses]);
 
   const handleSendChat = async (event) => {
@@ -113,6 +127,7 @@ export default function HomePage() {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
+      autoScroll = true;
       setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
       if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
@@ -124,6 +139,7 @@ export default function HomePage() {
   };
 
   const handleSessionChange = async (sessionID) => {
+    autoScroll = false;
     setActiveSession(sessionID);
   };
 
@@ -174,6 +190,7 @@ export default function HomePage() {
       const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
+      console.log("Autoscroll afer SendChat " + autoScroll);
       setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
       if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
@@ -220,10 +237,12 @@ export default function HomePage() {
   return (
     <div className="HomePage">
       <div className="HomePage__side">
-        <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} />
+        <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} activeSession={activeSession}/>
       </div>
       <div className="HomePage__main">
+      < h1 className="HomePage__main__title">{activeSessionTitle}</h1>
         <div ref={chatDiv} className="HomePage__main__content">
+           
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
         <div className="HomePage__main__input">

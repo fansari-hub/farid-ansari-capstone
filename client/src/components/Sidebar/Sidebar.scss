@@ -51,7 +51,9 @@
     }
     &__list {
       margin-top: 10px;
+      @include displayMobile{
       margin-left: 10px;
+      }
     }
   }
   &__add {

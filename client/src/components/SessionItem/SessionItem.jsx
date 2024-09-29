@@ -1,8 +1,16 @@
 import "./SessionItem.scss";
 import { useRef } from "react";
 
-export default function SessionItem({ chatSession, switchSessionCallBack, deleteSessionCallback, updateSessionCallback }) {
+export default function SessionItem({ chatSession, switchSessionCallBack, deleteSessionCallback, updateSessionCallback, activeSession }) {
   const sessionRef = useRef();
+
+  let sessionItemClass = "SessionItem__group__item";
+
+  if (chatSession.sessionID === activeSession){
+    sessionItemClass += " SessionItem__group__item--active"
+  }
+
+  
 
   function handleEditButton() {
     sessionRef.current.disabled = false;
@@ -27,7 +35,7 @@ export default function SessionItem({ chatSession, switchSessionCallBack, delete
             ref={sessionRef}
             name="sessionField"
             type="text"
-            className="SessionItem__group__item"
+            className={sessionItemClass}
             onBlur={() => {
               handleUpdateName();
             }}
