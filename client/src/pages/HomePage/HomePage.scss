@@ -10,8 +10,12 @@
     flex-direction: column;
   }
 
-  &__left{
+  &__side{
     background-color: none;
+    position: fixed;
+    @include displayMobile{
+      position: relative;
+    }
   }
   &__main{
     flex-grow: 1;
@@ -20,6 +24,7 @@
     font-size: 1rem;
   
     &__content {
+      padding-left: 220px;
       background-color: none;
       margin: auto;
       max-width: 1280px;
@@ -31,6 +36,7 @@
       padding-bottom: 220px;
       @include displayMobile{
         padding-bottom: 200px;
+        padding-left: 0px;
       }
     }
     &__input{
