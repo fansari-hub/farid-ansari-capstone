@@ -25,9 +25,23 @@
     font-size: calc(10px + 1vmin);
     flex-grow: 1;
 
+    &__title{
+      text-align: left;
+      padding-left: 170px;
+      padding-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight:400;
+      letter-spacing: 0.25rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      @include displayMobile{
+        padding-left :0;
+        padding-right :0;
+        text-align: center;
+      }
+    }
+
     &__content {
       padding-left: 150px;
-      //margin: auto;
       max-width: 1280px;
       text-align: left;
       @include displayMobile{
@@ -38,9 +52,10 @@
         margin-bottom: 20px;
         &__add {
           margin-left: 20px;
-          border: 1px solid $colSecondary-PositiveAction;
+          border: 3px outset $colSecondary-MutedBorder;
+          box-shadow: 1px 1px black;
           border-radius: 20px;
-          background-color: transparent;
+          background-color: $colPrimary-ItemFill;
           color: $colSecondary-PositiveActionText;
           height: 2rem;
           width: 10rem;

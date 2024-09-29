@@ -5,7 +5,12 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
+import soundChatDing from "../../assets/sounds/ding.mp3"
+const mainAudioChannel = new Audio();
+const speechAudioChannel = new Audio();
 let autoScroll = false;
+
+
 
 export default function HomePage() {
   let [responses, setResponses] = useState([]);
@@ -18,6 +23,19 @@ export default function HomePage() {
   let userInput = useRef();
   let inputTTSflag = useRef();
   let chatDiv = useRef();
+
+  function ChangeAutoScroll(flag){
+    if (flag === true){
+      autoScroll = true
+    } else{
+      autoScroll = false
+    }
+  }
+
+  function playNewMessagSound(){
+    mainAudioChannel.src = soundChatDing;
+    mainAudioChannel.play();
+  }
 
   async function refetchSessionData(){
     try {
@@ -107,7 +125,7 @@ export default function HomePage() {
   }, [chatlog, personalities]);
 
   useEffect(() => {
-    if (autoScroll){
+    if (autoScroll === true){
       window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
     }
       
@@ -127,8 +145,9 @@ export default function HomePage() {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
       const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      autoScroll = true;
+      ChangeAutoScroll(true);
       setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
+      playNewMessagSound();
       if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
@@ -139,7 +158,7 @@ export default function HomePage() {
   };
 
   const handleSessionChange = async (sessionID) => {
-    autoScroll = false;
+    ChangeAutoScroll(false);
     setActiveSession(sessionID);
   };
 
@@ -190,8 +209,9 @@ export default function HomePage() {
       const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      console.log("Autoscroll afer SendChat " + autoScroll);
+      ChangeAutoScroll(true);
       setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
+      playNewMessagSound();
       if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
       }
@@ -210,9 +230,8 @@ export default function HomePage() {
       }
       const getURL = webapi.URL + "/ttsgen";
       const response = await axios.post(getURL, ttsObj);
-      const audio = new Audio();
-      audio.src = webapi.URL + "/" + response.data.result;
-      audio.play();
+      speechAudioChannel.src = webapi.URL + "/" + response.data.result;
+      speechAudioChannel.play();
     }catch (error){
       alert(`HomePage.getAndPlayTTS() request failed with error: ${error}`);
       return -1;
@@ -224,9 +243,8 @@ export default function HomePage() {
       const getURL = webapi.URL + "/ttsgen/" + messageID
       const response = await axios.get(getURL);
       if (response.data.ttsAudioFile){
-        const audio = new Audio();
-        audio.src = webapi.URL + "/" + response.data.ttsAudioFile;
-        audio.play();
+        speechAudioChannel.src = webapi.URL + "/" + response.data.ttsAudioFile;
+        speechAudioChannel.play();
       }
     }catch (error){
       alert(`HomePage.handleSingleAudioPlayback() request failed with error: ${error}`);
