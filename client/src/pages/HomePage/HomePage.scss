@@ -20,20 +20,28 @@
   &__main{
     flex-grow: 1;
     background-color: none; 
-    
     font-size: 1rem;
+
+    &__title{
+      padding-left: 250px;
+      padding-right: 50px;
+      color: $colPrimary-MainText;
+      text-align: center;
+      @include displayMobile{
+        padding-left :0;
+        padding-right :0;
+      }
+    }
   
     &__content {
       padding-left: 220px;
       background-color: none;
       margin: auto;
       max-width: 1280px;
-      //height: 80vh;
-      //overflow:hidden;
       padding-right: 1rem;
+      padding-bottom: 220px;
       //scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
       //scrollbar-width: thin;
-      padding-bottom: 220px;
       @include displayMobile{
         padding-bottom: 200px;
         padding-left: 0px;
