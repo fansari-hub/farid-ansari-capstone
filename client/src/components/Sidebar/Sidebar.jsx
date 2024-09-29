@@ -11,7 +11,7 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
       <div className="Sidebar">
         <div className="Sidebar__settings">
           <Link to="/setup">
-            <p className="Sidebar__settings__item">Personality Settings</p>
+            <p className="Sidebar__settings__item">Settings</p>
           </Link>
         </div>
         <div className="Sidebar__sessionList">
@@ -26,7 +26,7 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
         </div>
         {addSessionCallback ? (
             <button className="Sidebar__add" onClick={addSessionCallback}>
-              +
+             +New
             </button>
           ) : (
             <></>

@@ -11,11 +11,15 @@
 
   @include displayMobile {
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
   }
 
   &__settings {
     order: 0;
+    @include displayMobile{
+      order: 0;
+    }
     &__item {
       color: cadetblue;
       &:hover {
@@ -51,20 +55,24 @@
     }
   }
   &__add {
-    margin-left: auto;
-    width: 55px;
+    margin-left: 10px;
+    width: 100%;
     order: 2;
     border: 1px solid green;
     background-color: transparent;
     color: green;
+    border-radius: 20px;
+    font-size: 1rem;
+    height: 1.5rem;
 
     @include displayMobile{
-      width: 1.25rem;
-      height: 1.25rem;
+      margin-left: 0;
+      flex-grow: 1;
       padding-right: 0px;
       padding-left: 0px;
       order: 2;
       align-self: center;
+      height: 2rem;
     }
     &:hover {
       cursor: pointer;
