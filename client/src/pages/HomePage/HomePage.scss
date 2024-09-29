@@ -27,6 +27,10 @@
       padding-right: 50px;
       color: $colPrimary-MainText;
       text-align: center;
+      font-size: 1.5rem;
+      font-weight:400;
+      letter-spacing: 0.25rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       @include displayMobile{
         padding-left :0;
         padding-right :0;

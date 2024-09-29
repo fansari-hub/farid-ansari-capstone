@@ -10,7 +10,7 @@
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-  max-width: 1280px;
+  max-width: 1100px;
   @include displayMobile{
     margin-top: 10px;
     
@@ -18,9 +18,9 @@
 
   &__logo {
     flex-grow: 0;
-    margin: 0px;
-    margin-left: 20px;
+    margin-bottom: 0px;
     margin-top: 10px;
+    margin-left: 60px;
     margin-right: 20px;
     border-radius: 20px;
     height: 100px;
@@ -31,9 +31,7 @@
     }
   }
   &__input {
-    max-width: 1280px;
     flex-grow: 1;
-    padding-right: 25px;
     margin-right: 0px;
     background-color: none;
     display: flex;
