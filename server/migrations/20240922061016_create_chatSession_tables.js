@@ -5,6 +5,7 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.string('sessionID').notNullable().unique();
         table.string('sessionName').notNullable();
+        table.string('participants');
       })
       .createTable("chatSessionHist",(table) => {
       table.increments("id").primary();
