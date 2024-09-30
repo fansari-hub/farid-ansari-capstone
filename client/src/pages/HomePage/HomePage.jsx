@@ -96,7 +96,7 @@ export default function HomePage() {
       if (randomPick === 1) {
         console.log("Auto Chat Event: Active Session is: " + strActiveSession + " checkbox value is: " + inputAutoChatFlag.current.checked);
         //console.log(objResponses);
-        handleSendSkip(strActiveSession, objResponses);
+        handleSendSkip(""+strActiveSession, objResponses);
       }
     }
     
@@ -255,17 +255,12 @@ export default function HomePage() {
 
     //If this function is called from ChatAutoPlay(), we have to use local verisons of state variables form ChatAutoPlay()
     //otherwise the data whicih the scope of the setInterval wrapper won't be up to date.
-    if (strAutoChatSession){
+    if (typeof strAutoChatSession === "string"){
       currentActiveSession= strAutoChatSession
+      currentResponses = objAutoChatResponses;
     }
     else{
       currentActiveSession = activeSession;
-    }
-
-    if (objAutoChatResponses){
-      currentResponses = objAutoChatResponses
-    }
-    else{
       currentResponses = responses;
     }
 

@@ -65,7 +65,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Temperature</p>
-            <input ref={userInputTemperature} name="temperature" className="PersonalityConfig__group__data PersonalityConfig__group__data--noborder" type="range" step="0.25" min="0" max="2.0" value={formData.temperature} onChange={handleChange}></input>
+            <input ref={userInputTemperature} name="temperature" className="PersonalityConfig__group__data PersonalityConfig__group__data--noborder" type="range" step="0.1" min="0.0" max="1.0" value={formData.temperature} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Prompt</p>
