@@ -79,8 +79,8 @@ async function conversationManager(gptData, strSessionID, res) {
   }
 
   const chatResponse = await chatgptModel.chatSend(gptData[randomPick]);
-  console.log(`${personalityData[randomPick].name} is responding with:`);
-  console.log(chatResponse.reply);
+  console.log(`****** ${personalityData[randomPick].name} is responding to user ******`);
+  //console.log(chatResponse.reply);
   openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityData[randomPick].personalityID, chatResponse.reply);
   res.status(200).json(openAIresponse);
 
