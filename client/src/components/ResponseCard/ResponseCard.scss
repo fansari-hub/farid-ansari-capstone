@@ -7,23 +7,24 @@
   background-color: none;
   margin-bottom: 25px;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   &__left {
     &__image {
-      height:75px;
+      height: 75px;
       border-radius: 50px;
       border: 3px outset $colSecondary-MutedBorder;
       box-shadow: 3px 3px;
-      margin-right:10px;
+      margin-right: 10px;
       position: relative;
       margin-left: -60px;
-      top: 30px;
-      left: 60px;
-      @include displayMobile{
+      top: -10px;
+      left: 40px;
+      @include displayMobile {
         border: thin outset $colSecondary-MutedBorder;
         height: 60px;
-        left: 70px;
-        top: 35px;
+        left: 40px;
+        top: -10px;
+        margin-left: -20px;
       }
     }
   }
@@ -34,19 +35,24 @@
     background-color: $colPrimary-ItemFill;
     border-radius: 15px;
     margin-top: 20px;
-
+    margin-right: 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     padding-left: 1rem;
     padding-right: 1rem;
     padding-bottom: 2rem;
+    @include displayMobile {
+      margin-right: 20px;
+    }
     &__header {
       display: flex;
       justify-content: space-between;
       padding-left: 25px;
       &__name {
+        font-family: monospace;
         font-weight: 400;
+        letter-spacing: 0.1rem;
         color: $colPrimary-LabelText;
       }
       &__date {
@@ -56,7 +62,10 @@
     &__content {
       flex-grow: 1;
       padding-left: 30px;
-      @include displayMobile{
+      padding-right: 20px;
+      line-height: 1.5rem;
+
+      @include displayMobile {
         padding-left: 10px;
       }
     }
