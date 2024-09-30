@@ -59,6 +59,21 @@ const httpUpdateSession = async (req, res) => {
   res.status(200).json(result);
 }
 
+const httpInsertPersonIntoSession = async (req, res) => {
+  const result = await chatSessionModel.insertPerson(req.params.id, req.params.personid);
+  res.status(200).json(result);
+}
+
+const httpRemovePersonFromSession = async (req, res) => {
+  const result = await chatSessionModel.removePerson(req.params.id, req.params.personid);
+  res.status(200).json(result);
+}
+
+const httpGetPersonsInSession = async (req, res) => {
+  const result = await chatSessionModel.getPersons(req.params.id);
+  res.status(200).json(result);
+}
+
 module.exports = {
   httpCreateSession,
   httpGetSessions,
@@ -66,5 +81,8 @@ module.exports = {
   httpForceBotChat,
   httpGetSessionHistory,
   httpDeleteSession,
-  httpUpdateSession
+  httpUpdateSession,
+  httpInsertPersonIntoSession,
+  httpRemovePersonFromSession,
+  httpGetPersonsInSession
 };
