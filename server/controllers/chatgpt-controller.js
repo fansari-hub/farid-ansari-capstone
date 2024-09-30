@@ -78,7 +78,7 @@ async function conversationManager(gptData, strSessionID, res) {
     randomPick = directRecipientIndex;
   }
 
-  const chatResponse = await chatgptModel.chatSend(gptData[randomPick]);
+  const chatResponse = await chatgptModel.chatSend(gptData[randomPick], personalityData[randomPick].temperature);
   console.log(`****** ${personalityData[randomPick].name} is responding to user ******`);
   //console.log(chatResponse.reply);
   openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityData[randomPick].personalityID, chatResponse.reply);
