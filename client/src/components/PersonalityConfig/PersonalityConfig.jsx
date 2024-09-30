@@ -65,7 +65,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Temperature</p>
-            <input ref={userInputTemperature} name="temperature" className="PersonalityConfig__group__data" type="number" step="0.01"  value={formData.temperature} onChange={handleChange}></input>
+            <input ref={userInputTemperature} name="temperature" className="PersonalityConfig__group__data PersonalityConfig__group__data--noborder" type="range" step="0.25" min="0" max="2.0" value={formData.temperature} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">Prompt</p>
@@ -73,7 +73,13 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label">TTS Voice</p>
-            <input ref={userInputVoice} name="voice" className="PersonalityConfig__group__data" placeholder="Enter a valid voice value: Valid choices are : alloy, echo, fable, onyx, nova, and shimme " type="text" value={formData.voice} onChange={handleChange}></input>
+            <select ref={userInputVoice} name="voice" className="PersonalityConfig__group__data" type="text" value={formData.voice} onChange={handleChange}>
+              <option value="alloy">Alloy</option>
+              <option value="echo">Echo</option>
+              <option value="onyx">Onyx</option>
+              <option value="nova">Nova</option>
+              <option value="shimme">Shimme</option>
+            </select>
           </div>
           <div className="PersonalityConfig__group">
             <button className="PersonalityConfig__group__save" type="submit" onClick={handleSave}>Save</button>
