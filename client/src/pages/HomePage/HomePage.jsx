@@ -32,11 +32,14 @@ export default function HomePage() {
   useEffect(() => {
     refetchSessionData();
     refetchPersonalityData();
+    return () => {
+      //ensure any active intervals are cleared if the user goes to a different page.
+      clearInterval(autoChatInterval); 
+    }
   }, []);
 
   useEffect(() => {
     refetchSessionDetailData();
-    
   }, [activeSession]);
 
   useEffect(() => {
@@ -75,7 +78,7 @@ export default function HomePage() {
     if (autoScroll === true){
       window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
     }
-
+    //this for auto chat, evertime responses are updated this gets reset
     clearInterval(autoChatInterval); 
     autoChatInterval = setInterval(() => {
       chatAutoPlay(activeSession, responses);
@@ -250,6 +253,8 @@ export default function HomePage() {
     let currentActiveSession;
     let currentResponses;
 
+    //If this function is called from ChatAutoPlay(), we have to use local verisons of state variables form ChatAutoPlay()
+    //otherwise the data whicih the scope of the setInterval wrapper won't be up to date.
     if (strAutoChatSession){
       currentActiveSession= strAutoChatSession
     }
