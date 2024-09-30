@@ -6,7 +6,7 @@ import defaultLogo from "../../assets/images/logo.webp"
 export default function ResponseCard({ responseObj, audioPlayCallBack }) {
   let avatarImg;
   
-  if (responseObj.name === "You"){
+  if (responseObj.name === "You" || responseObj.name === "JanusGPT"){
     avatarImg = defaultLogo;
   }
   else{

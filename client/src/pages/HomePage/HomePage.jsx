@@ -300,14 +300,16 @@ export default function HomePage() {
     }
   };
 
-  const handleRemovePersonFromSession = async (personID, sessionID) => {
+  const handleRemovePersonFromSession = async (personObj, sessionID) => {
     try {
-      const delURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personID;
+      const delURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personObj.personalityID;
       const response = await axios.delete(delURL);
       const personsFiltered = activeSessionPersons.filter((e) => {
-        return e.personalityID !== personID;
+        return e.personalityID !== personObj.personalityID;
       });
       setActiveSessionPersons(personsFiltered);
+      ChangeAutoScroll(true);
+      setResponses([...responses, { name: "JanusGPT",  content: `${personObj.name} left the chat!`, timestamp: Date.now() }]);
     } catch (error) {
       alert(`HomePage.handleRemovePersonFromSession() request failed with error: ${error}`);
       return -1;
@@ -319,6 +321,8 @@ export default function HomePage() {
       const postURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personObj.personalityID;
       const response = await axios.post(postURL);
       setActiveSessionPersons([...activeSessionPersons, personObj]);
+      ChangeAutoScroll(true);
+      setResponses([...responses, { name: "JanusGPT",  content: `${personObj.name} entered the chat!`, timestamp: Date.now() }]);
     } catch (error) {
       alert(`HomePage.handleAddPersonToSession() request failed with error: ${error}`);
       return -1;

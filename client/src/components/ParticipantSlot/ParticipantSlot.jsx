@@ -21,7 +21,7 @@ export default function ParticipantSlot({ personalitiesObj, activeSession, remov
     <>
       <div className="ParticipantSlot__group">
         <img className="ParticipantSlot__group__image" src={profileImage} alt="avatar_icon" />
-        <div className="ParticipantSlot__group__delete" onClick={() => handleRemovePerson(personalitiesObj.personalityID)}>
+        <div className="ParticipantSlot__group__delete" onClick={() => handleRemovePerson(personalitiesObj)}>
           X
         </div>
       </div>
