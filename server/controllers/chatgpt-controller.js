@@ -25,12 +25,15 @@ function generateGPTChat(strSessionID, res) {
   getData().then(() => {
     let membersPresent = "";
 
-    personalityDataFiltered = personalityData.map((e) => {
-      if (sessionParticipants.indexOf(e.personalityID) >= 0){
-        return e;
-      }
+    personalityDataFiltered = personalityData.filter((e) => {
+       return sessionParticipants.indexOf(e.personalityID) >= 0
     });
 
+    if (personalityDataFiltered.length === 0) {
+      res.status(200).json({});
+      return
+    }
+    
     personalityDataFiltered.forEach((p) => {
       membersPresent += p.name + ", ";
     });

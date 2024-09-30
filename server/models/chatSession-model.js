@@ -16,7 +16,7 @@ function createChatSession(strName) {
   if (!strName) {
     throw Error("ChatSession: You must provide a session name!");
   }
-  const data = { sessionID: uuidv4(), sessionName: strName };
+  const data = { sessionID: uuidv4(), sessionName: strName, participants : "[]" };
   knexops.insertDatabase("chatSessions", data); //async op but no need to wait
   return data;
 }
