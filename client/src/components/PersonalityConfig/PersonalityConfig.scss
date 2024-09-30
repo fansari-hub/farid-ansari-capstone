@@ -22,6 +22,8 @@
       gap: 0.6rem;
     }
     &__picture{
+      border: 2px outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black ;
       height: 8rem;
       border-radius: 100px;
       @include displayMobile{
@@ -93,6 +95,10 @@
         font-size: 0.8rem;
         padding-left: 0.8rem;
         padding-right: 0.8rem;
+      }
+      &--noborder{
+        border: none;
+        box-shadow: none;
       }
     }
     &__prompt{

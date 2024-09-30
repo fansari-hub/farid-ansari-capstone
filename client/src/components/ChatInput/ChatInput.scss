@@ -56,12 +56,12 @@
     &__buttons {
       width: 100%;
       justify-content: flex-start;
-      margin-left: 25px;
+      margin-left: 15px;
       display: flex;
       gap: 20px;
       @include displayMobile {
         justify-content: center;
-        margin-left: 0px;
+        margin-left: -15px;
       }
       &__group {
         display: flex;
