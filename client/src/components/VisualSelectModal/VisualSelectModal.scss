@@ -1,0 +1,61 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+
+.VisualSelectModal {
+    background-color: rgba(0, 0, 0, 0.808);
+    position:fixed;
+    height: 100vh;
+    width: 100vw;
+    padding: 0px;
+    margin-top: -60px;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include displayMobile{
+        margin-top: -219px;
+    }
+    &__container{
+        height: fit-content;
+        background-color: $colPrimary-ItemFill;
+        border: thick outset $colSecondary-MutedBorder;
+        border-radius: 25px;
+        box-shadow: 5px 5px rgba(0, 0, 0, 0.656);
+        width: 400px;
+        padding: 20px;
+        margin: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        @include displayMobile{
+            width: 270px;
+        }
+    
+    &__group{
+        &__item{
+            &__label{
+                padding: 0;
+                margin: 0;
+                text-align: center;
+                position: relative;
+                top: 100px;
+                left: 0px;
+                font-size: 1rem;
+                color: $colSecondary-PositiveActionTextHover;
+                background-color: rgba(0, 0, 0, 0.623);
+
+            }
+            &__image{
+                height: 100px;
+                border: thick outset $colSecondary-MutedBorder;
+                box-shadow: 2px 2px black;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+}

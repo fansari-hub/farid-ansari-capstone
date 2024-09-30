@@ -3,7 +3,9 @@ const personalityModel = require("../models/personality-model");
 const chatSessionModel = require("../models/chatSession-model");
 
 let personalityData = [];
+let personalityDataFiltered = [];
 let chatHistoryData = [];
+let sessionParticipants = [];
 
 function generateGPTChat(strSessionID, res) {
 
@@ -14,6 +16,7 @@ function generateGPTChat(strSessionID, res) {
   const getData = async () => {
     personalityData = await personalityModel.getPersonalityDetails();
     chatHistoryData = await chatSessionModel.getChatSessionChatDetail(strSessionID);
+    sessionParticipants = await chatSessionModel.getPersons(strSessionID);
     return true;
   };
 
@@ -22,11 +25,20 @@ function generateGPTChat(strSessionID, res) {
   getData().then(() => {
     let membersPresent = "";
 
-    personalityData.forEach((p) => {
+    personalityDataFiltered = personalityData.filter((e) => {
+       return sessionParticipants.indexOf(e.personalityID) >= 0
+    });
+
+    if (personalityDataFiltered.length === 0) {
+      res.status(200).json({});
+      return
+    }
+    
+    personalityDataFiltered.forEach((p) => {
       membersPresent += p.name + ", ";
     });
 
-    personalityData.forEach((p) => {
+    personalityDataFiltered.forEach((p) => {
       let personalChatHistory = [];
 
       const currentPersonalityName = p.name;
@@ -36,13 +48,13 @@ function generateGPTChat(strSessionID, res) {
       chatHistoryData.forEach((e) => {
         let chatSenderName = "";
 
-        const nameIndex = personalityData.findIndex((o) => o.personalityID === e.senderID);
+        const nameIndex = personalityDataFiltered.findIndex((o) => o.personalityID === e.senderID);
         if (nameIndex === -1) {
           chatSenderName = "User";
-        } else if (personalityData[nameIndex].name === currentPersonalityName) {
+        } else if (personalityDataFiltered[nameIndex].name === currentPersonalityName) {
           chatSenderName = "You";
         } else {
-          chatSenderName = personalityData[nameIndex].name;
+          chatSenderName = personalityDataFiltered[nameIndex].name;
         }
 
         if (chatSenderName === "You") {
@@ -66,22 +78,23 @@ async function conversationManager(gptData, strSessionID, res) {
   let directRecipientIndex = -1;
   let randomPick = 0;
 
-  personalityData.forEach((e, i) => {
+  personalityDataFiltered.forEach((e, i) => {
     if (getlastMessage.includes(`@${e.name}`)) {
       directRecipientIndex = i;
     }
   });
 
   if (directRecipientIndex === -1) {
-    randomPick = Math.floor(Math.random() * 3);
+    randomPick = Math.floor(Math.random() * personalityDataFiltered.length);
   } else {
     randomPick = directRecipientIndex;
   }
 
-  const chatResponse = await chatgptModel.chatSend(gptData[randomPick], personalityData[randomPick].temperature);
-  console.log(`****** ${personalityData[randomPick].name} is responding to user ******`);
-  //console.log(chatResponse.reply);
-  openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityData[randomPick].personalityID, chatResponse.reply);
+  console.log(`****** Chat will be sent to ${personalityDataFiltered[randomPick].name} ******`);
+  const chatResponse = await chatgptModel.chatSend(gptData[randomPick], personalityDataFiltered[randomPick].temperature);
+  console.log(`****** ${personalityDataFiltered[randomPick].name} is responding to user ******`);
+  // console.log(chatResponse.reply);
+  openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[randomPick].personalityID, chatResponse.reply);
   res.status(200).json(openAIresponse);
 
 }

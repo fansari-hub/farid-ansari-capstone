@@ -1,0 +1,40 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.Participants {
+  padding-top: 10px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 30px;
+  background-color: rgba(0, 0, 0, 0.561);
+  gap: 10px;
+  &__add {
+    background-color: none;
+    &__addIcon {
+      height: 1.5rem;
+      width: 1.5rem;
+      border-radius: 250px;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      background-color: $colPrimary-Background;
+      color: $colSecondary-PositiveActionText;
+      text-align: center;
+      font-size: 1rem;
+      margin: 0;
+      padding: 0;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  &__list {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 25px;
+  }
+}

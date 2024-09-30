@@ -1,0 +1,37 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.ParticipantSlot {
+    &__group {
+      &__image {
+        height: 60px;
+        border-radius: 50px;
+        border: thin outset $colSecondary-MutedBorder;
+        box-shadow: 1px 1px;
+        padding: 0;
+        margin: 0;
+        @include displayMobile {
+          height: 50px;
+        }
+      }
+      &__delete {
+        height: 1.1rem;
+        width: 1.1rem;
+        border-radius: 250px;
+        border: thin outset $colSecondary-MutedBorder;
+        box-shadow: 1px 1px black;
+        background-color: $colPrimary-Background;
+        color: $colSecondary-NegativeActionText;
+        text-align: center;
+        position: relative;
+        top: -20px;
+        left: 46px;
+        font-size: 0.8rem;
+        margin: 0;
+        padding: 0;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }

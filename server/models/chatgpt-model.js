@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const chatSend = async (tokens, floatTemp = 1) => {
   console.log("****** Sending Request to Open AI*****");
-  console.log("***** Temperature: " + floatTemp);
+  //console.log("***** Temperature: " + floatTemp);
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
