@@ -9,6 +9,7 @@ import soundChatDing from "../../assets/sounds/ding.mp3"
 const mainAudioChannel = new Audio();
 const speechAudioChannel = new Audio();
 let autoScroll = false;
+let autoChatInterval;
 
 
 
@@ -22,74 +23,20 @@ export default function HomePage() {
   
   let userInput = useRef();
   let inputTTSflag = useRef();
+  let inputAutoChatFlag = useRef();
   let chatDiv = useRef();
+  
 
-  function ChangeAutoScroll(flag){
-    if (flag === true){
-      autoScroll = true
-    } else{
-      autoScroll = false
-    }
-  }
 
-  function playNewMessagSound(){
-    mainAudioChannel.src = soundChatDing;
-    mainAudioChannel.play();
-  }
-
-  async function refetchSessionData(){
-    try {
-      setSessions([]);
-      const response = await axios.get(webapi.URL + "/chatsession");
-      setSessions(response.data);
-      setActiveSession(response.data[0].sessionID);
-    } catch (error) {
-      alert(`HomePage.fetchSessions() request failed with error: ${error}`);
-    }
-  }
   
   useEffect(() => {
-    const fetchSessions = async () => {
-      try {
-        const response = await axios.get(webapi.URL + "/chatsession");
-        setSessions(response.data);
-        setActiveSession(response.data[0].sessionID);
-      } catch (error) {
-        alert(`HomePage.fetchSessions() request failed with error: ${error}`);
-      }
-    };
-    fetchSessions();
-
-    const fetchPersonalities = async () => {
-      try {
-        const response = await axios.get(webapi.URL + "/personality");
-        setPersonalities(response.data);
-      } catch (error) {
-        alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
-      }
-    };
-    fetchPersonalities();
+    refetchSessionData();
+    refetchPersonalityData();
   }, []);
 
   useEffect(() => {
-    const fetchChatHistory = async () => {
-      try {
-        const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
-        setChatlog(response.data);
-        setSessionTitle();
-      } catch (error) {
-        alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
-      }
-    };
-
-    const setSessionTitle = () => {
-      const titleIndex = sessions.findIndex((o) => o.sessionID === activeSession);
-      if (titleIndex !== -1) {
-        setActiveSessionTitle(sessions[titleIndex].sessionName)
-      }
-    }
-
-    fetchChatHistory();
+    refetchSessionDetailData();
+    
   }, [activeSession]);
 
   useEffect(() => {
@@ -128,8 +75,112 @@ export default function HomePage() {
     if (autoScroll === true){
       window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
     }
+
+    clearInterval(autoChatInterval); 
+    autoChatInterval = setInterval(() => {
+      chatAutoPlay(activeSession, responses);
+    }, 5000);
       
   }, [responses]);
+
+
+  function chatAutoPlay(strActiveSession, objResponses){
+    //console.log("Chat Auto: Active Session is: " + activeSession + " checkbox value is: " + inputAutoChatFlag.current.checked);
+    if (inputAutoChatFlag.current.checked === true && strActiveSession !=="")
+    {
+      const randomPick = Math.floor(Math.random() * 3);
+      //console.log(`randomPick ${randomPick}`);
+      if (randomPick === 1) {
+        console.log("Auto Chat Event: Active Session is: " + strActiveSession + " checkbox value is: " + inputAutoChatFlag.current.checked);
+        //console.log(objResponses);
+        handleSendSkip(strActiveSession, objResponses);
+      }
+    }
+    
+  }
+  
+  function ChangeAutoScroll(flag){
+    if (flag === true){
+      autoScroll = true
+    } else{
+      autoScroll = false
+    }
+  }
+
+  function playNewMessagSound(){
+    mainAudioChannel.src = soundChatDing;
+    mainAudioChannel.play();
+  }
+
+  async function refetchSessionData(){
+    try {
+      setSessions([]);
+      const response = await axios.get(webapi.URL + "/chatsession");
+      setSessions(response.data);
+      setActiveSession(response.data[0].sessionID);
+    } catch (error) {
+      alert(`HomePage.fetchSessions() request failed with error: ${error}`);
+    }
+  }
+  
+  async function refetchPersonalityData(){
+    try {
+      setPersonalities([]);
+      const response = await axios.get(webapi.URL + "/personality");
+      setPersonalities(response.data);
+    } catch (error) {
+      alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
+    }
+  }
+
+  async function refetchSessionDetailData(){
+    try {
+      const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
+      setChatlog(response.data);
+      setSessionTitle();
+    } catch (error) {
+      alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
+    }
+  };
+
+  function setSessionTitle(){
+    const titleIndex = sessions.findIndex((o) => o.sessionID === activeSession);
+    if (titleIndex !== -1) {
+      setActiveSessionTitle(sessions[titleIndex].sessionName)
+    }
+  }
+
+  async function getAndPlayTTS (strText, strVoice, strMessageID) {
+    try{
+      const ttsObj = {
+        "text": strText,
+        "voice":  strVoice,
+        "messageID" : strMessageID
+      }
+      const getURL = webapi.URL + "/ttsgen";
+      const response = await axios.post(getURL, ttsObj);
+      speechAudioChannel.src = webapi.URL + "/" + response.data.result;
+      speechAudioChannel.play();
+    }catch (error){
+      alert(`HomePage.getAndPlayTTS() request failed with error: ${error}`);
+      return -1;
+    }
+  }
+
+  async function handleSingleAudioPlayback(messageID){
+    try{
+      const getURL = webapi.URL + "/ttsgen/" + messageID
+      const response = await axios.get(getURL);
+      if (response.data.ttsAudioFile){
+        speechAudioChannel.src = webapi.URL + "/" + response.data.ttsAudioFile;
+        speechAudioChannel.play();
+      }
+    }catch (error){
+      alert(`HomePage.handleSingleAudioPlayback() request failed with error: ${error}`);
+      return -1;
+    }
+  }
+
 
   const handleSendChat = async (event) => {
     const personalitiesList = personalities.map((e) => {
@@ -195,7 +246,24 @@ export default function HomePage() {
     }
   };
 
-  const handleSendSkip = async (event) => {
+  const handleSendSkip = async (strAutoChatSession, objAutoChatResponses) => {
+    let currentActiveSession;
+    let currentResponses;
+
+    if (strAutoChatSession){
+      currentActiveSession= strAutoChatSession
+    }
+    else{
+      currentActiveSession = activeSession;
+    }
+
+    if (objAutoChatResponses){
+      currentResponses = objAutoChatResponses
+    }
+    else{
+      currentResponses = responses;
+    }
+
     const personalitiesList = personalities.map((e) => {
       const obj = {
         name: e.name,
@@ -206,11 +274,11 @@ export default function HomePage() {
       return obj;
     });
     try {
-      const getURL = webapi.URL + "/chatsession/" + activeSession + "/auto";
+      const getURL = webapi.URL + "/chatsession/" + currentActiveSession + "/auto";
       const response = await axios.get(getURL);
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       ChangeAutoScroll(true);
-      setResponses([...responses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
+      setResponses([...currentResponses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg :  personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID}]);
       playNewMessagSound();
       if (inputTTSflag.current.checked === true){
         getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID );
@@ -221,36 +289,6 @@ export default function HomePage() {
     }
   };
 
-  const getAndPlayTTS = async (strText, strVoice, strMessageID) => {
-    try{
-      const ttsObj = {
-        "text": strText,
-        "voice":  strVoice,
-        "messageID" : strMessageID
-      }
-      const getURL = webapi.URL + "/ttsgen";
-      const response = await axios.post(getURL, ttsObj);
-      speechAudioChannel.src = webapi.URL + "/" + response.data.result;
-      speechAudioChannel.play();
-    }catch (error){
-      alert(`HomePage.getAndPlayTTS() request failed with error: ${error}`);
-      return -1;
-    }
-  }
-
-  const handleSingleAudioPlayback = async (messageID) => {
-    try{
-      const getURL = webapi.URL + "/ttsgen/" + messageID
-      const response = await axios.get(getURL);
-      if (response.data.ttsAudioFile){
-        speechAudioChannel.src = webapi.URL + "/" + response.data.ttsAudioFile;
-        speechAudioChannel.play();
-      }
-    }catch (error){
-      alert(`HomePage.handleSingleAudioPlayback() request failed with error: ${error}`);
-      return -1;
-    }
-  }
 
   return (
     <div className="HomePage">
@@ -264,7 +302,7 @@ export default function HomePage() {
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
         <div className="HomePage__main__input">
-          <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} />
+          <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} />
         </div>
       </div>
     </div>

@@ -67,7 +67,7 @@
         display: flex;
         align-items: flex-end;
         padding-bottom: 5px;
-        padding-left: 20px;
+        padding-left: 10px;
         &__control {
           height: 1.5rem;
           width: 1.5rem;
@@ -75,7 +75,8 @@
           margin: 0px;
         }
         &__label {
-          padding-left: 10px;
+          padding-left: 5px;
+          padding-bottom: 2px;
           margin: 0px;
           color: $colPrimary-MutedText;
         }

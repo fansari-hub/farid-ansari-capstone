@@ -9,28 +9,20 @@ import { useState, useRef, useEffect } from "react";
 export default function PersonalitiesPage() {
   let [personalities, setPersonalities] = useState([]);
 
-  const refetchPersonalities  = async () => {
+
+
+  useEffect(() => {
+    refetchPersonalities();
+  }, []);
+
+  async function refetchPersonalities(){
     try {
-      //setPersonalities([]);
       const response = await axios.get(webapi.URL + "/personality");
       setPersonalities(response.data);
     } catch (error) {
       alert(`HomePage.refetchPersonalities() request failed with error: ${error}`);
     }
-    
   }
-
-  useEffect(() => {
-    const fetchPersonalities = async () => {
-      try {
-        const response = await axios.get(webapi.URL + "/personality");
-        setPersonalities(response.data);
-      } catch (error) {
-        alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
-      }
-    };
-    fetchPersonalities();
-  }, []);
 
   const handleUpdatePersonality = async (personalityObj) => {
     try {
