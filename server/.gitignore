@@ -2,3 +2,4 @@
 .env
 /public/TTS/*
 /public/avatarImg/*
+.DS_Store
