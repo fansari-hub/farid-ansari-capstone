@@ -18,6 +18,10 @@ export default function Participants({ activePersonalitiesObj, activeSession, pe
 
   const handleAddPerson = (param) => {
     setSelectionModal(<></>);
+
+    if (!param){
+      return;
+    }
     
     const selectedPersonIndex = personalitiesObj.findIndex((o) => 
       o.personalityID === param

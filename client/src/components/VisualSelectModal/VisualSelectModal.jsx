@@ -11,6 +11,9 @@ export default function VisualSelectModal({ selectionArray, callback }) {
     <>
     <div className="VisualSelectModal">
     <div className="VisualSelectModal__container">
+    <div className="VisualSelectModal__container__closeButton" onClick={() => {handleCallBack()}}>
+        X
+    </div>
     {selectionArray.map((e,i) => {
         return (
             <div className="VisualSelectModal__container__group" key={i}>
