@@ -8,24 +8,25 @@
     position:fixed;
     height: 100vh;
     width: 100vw;
-    padding: 0px;
-    margin-top: 0;
-    margin-left: 0;
     z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     &__container{
+        position: fixed;
+        top: 10vh;
+        left: 35vw;
+        @include displayMobile{
+        left: 25vw;
+
+        }
         &__closeButton{
-            position:fixed;
-            left: 50%;
-            top: 10%;
+            position: absolute;
+            left: -20px;
+            top: -20px;
             font-size: 2rem;
             height: 2.5rem;
             width: 2.5rem;
             text-align: center;
             background-color: $colPrimary-ItemFill;
-            border: thin outset $colSecondary-MutedBorder;
+            border: 1px outset $colSecondary-MutedBorder;
             border-radius: 50px;
             box-shadow: 5px 5px rgba(0, 0, 0, 0.656);
             color: $colSecondary-NegativeActionTextHover;
