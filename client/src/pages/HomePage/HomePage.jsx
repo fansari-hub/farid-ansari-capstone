@@ -114,9 +114,11 @@ export default function HomePage() {
       setSessions([]);
       const response = await axios.get(webapi.URL + "/chatsession");
       setSessions(response.data);
-      setActiveSession(response.data[0].sessionID);
+      if (response.data[0]){
+        setActiveSession(response.data[0].sessionID);        
+      }
     } catch (error) {
-      alert(`HomePage.fetchSessions() request failed with error: ${error}`);
+      alert(`HomePage.refetchSessions() request failed with error: ${error}`);
     }
   }
 
@@ -192,6 +194,9 @@ export default function HomePage() {
   }
 
   const handleSendChat = async (event) => {
+    if (!userInput.current.value){
+      return;
+    }
     const personalitiesList = personalities.map((e) => {
       const obj = {
         name: e.name,
@@ -215,6 +220,7 @@ export default function HomePage() {
       } else {
         setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }]);
       }
+      userInput.current.value = "";
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
       return -1;
