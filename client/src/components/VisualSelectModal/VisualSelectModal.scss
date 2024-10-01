@@ -8,14 +8,12 @@
     height: 100vh;
     width: 100vw;
     padding: 0px;
-    margin-top: -60px;
+    margin-top: 0;
+    margin-left: 0;
     z-index: 100;
     display: flex;
     justify-content: center;
     align-items: center;
-    @include displayMobile{
-        margin-top: -219px;
-    }
     &__container{
         height: fit-content;
         background-color: $colPrimary-ItemFill;

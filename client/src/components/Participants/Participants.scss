@@ -2,16 +2,16 @@
 @use "../../styles//partials/mixins" as *;
 
 .Participants {
+  padding-left: 25px;
+  padding-right: 25px;
   padding-top: 10px;
-  border-radius: 25px;
+  padding-bottom: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
-  margin-left: 20px;
-  margin-bottom: 30px;
-  background-color: rgba(0, 0, 0, 0.561);
-  gap: 10px;
+  margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.156);
+  gap: 25px;
   &__add {
     background-color: none;
     &__addIcon {
@@ -34,7 +34,6 @@
   &__list {
     display: flex;
     align-items: flex-end;
-    flex-wrap: wrap;
     gap: 25px;
   }
 }

@@ -2,41 +2,44 @@
 @use "../../styles//partials/mixins" as *;
 
 .HomePage {
-  display: flex; 
   background-color: $colPrimary-Background;
   min-height: 100vh;
-
-  @include displayMobile{
+  flex-direction: column;
+  @include displayMobile {
     flex-direction: column;
   }
 
-  &__side{
+  &__selectionBar {
+    max-width: 100%;
+  }
+
+  &__side {
     background-color: none;
     position: fixed;
-    @include displayMobile{
+    @include displayMobile {
       position: relative;
     }
   }
-  &__main{
+  &__main {
     flex-grow: 1;
-    background-color: none; 
+    background-color: none;
     font-size: 1rem;
 
-    &__title{
+    &__title {
       padding-left: 250px;
       padding-right: 50px;
       color: $colPrimary-MainText;
       text-align: center;
       font-size: 1.5rem;
-      font-weight:400;
+      font-weight: 400;
       letter-spacing: 0.25rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      @include displayMobile{
-        padding-left :0;
-        padding-right :0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      @include displayMobile {
+        padding-left: 0;
+        padding-right: 0;
       }
     }
-  
+
     &__content {
       padding-left: 220px;
       background-color: none;
@@ -46,24 +49,22 @@
       padding-bottom: 220px;
       //scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
       //scrollbar-width: thin;
-      @include displayMobile{
+      @include displayMobile {
         padding-bottom: 200px;
         padding-left: 0px;
       }
     }
-    &__input{
+    &__input {
       padding-bottom: 20px;
       padding-left: 160px;
       background-color: $colPrimary-Background;
       width: 100vw;
       position: fixed;
-      bottom:0;
+      bottom: 0;
       left: 0;
-      @include displayMobile{
+      @include displayMobile {
         padding-left: 0;
-
       }
     }
   }
-  }
-  
+}

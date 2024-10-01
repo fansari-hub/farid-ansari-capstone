@@ -331,12 +331,14 @@ export default function HomePage() {
 
   return (
     <div className="HomePage">
+      <div className="HomePage__selectionBar">
+        <Participants activeSession={activeSession} activePersonalitiesObj={activeSessionPersons} personalitiesObj={personalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
+        </div>
       <div className="HomePage__side">
         <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} activeSession={activeSession} />
       </div>
       <div className="HomePage__main">
         <h1 className="HomePage__main__title">{activeSessionTitle}</h1>
-        <Participants activeSession={activeSession} activePersonalitiesObj={activeSessionPersons} personalitiesObj={personalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
         <div ref={chatDiv} className="HomePage__main__content">
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>

@@ -3,6 +3,10 @@
 
 .ParticipantSlot {
     &__group {
+      height: 70px;
+      @include displayMobile{
+        height: 60px;
+      }
       &__image {
         height: 60px;
         border-radius: 50px;
