@@ -43,8 +43,8 @@ export default function Participants({ activePersonalitiesObj, activeSession, pe
     {selectionModal}
       <div className="Participants">
         <div className="Participants__add">
-          {/* <img className="Participants__add__image" src={defaultLogo} alt="add_person" /> */}
           <div className="Participants__add__addIcon" onClick={() => handleShowSelectinModal()}>+</div>
+          {(activePersonalitiesObj.length === 0) ? (<p className="Participants__add__text">Click to invite to chat</p>) : (<></>)}
         </div>
         <div className="Participants__list">
           {activePersonalitiesObj.map((e, i) => {
