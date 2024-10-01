@@ -81,7 +81,7 @@ export default function PersonalitiesPage() {
       < h1 className="PersonalitiesPage__main__title">Configure Personas</h1>
         <div className="PersonalitiesPage__main__content">
           {personalities.map((i,x) => (
-            <PersonalityConfig key={x} personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} generateImgCallBack={handleGenerateAvatarImg}/>
+            <PersonalityConfig key={i.personalityID} personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} generateImgCallBack={handleGenerateAvatarImg}/>
           ))}
           <div className="PersonalitiesPage__main__content__bottom">
         <button className="PersonalitiesPage__main__content__bottom__add" onClick={handleAddPersonality}>Add New Slot</button>

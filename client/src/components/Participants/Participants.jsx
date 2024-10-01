@@ -53,7 +53,7 @@ export default function Participants({ activePersonalitiesObj, activeSession, pe
         <div className="Participants__list">
           {activePersonalitiesObj.map((e, i) => {
             return (
-              <ParticipantSlot personalitiesObj={e} activeSession={activeSession} removePersonCallBack={removePersonCallBack} key={i}/>
+              <ParticipantSlot personalitiesObj={e} activeSession={activeSession} removePersonCallBack={removePersonCallBack} key={e.personalityID}/>
             );
           })}
         </div>
