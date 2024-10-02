@@ -48,9 +48,18 @@ const httpInsertChat = async (req, res) => {
     res.status(400).json({ error: "Must provide a message String" });
     return false;
   }
-  chatSessionModel.setChatGlobal(req.params.id, req.body.senderID, req.body.message);
-  // The HTTP response will be send by chatGPT controller. 
-  chatgptController.generateGPTChat(req.params.id, res);
+  const result = chatSessionModel.setChatGlobal(req.params.id, req.body.senderID, req.body.message);
+  
+console.log("RESULT : ", result);
+    if (result === false){
+      res.status(500).json({});
+      return false;
+    }
+
+    chatgptController.generateGPTChat(req.params.id, res); 
+      // The HTTP response will be send by chatGPT controller. 
+
+
 };
 
 const httpForceBotChat = async (req, res) => {

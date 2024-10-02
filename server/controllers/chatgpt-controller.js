@@ -8,9 +8,9 @@ let chatHistoryData = [];
 let sessionParticipants = [];
 
 function generateGPTChat(strSessionID, res) {
-
   if (!strSessionID && typeof strSessionID !== "string") {
-    throw Error("generateGPTChat: You must provide a strSessionID string!");
+    console.log("Chatgpt-controller.generateGPTChat(): You must provide a strSessionID string!");
+    return false
   }
 
   const getData = async () => {
@@ -25,15 +25,22 @@ function generateGPTChat(strSessionID, res) {
   getData().then(() => {
     let membersPresent = "";
 
+
+    if (sessionParticipants === false){
+      res.status(400).json({"error" : "Error getting session participants, did you provide an existing session ID?"});
+      return;
+    }
+
     personalityDataFiltered = personalityData.filter((e) => {
-       return sessionParticipants.indexOf(e.personalityID) >= 0
+      return sessionParticipants.indexOf(e.personalityID) >= 0;
     });
 
     if (personalityDataFiltered.length === 0) {
       res.status(200).json({});
-      return
+      return;
     }
-    
+
+
     personalityDataFiltered.forEach((p) => {
       membersPresent += p.name + ", ";
     });
@@ -69,7 +76,7 @@ function generateGPTChat(strSessionID, res) {
       });
       GPTPersonalityChats.push(personalChatHistory);
     });
-     conversationManager(GPTPersonalityChats, strSessionID, res);
+    conversationManager(GPTPersonalityChats, strSessionID, res);
   });
 }
 
@@ -91,15 +98,22 @@ async function conversationManager(gptData, strSessionID, res) {
   }
 
   console.log(`****** Chat will be sent to ${personalityDataFiltered[randomPick].name} ******`);
-  const chatResponse = await chatgptModel.chatSend(gptData[randomPick], personalityDataFiltered[randomPick].temperature);
-  console.log(`****** ${personalityDataFiltered[randomPick].name} is responding to user ******`);
-  // console.log(chatResponse.reply);
-  openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[randomPick].personalityID, chatResponse.reply);
-  if (openAIresponse === false){
+  const openAIresponse = await chatgptModel.chatSend(gptData[randomPick], personalityDataFiltered[randomPick].temperature);
+  if (openAIresponse === false) {
     res.status(500).json({});
-    return false
+    console.log("chatgpt-controller.conversationManager() : failed on getting response from OpenAI  using chatgptModel");
+    return false;
   }
-  res.status(200).json(openAIresponse);
+
+  console.log(`****** ${personalityDataFiltered[randomPick].name} is responding to user ******`);
+
+  const result = chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[randomPick].personalityID, chatResponse.reply);
+  if (result === false) {
+    res.status(500).json({});
+    console.log("chatgpt-controller.conversationManager() : failed on SetChatGlobal model call");
+    return false;
+  }
+  res.status(200).json(result);
 }
 
 module.exports = {
