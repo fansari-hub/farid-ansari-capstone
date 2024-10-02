@@ -45,6 +45,12 @@ function generateGPTChat(strSessionID, res) {
       membersPresent += p.name + ", ";
     });
 
+    console.log("chatpgtcontroller-generateGPTChat(): members present = ", membersPresent);
+    if (chatHistoryData.length > 0){
+      console.log("chatpgtcontroller-generateGPTChat(): last senderID in msg data = " + chatHistoryData[chatHistoryData.length -1].senderID);
+    }
+    
+
     personalityDataFiltered.forEach((p) => {
       let personalChatHistory = [];
 
