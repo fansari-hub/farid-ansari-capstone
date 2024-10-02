@@ -16,31 +16,37 @@ async function getPersonalityDetails() {
 
 function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
   if (!strName || typeof strName !== "string") {
-    throw Error("ChatPersonality: You must provide a personality name");
+    console.log("personality-model.createPersonality(): Missing or incorrect type for personality name!");
+    return false; 
   }
 
   if (typeof strAvatarImg !== "string") {
-    throw Error("ChatPersonality: You must provide an avatarIMG URL string");
+    console.log("personality-model.createPersonality(): AvatarImg is not a string");
+    return false; 
   }
 
   if (!floatTemperature || typeof floatTemperature !== "number") {
-    throw Error("ChatPersonality: You must provide a temperature number between 0.0 and 1.0");
+    console.log("personality-model.createPersonality(): Missing or incorrect type for temperature!");
+    return false; 
   }
 
   if (floatTemperature > 1.0 || floatTemperature < 0.0) {
-    floatTemperature = 0.5;
+    floatTemperature = 1.0;
   }
 
   if (!strConditionPrompt || typeof strConditionPrompt !== "string") {
-    throw Error("ChatPersonality: You must provide a condition prompt");
+    console.log("personality-model.createPersonality(): Missing or incorrect type condition prompt!");
+    return false; 
   }
 
   if (!strAvatarPrompt || typeof strAvatarPrompt !== "string") {
-    throw Error("ChatPersonality: You must provide an avatar prompt");
+    console.log("personality-model.createPersonality(): Missing or incorrect type for avatar prompt!");
+    return false; 
   }
 
   if (!strVoice || typeof strVoice !== "string") {
-    throw Error("ChatPersonality: You must provide voice string");
+    console.log("personality-model.createPersonality(): Missing or incorrect type for voice!");
+    return false; 
   }
 
 
@@ -60,15 +66,18 @@ function createPersonality(strName, strAvatarImg, floatTemperature, strCondition
 
 function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide a personality ID");
+    console.log("personality-model.updatePersonality(): Missing or incorrect type for personalityID!");
+    return false; 
   }
 
   if (typeof strAvatarImg !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide an avatarIMG URL string.");
+    console.log("personality-model.updatePersonality(): incorrect type for strAvatarImg!");
+    return false; 
   }
 
   if (!floatTemperature || typeof floatTemperature !== "number") {
-    throw Error("ChatPersonality.updatePesonality: You must provide a temperature number between 0.0 and 2.0");
+    console.log("personality-model.updatePersonality(): incorrect type for temparature!");
+    return false; 
   }
 
   if (floatTemperature > 2.0 || floatTemperature < 0.0) {
@@ -76,15 +85,18 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
   }
 
   if (!strConditionPrompt || typeof strConditionPrompt !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide a condition prompt.");
+    console.log("personality-model.updatePersonality(): missing or incorrect type for condition prompt");
+    return false; 
   }
 
   if (!strAvatarPrompt || typeof strAvatarPrompt !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide an avatar prompt.");
+    console.log("personality-model.updatePersonality(): missing or incorrect type for avatar prompt!");
+    return false; 
   }
 
   if (!strVoice || typeof strVoice !== "string") {
-    throw Error("ChatPersonality: You must provide voice string");
+    console.log("personality-model.updatePersonality(): missing or incorrect type for voice!");
+    return false; 
   }
 
 
@@ -102,18 +114,21 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
 
 function deletePersonality(strPersonalityID) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
-    throw Error("ChatPersonality.updatePesonality: You must provide a personality ID");
+    console.log("personality-model.deletePersonality(): missing or incorrect type for personalityID!");
+    return false; 
   }
   knexops.deleteDatabase("personalities", { personalityID: strPersonalityID });
 }
 
 function updatePersonalityAvatar(strPersonalityID, strAvatarImg) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
-    throw Error("ChatPersonality.updatePersonalityAvatar: You must provide a personality ID");
+    console.log("personality-model.updatePersonalityAvatar(): missing or incorrect type for personalityID!");
+    return false; 
   }
 
   if (!strAvatarImg) {
-    throw Error("ChatPersonality.updatePersonalityAvatar: You must provide an image buffer!");
+    console.log("personality-model.updatePersonalityAvatar(): missing image buffer object!");
+    return false; 
   }
 
   const filename = uuidv4() + ".png";

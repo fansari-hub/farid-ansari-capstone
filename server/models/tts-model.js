@@ -34,15 +34,15 @@ const textToSpeech = async (voice , input, messageID) => {
     }
     return AUDIO_FILE_PATH + filename;
   } catch (error) {
-    console.error("Error generating speech:", error);
-    return "Failed to Generate TTS!";
+    console.log("tts-model.textToSpeech(): Failed to fetch response from OpenAI API with error: ", error);
+    return false; 
   }
 };
 
 const getSingleFile = async (messageID) => {
   if(typeof messageID === "string"){
-    const result = await knexops.selectDatabase("ttsAudioFile", "chatSessionHist", {messageID: messageID});
-    return result[0];
+    const queryResult = await knexops.selectDatabase("ttsAudioFile", "chatSessionHist", {messageID: messageID});
+    return queryResult[0];
   }
 
 }

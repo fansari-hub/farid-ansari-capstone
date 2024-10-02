@@ -1,4 +1,3 @@
-const knex = require("knex");
 const knexops = require("./utils/knexops");
 const { v4: uuidv4 } = require("uuid");
 
@@ -14,7 +13,8 @@ async function getChatSessionChatDetail(strSessionID) {
 
 function createChatSession(strName) {
   if (!strName) {
-    throw Error("ChatSession: You must provide a session name!");
+    console.log("chatSession-model.createChatSession(): Missing session name!");
+    return false; 
   }
   const data = { sessionID: uuidv4(), sessionName: strName, participants : "[]" };
   knexops.insertDatabase("chatSessions", data); //async op but no need to wait
@@ -23,11 +23,13 @@ function createChatSession(strName) {
 
 function setChatGlobal(strSession_id, strSenderID, strMessage) {
   if (!strSession_id) {
-    throw Error("ChatSession.getCurrentSessionChat: You must provide a session ID!");
+    console.log("chatSession-model.setChatGlobal(): Missing sessionID!");
+    return false; 
   }
 
   if (!strSenderID || !strMessage) {
-    throw Error("ChatSession.setChatglobal: You must provide SenderID and Message");
+    console.log("chatSession-model.setChatGlobal(): Missing message!");
+    return false; 
   }
   const dataObj = {
     sessionID: strSession_id,
@@ -44,26 +46,30 @@ function setChatGlobal(strSession_id, strSenderID, strMessage) {
 
 function deleteSession(strSessionID) {
   if (!strSessionID || typeof strSessionID !== "string") {
-    throw Error("ChatSession.deleteSession: You must provide a Session ID");
+    console.log("chatSession-model.deleteSession(): Missing sessionID!");
+    return false; 
   }
-  const result = knexops.deleteDatabase("chatSessions", { sessionID: strSessionID });
-  return result;
+  const queryResult = knexops.deleteDatabase("chatSessions", { sessionID: strSessionID });
+  return queryResult;
 }
 
 function updateSession(strSessionID, strName) {
   if (!strSessionID || typeof strSessionID !== "string") {
-    throw Error("ChatSession.updateSession: You must provide a Session ID");
+    console.log("chatSession-model.updateSession(): Missing sessionID!");
+    return false; 
   }
-  const result = knexops.updateDatabase("chatSessions", { sessionName: strName }, { sessionID: strSessionID });
-  return result;
+  const queryResult = knexops.updateDatabase("chatSessions", { sessionName: strName }, { sessionID: strSessionID });
+  return queryResult;
 }
 
 async function insertPerson(strSessionID, strPersonalityID) {
   if (!strSessionID) {
-    throw Error("ChatSession.getCurrentSessionChat: You must provide a session ID!");
+    console.log("chatSession-model.insertPerson(): Missing sessionID!");
+    return false; 
   }
   if (!strPersonalityID) {
-    throw Error("ChatSession.setChatglobal: You must provide PersonalityID");
+    console.log("chatSession-model.insertPerson(): Missing PersonalityID!");
+    return false; 
   }
 
   const queryResult = await getPersons(strSessionID);
@@ -81,16 +87,18 @@ async function insertPerson(strSessionID, strPersonalityID) {
    // console.log("Add Person to new Array");
   }
 
-  const result = await knexops.updateDatabase("chatSessions", { participants: JSON.stringify(personsArray) }, { sessionID: strSessionID });
-  return result;
+  const queryResult2 = await knexops.updateDatabase("chatSessions", { participants: JSON.stringify(personsArray) }, { sessionID: strSessionID });
+  return queryResult2;
 }
 
 async function removePerson(strSessionID, strPersonalityID) {
   if (!strSessionID) {
-    throw Error("ChatSession.getCurrentSessionChat: You must provide a session ID!");
+    console.log("chatSession-model.removePerson(): Missing sessionID!");
+    return false; 
   }
   if (!strPersonalityID) {
-    throw Error("ChatSession.setChatglobal: You must provide PersonalityID");
+    console.log("chatSession-model.removePerson(): Missing PersonalityID!");
+    return false; 
   }
 
   const queryResult = await getPersons(strSessionID);
@@ -105,19 +113,21 @@ async function removePerson(strSessionID, strPersonalityID) {
         return e !== strPersonalityID;
       });
       //console.log("Removed PersonID from Array");
-      const result = await knexops.updateDatabase("chatSessions", { participants: JSON.stringify(arrayFiltered) }, { sessionID: strSessionID });
-      return result;
+      const queryResult = await knexops.updateDatabase("chatSessions", { participants: JSON.stringify(arrayFiltered) }, { sessionID: strSessionID });
+      return queryResult;
     }
   }
   return 0;
 }
+
 async function getPersons(strSessionID) {
   if (!strSessionID) {
-    throw Error("ChatSession.getCurrentSessionChat: You must provide a session ID!");
+    console.log("chatSession-model.getPersons(): Missing sessionID!");
+    return false; 
   }
 
-  const result = await knexops.selectDatabase("participants", "chatSessions", { sessionID: strSessionID });
-  return JSON.parse(result[0].participants);
+  const queryResult = await knexops.selectDatabase("participants", "chatSessions", { sessionID: strSessionID });
+  return JSON.parse(queryResult[0].participants);
 }
 
 module.exports = {
