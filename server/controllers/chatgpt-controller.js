@@ -107,7 +107,7 @@ async function conversationManager(gptData, strSessionID, res) {
 
   console.log(`****** ${personalityDataFiltered[randomPick].name} is responding to user ******`);
 
-  const result = chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[randomPick].personalityID, chatResponse.reply);
+  const result = chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[randomPick].personalityID, openAIresponse.reply);
   if (result === false) {
     res.status(500).json({});
     console.log("chatgpt-controller.conversationManager() : failed on SetChatGlobal model call");

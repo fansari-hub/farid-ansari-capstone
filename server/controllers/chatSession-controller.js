@@ -50,7 +50,6 @@ const httpInsertChat = async (req, res) => {
   }
   const result = chatSessionModel.setChatGlobal(req.params.id, req.body.senderID, req.body.message);
   
-console.log("RESULT : ", result);
     if (result === false){
       res.status(500).json({});
       return false;
