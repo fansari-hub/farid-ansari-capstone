@@ -2,6 +2,7 @@ const axios = require("axios");
 
 const generateImage = async (imgPrompt) => {
   try {
+    console.log("dalle-model.generateImage(): Sending imagegen request to DALL-E");
     const response = await axios.post(
       "https://api.openai.com/v1/images/generations",
       {
@@ -19,8 +20,9 @@ const generateImage = async (imgPrompt) => {
         },
       }
     );
+    console.log("dalle-model.generateImage(): Response received from DALL-E");
     const data = response.data.data[0];
-    console.log("OpenAI POST REQ: DALL-E-3 responded");
+    console.log("dalle-model.generateImage(): Opened respense from DALL-3");
     return {
       timestamp: Date.now(),
       prompt: imgPrompt,

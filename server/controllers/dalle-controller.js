@@ -9,6 +9,10 @@ async function generateAvatar(req, res){
   }
   const avatarPrompt = req.body.prompt;
   const chatResponse = await dalleModel.generateImage(avatarPrompt);
+  if (chatResponse === false){
+    res.status(500).json({});
+    return false;
+  }
   const imageBuffer = base64ToBlob(chatResponse.b64_image, "image/png")
   const result = chatPersonalityModel.updatePersonalityAvatar(req.params.id, imageBuffer);
   if (result === false){
