@@ -1,6 +1,5 @@
 const chatPersonalityModel = require("../models/personality-model");
 
-
 const httpCreatePersonality = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {
     res.status(400).json({ error: "Must provide a name string" });
@@ -32,8 +31,8 @@ const httpCreatePersonality = async (req, res) => {
     return false;
   }
 
-  const result = chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
-  if (result === false){
+  const result = await chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
+  if (result === false) {
     res.status(500).json({});
     return false;
   }
@@ -41,14 +40,13 @@ const httpCreatePersonality = async (req, res) => {
 };
 
 const httpGetPersonalities = async (req, res) => {
-  const result = chatPersonalityModel.getPersonalityDetails();
-  result.then((result) => {
-    if (result === false){
-      res.status(500).json({});
-      return false;
-    }
-    res.status(200).json(result);
-  });
+  const result = await chatPersonalityModel.getPersonalityDetails();
+
+  if (result === false) {
+    res.status(500).json({});
+    return false;
+  }
+  res.status(200).json(result);
 };
 
 const httpUpdatePersonality = async (req, res) => {
@@ -82,8 +80,8 @@ const httpUpdatePersonality = async (req, res) => {
     return false;
   }
 
-  const result = chatPersonalityModel.updatePersonality(req.params.id, req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
-  if (result === false){
+  const result = await chatPersonalityModel.updatePersonality(req.params.id, req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
+  if (result === false) {
     res.status(500).json({});
     return false;
   }
@@ -91,14 +89,13 @@ const httpUpdatePersonality = async (req, res) => {
 };
 
 const httpDeletePersonality = async (req, res) => {
-  const result = chatPersonalityModel.deletePersonality(req.params.id);
-  if (result === false){
+  const result = await chatPersonalityModel.deletePersonality(req.params.id);
+  if (result === false) {
     res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
-
-}
+};
 
 module.exports = {
   httpCreatePersonality,

@@ -14,7 +14,7 @@ async function getPersonalityDetails() {
   return queryResult;
 }
 
-function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
+async function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
   if (!strName || typeof strName !== "string") {
     console.log("personality-model.createPersonality(): Missing or incorrect type for personality name!");
     return false; 
@@ -60,11 +60,11 @@ function createPersonality(strName, strAvatarImg, floatTemperature, strCondition
     personalityID: uuidv4(),
   };
 
-  knexops.insertDatabase("personalities", data);
+  const queryResult  = await knexops.insertDatabase("personalities", data);
   return data;
 }
 
-function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
+async function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
     console.log("personality-model.updatePersonality(): Missing or incorrect type for personalityID!");
     return false; 
@@ -108,19 +108,20 @@ function updatePersonality(strPersonalityID, strName, strAvatarImg, floatTempera
     avatarPrompt : strAvatarPrompt,
     voice: strVoice
   };
-  knexops.updateDatabase("personalities", data, { personalityID: strPersonalityID });
+  const queryResult = await knexops.updateDatabase("personalities", data, { personalityID: strPersonalityID });
   return data;
 }
 
-function deletePersonality(strPersonalityID) {
+async function deletePersonality(strPersonalityID) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
     console.log("personality-model.deletePersonality(): missing or incorrect type for personalityID!");
     return false; 
   }
-  knexops.deleteDatabase("personalities", { personalityID: strPersonalityID });
+  const queryResult = await knexops.deleteDatabase("personalities", { personalityID: strPersonalityID });
+  return queryResult
 }
 
-function updatePersonalityAvatar(strPersonalityID, strAvatarImg) {
+async function updatePersonalityAvatar(strPersonalityID, strAvatarImg) {
   if (!strPersonalityID || typeof strPersonalityID !== "string") {
     console.log("personality-model.updatePersonalityAvatar(): missing or incorrect type for personalityID!");
     return false; 
@@ -133,7 +134,7 @@ function updatePersonalityAvatar(strPersonalityID, strAvatarImg) {
 
   const filename = uuidv4() + ".png";
   fs.writeFileSync(IMAGE_FILE_BASE + IMAGE_FILE_PATH + filename, strAvatarImg);
-  knexops.updateDatabase("personalities", {avatarImg: IMAGE_FILE_PATH + filename}, {personalityID: strPersonalityID});
+  const queryResult = await knexops.updateDatabase("personalities", {avatarImg: IMAGE_FILE_PATH + filename}, {personalityID: strPersonalityID});
   return IMAGE_FILE_PATH + filename;
 }
 
