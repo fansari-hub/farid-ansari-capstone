@@ -27,8 +27,8 @@ const generateImage = async (imgPrompt) => {
       b64_image: data.b64_json,
     };
   } catch (error) {
-    console.error("Error communicating with OpenAI API or Database update failed:", error);
-    return "Failed to fetch response from OpenAI API";
+    console.log("dalle-model.generateImage(): Failed to fetch response from OpenAI API with error: ", error);
+    return false; 
   }
 };
 

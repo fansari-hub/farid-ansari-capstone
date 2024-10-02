@@ -15,9 +15,8 @@ app.use((req, res, next) => {
   }
 });
 
-const PORT = process.env.HTTP_PORT || 5050;
+const PORT = process.env.PORT || 5050;
 
-//const chatGTPRoutes = require('./routes/chatgpt-routes');
 const personalityRoutes = require('./routes/personality-routes');
 const chatSessionRoutes = require('./routes/chatSession-routes');
 const dallERoutes = require('./routes/dalle-routes');
@@ -25,7 +24,6 @@ const ttsRoutes = require('./routes/tts-routes');
 
 app.use(express.static("public"));
 
-//app.use('/chatgpt', chatGTPRoutes);
 app.use('/personality', personalityRoutes);
 app.use('/chatsession', chatSessionRoutes);
 app.use('/imagegen', dallERoutes);

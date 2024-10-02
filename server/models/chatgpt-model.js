@@ -3,7 +3,7 @@ require("dotenv").config();
 
 
 const chatSend = async (tokens, floatTemp = 1) => {
-  console.log("****** Sending Request to Open AI*****");
+  console.log("****** OpenAI POST REQ: Sendng*****");
   //console.log("***** Temperature: " + floatTemp);
   try {
     const response = await axios.post(
@@ -21,21 +21,16 @@ const chatSend = async (tokens, floatTemp = 1) => {
       }
     );
     const chatResponse = response.data.choices[0].message.content;
-    console.log("****** OpenAI POST REQ: ChatGPT responded*****");
-    console.log("                                              ");
+    console.log("****** OpenAI POST REQ: Received Response*****");
 
-    if (typeof tokens[tokens.length - 1].content === "string") {
-   //   console.log("This was a non-vision request.");
-    } else {
-    //  console.log("This is a vision request, not saving image base64 information in dbase");
-    }
     return { reply: chatResponse, timestamp: Date.now() };
   } catch (error) {
-    console.error("Error communicating with OpenAI API or Database update failed:", error);
-    return "Failed to fetch response from OpenAI API";
+    console.error("chatgpt-model.chatSend(): Error communicating with OpenAI API: ", error);
+    return false;
   }
 };
 
 module.exports = {
   chatSend,
 };
+

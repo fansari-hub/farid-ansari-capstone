@@ -5,8 +5,9 @@ async function updateDatabase(strTable, objData, objCondition) {
     try {
       result = await knex(strTable).update(objData).where(objCondition);
     } catch (error) {
-      console.log("Could not update database!");
+      console.log("knexops.updateDatabase(): Could not update database!");
       console.log(error);
+      return false;
     }
     return result
   }
@@ -17,8 +18,9 @@ async function deleteDatabase(strTable, objCondition){
   try{
     result = await knex(strTable).delete().where(objCondition);
   } catch (error){
-    console.log("Could not delete from database!")
-    console.error;
+    console.log("knexops.deleteDatabase(): Could not delete from database!");
+    console.log(error);
+    return false
   }
 }
   async function insertDatabase(strTable, objData) {
@@ -26,8 +28,9 @@ async function deleteDatabase(strTable, objCondition){
     try {
       result = await knex(strTable).insert(objData);
     } catch (error) {
-      console.log("Could not insert into database!");
+      console.log("knexops.insertDatabase(): Could not insert into database!");
       console.log(error);
+      return false;
     }
     return result;
   }
@@ -43,8 +46,9 @@ async function deleteDatabase(strTable, objCondition){
       }
        
     } catch (error) {
-      console.log("Could not select from database");
+      console.log("knexops.selectDatabaseAll() : could not SELECT ALL from database");
       console.log(error);
+      return false;
     }
     return result;
   }
@@ -59,8 +63,9 @@ async function deleteDatabase(strTable, objCondition){
       }
 
     } catch (error) {
-      console.log("Could not select ALL from database");
+      console.log("knexops.selectDatabase() : Could not select  from database");
       console.log(error);
+      return false;
     }
     return result;
   }
