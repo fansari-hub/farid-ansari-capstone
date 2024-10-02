@@ -15,7 +15,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "db:migrate" : "knex migrate:latest",
     "db:undo" : "knex migrate:down",
     "db:rollback" : "knex migrate:rollback",
