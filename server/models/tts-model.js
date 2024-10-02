@@ -8,6 +8,7 @@ const AUDIO_FILE_PATH = "TTS/"
 
 
 const textToSpeech = async (voice , input, messageID) => {
+  console.log("tts-model.textToSpeech() : Requesting TTS from OpenAI.");
 
   try {
     const response = await axios.post(
@@ -26,9 +27,11 @@ const textToSpeech = async (voice , input, messageID) => {
       }
     );
 
-    console.log("Received TTS Audio");
+    console.log("tts-model.textToSpeech() : Received TTS AUDIO from OpenAI.");
     const filename = uuidv4() + ".wav";
+    console.log("tts-model.textToSpeech() : File will be saved as: ", AUDIO_FILE_PATH + filename);
     fs.writeFileSync(AUDIO_FILE_BASE +  AUDIO_FILE_PATH + filename, response.data);
+    console.log("tts-model.textToSpeech() : File save opearing ended with result: ", fileOperatationResult);
     if(typeof messageID === "string"){
       knexops.updateDatabase("chatSessionHist", {ttsAudioFile: AUDIO_FILE_PATH + filename}, {messageID: messageID});
     }
