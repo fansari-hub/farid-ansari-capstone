@@ -127,6 +127,9 @@ async function getPersons(strSessionID) {
   }
 
   const queryResult = await knexops.selectDatabase("participants", "chatSessions", { sessionID: strSessionID });
+  if (!queryResult[0]){
+    return false;
+  }
   return JSON.parse(queryResult[0].participants);
 }
 

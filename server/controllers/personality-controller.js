@@ -34,7 +34,7 @@ const httpCreatePersonality = async (req, res) => {
 
   const result = chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(201).json(result);
@@ -44,7 +44,7 @@ const httpGetPersonalities = async (req, res) => {
   const result = chatPersonalityModel.getPersonalityDetails();
   result.then((result) => {
     if (result === false){
-      res.status(500);
+      res.status(500).json({});
       return false;
     }
     res.status(200).json(result);
@@ -84,7 +84,7 @@ const httpUpdatePersonality = async (req, res) => {
 
   const result = chatPersonalityModel.updatePersonality(req.params.id, req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
@@ -93,7 +93,7 @@ const httpUpdatePersonality = async (req, res) => {
 const httpDeletePersonality = async (req, res) => {
   const result = chatPersonalityModel.deletePersonality(req.params.id);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);

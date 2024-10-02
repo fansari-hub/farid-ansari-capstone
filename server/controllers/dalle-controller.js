@@ -12,7 +12,7 @@ async function generateAvatar(req, res){
   const imageBuffer = base64ToBlob(chatResponse.b64_image, "image/png")
   const result = chatPersonalityModel.updatePersonalityAvatar(req.params.id, imageBuffer);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);

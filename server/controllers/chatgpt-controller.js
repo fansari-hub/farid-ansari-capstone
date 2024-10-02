@@ -95,8 +95,11 @@ async function conversationManager(gptData, strSessionID, res) {
   console.log(`****** ${personalityDataFiltered[randomPick].name} is responding to user ******`);
   // console.log(chatResponse.reply);
   openAIresponse = chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[randomPick].personalityID, chatResponse.reply);
+  if (openAIresponse === false){
+    res.status(500).json({});
+    return false
+  }
   res.status(200).json(openAIresponse);
-
 }
 
 module.exports = {

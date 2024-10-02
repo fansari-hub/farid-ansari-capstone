@@ -9,7 +9,7 @@ const httpCreateSession = async (req, res) => {
   }
   const result = chatSessionModel.createChatSession(req.body.sessionName)
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(201).json(result);
@@ -20,7 +20,7 @@ const result = chatSessionModel.getChatSessions();
 
 result.then((result) => {
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
@@ -31,7 +31,7 @@ const httpGetSessionHistory = async (req, res) => {
   const result = chatSessionModel.getChatSessionChatDetail(req.params.id);
   result.then((result) => {
     if (result === false){
-      res.status(500);
+      res.status(500).json({});
       return false;
     }
     res.status(200).json(result);
@@ -61,7 +61,7 @@ const httpForceBotChat = async (req, res) => {
 const httpDeleteSession = async (req, res) => {
   const result = chatSessionModel.deleteSession(req.params.id);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
@@ -74,7 +74,7 @@ const httpUpdateSession = async (req, res) => {
   }
   const result = chatSessionModel.updateSession(req.params.id, req.body.sessionName);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
@@ -83,7 +83,7 @@ const httpUpdateSession = async (req, res) => {
 const httpInsertPersonIntoSession = async (req, res) => {
   const result = await chatSessionModel.insertPerson(req.params.id, req.params.personid);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
@@ -92,7 +92,7 @@ const httpInsertPersonIntoSession = async (req, res) => {
 const httpRemovePersonFromSession = async (req, res) => {
   const result = await chatSessionModel.removePerson(req.params.id, req.params.personid);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);
@@ -101,7 +101,7 @@ const httpRemovePersonFromSession = async (req, res) => {
 const httpGetPersonsInSession = async (req, res) => {
   const result = await chatSessionModel.getPersons(req.params.id);
   if (result === false){
-    res.status(500);
+    res.status(500).json({});
     return false;
   }
   res.status(200).json(result);

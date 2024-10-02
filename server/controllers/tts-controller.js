@@ -22,7 +22,7 @@ res.status(200).send({ result });
 const httpGetSingleAudio = async (req, res) => {
 const result = await ttsmodel.getSingleFile(req.params.id);
 if (result === false){
-  res.status(500);
+  res.status(500).json({});
   return false;
 }
 res.status(200).send( result );
