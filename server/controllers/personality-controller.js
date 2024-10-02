@@ -3,32 +3,32 @@ const chatPersonalityModel = require("../models/personality-model");
 
 const httpCreatePersonality = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {
-    res.status(401).json({ error: "Must provide a name string" });
+    res.status(400).json({ error: "Must provide a name string" });
     return false;
   }
 
   if (typeof req.body.avatarImg !== "string") {
-    res.status(401).json({ error: "Must provide an avatarImg URL string" });
+    res.status(400).json({ error: "Must provide an avatarImg URL string" });
     return false;
   }
 
   if (!req.body.temperature || typeof req.body.temperature !== "number") {
-    res.status(401).json({ error: "Must provide temperature between 0 and 1" });
+    res.status(400).json({ error: "Must provide temperature between 0 and 1" });
     return false;
   }
 
   if (!req.body.conditionPrompt || typeof req.body.conditionPrompt !== "string") {
-    res.status(401).json({ error: "Must provide an conditionPrompt string" });
+    res.status(400).json({ error: "Must provide an conditionPrompt string" });
     return false;
   }
 
   if (!req.body.avatarPrompt || typeof req.body.avatarPrompt !== "string") {
-    res.status(401).json({ error: "Must provide an avatarPrompt string" });
+    res.status(400).json({ error: "Must provide an avatarPrompt string" });
     return false;
   }
 
   if (!req.body.voice || typeof req.body.voice !== "string") {
-    res.status(401).json({ error: "Must provide an voice string" });
+    res.status(400).json({ error: "Must provide an voice string" });
     return false;
   }
 
@@ -53,32 +53,32 @@ const httpGetPersonalities = async (req, res) => {
 
 const httpUpdatePersonality = async (req, res) => {
   if (!req.body.name || typeof req.body.name !== "string") {
-    res.status(401).json({ error: "Must provide a name string" });
+    res.status(400).json({ error: "Must provide a name string" });
     return false;
   }
 
   if (typeof req.body.avatarImg !== "string") {
-    res.status(401).json({ error: "Must provide an avatarImg URL string" });
+    res.status(400).json({ error: "Must provide an avatarImg URL string" });
     return false;
   }
 
   if (!req.body.temperature || typeof req.body.temperature !== "number") {
-    res.status(401).json({ error: "Must provide temperature between 0 and 1" });
+    res.status(400).json({ error: "Must provide temperature between 0 and 1" });
     return false;
   }
 
   if (!req.body.conditionPrompt || typeof req.body.conditionPrompt !== "string") {
-    res.status(401).json({ error: "Must provide an conditionPrompt string" });
+    res.status(400).json({ error: "Must provide an conditionPrompt string" });
     return false;
   }
 
   if (!req.body.avatarPrompt || typeof req.body.avatarPrompt !== "string") {
-    res.status(401).json({ error: "Must provide an avatarPrompt string" });
+    res.status(400).json({ error: "Must provide an avatarPrompt string" });
     return false;
   }
 
   if (!req.body.voice || typeof req.body.voice !== "string") {
-    res.status(401).json({ error: "Must provide a voice string" });
+    res.status(400).json({ error: "Must provide a voice string" });
     return false;
   }
 

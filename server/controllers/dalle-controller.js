@@ -4,7 +4,7 @@ const chatPersonalityModel = require("../models/personality-model");
 
 async function generateAvatar(req, res){
   if (!req.body.prompt || typeof req.body.prompt !== "string") {
-    res.status(401).json({ error: "Must provide a Prompt String" });
+    res.status(400).json({ error: "Must provide a Prompt String" });
     return false;
   }
   const avatarPrompt = req.body.prompt;
