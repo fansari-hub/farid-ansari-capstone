@@ -7,8 +7,8 @@ exports.up = function (knex) {
           table.string('name').notNullable();
           table.string('avatarImg');
           table.float('temperature').notNullable();
-          table.string('conditionPrompt', 1000).notNullable();
-          table.string('avatarPrompt', 1000);
+          table.string('conditionPrompt', 2000).notNullable();
+          table.string('avatarPrompt', 2000);
           table.string('voice').notNullable();
         })
     );
