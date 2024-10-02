@@ -137,10 +137,14 @@ async function conversationManager(gptData, strSessionID, res) {
     }
     else {
       console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name}  not added to recent speakers so might speak again `);
+      if (recentSpeakers.length > MAX_RECENT_SPEAKERS - 1) {
+        console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
+        recentSpeakers.shift();
+      }
     }
 
-  
   if (recentSpeakers.length > MAX_RECENT_SPEAKERS) {
+    console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
     recentSpeakers.shift();
   }
 
