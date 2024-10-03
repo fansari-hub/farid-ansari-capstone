@@ -11,6 +11,8 @@
 
   &__selectionBar {
     max-width: 100%;
+    position: fixed;
+    z-index: 100;
   }
 
   &__side {
@@ -21,11 +23,16 @@
     }
   }
   &__main {
+    padding-top: 100px;
     flex-grow: 1;
     background-color: none;
     font-size: 1rem;
+    @include displayMobile{
+      padding-top: 20px;
+    }
 
     &__title {
+      margin: 0;
       padding-left: 250px;
       padding-right: 50px;
       color: $colPrimary-MainText;
@@ -47,24 +54,17 @@
       max-width: 1280px;
       padding-right: 1rem;
       padding-bottom: 220px;
-      //scrollbar-color: $colSecondary-AccentBorder $colPrimary-ItemFill;
-      //scrollbar-width: thin;
       @include displayMobile {
         padding-bottom: 200px;
         padding-left: 0px;
       }
     }
-    &__input {
-      padding-bottom: 20px;
-      padding-left: 160px;
-      background-color: $colPrimary-Background;
-      width: 100vw;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      @include displayMobile {
-        padding-left: 0;
-      }
-    }
+  }
+  &__input {
+    background-color: $colPrimary-Background;
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    left: 0;
   }
 }

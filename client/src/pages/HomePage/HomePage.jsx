@@ -367,10 +367,11 @@ export default function HomePage() {
         <div ref={chatDiv} className="HomePage__main__content">
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
-        <div className="HomePage__main__input">
+       
+      </div>
+      <div className="HomePage__input">
           <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} />
         </div>
-      </div>
     </div>
   );
 }

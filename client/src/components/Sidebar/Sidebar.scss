@@ -4,15 +4,30 @@
 .Sidebar {
   display: flex;
   flex-direction: column;
-  background-color: none;
+  //background-color: rgba(0, 0, 0, 0.156);
+  height: 100vh;
   margin-left: 10px;
   margin-right: 30px;
+  //margin-top: -20px;
+  padding-right: 5px;
+  overflow:auto;
+  scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
+  scrollbar-width: thin;
+  padding-bottom: 270px;
+  padding-top: 100px;
   gap: 10px;
 
   @include displayMobile {
+    overflow:unset;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 0;
+    height: auto;
+    background-color: transparent;
+    padding-top: 70px;
+    padding-bottom: 0;
+
   }
 
   &__settings {
