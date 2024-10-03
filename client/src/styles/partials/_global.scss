@@ -12,6 +12,9 @@ body {
 html {
   margin: 0px;
   padding: 0px;
+  scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
+  scrollbar-width: thick;
+
 }
 
 hr {

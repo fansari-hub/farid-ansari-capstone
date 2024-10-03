@@ -2,7 +2,6 @@ import webapi from "../../utils/webapi";
 import { useState } from "react";
 
 import "./Participants.scss";
-import defaultLogo from "../../assets/images/logo.webp";
 import ParticipantSlot from "../ParticipantSlot/ParticipantSlot";
 import VisualSelectModal from "../VisualSelectModal/VisualSelectModal";
 

@@ -2,6 +2,7 @@
 @use "../../styles//partials/mixins" as *;
 
 .Participants {
+  width: 100vw;
   padding-left: 25px;
   padding-right: 25px;
   padding-top: 10px;
@@ -10,8 +11,10 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, 0.156);
+  background-color: $colPrimary-ItemFill;
   gap: 25px;
+  border-bottom: thin solid rgba(0, 0, 0, 0.269) ;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.24);
   &__add {
     background-color: none;
     display: flex;
@@ -45,6 +48,13 @@
   &__list {
     display: flex;
     align-items: flex-end;
-    gap: 25px;
+    //flex-wrap: wrap;
+    overflow:auto;
+    scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
+    scrollbar-width: thin;
+    padding-left: 5px;
+    padding-right: 10px;
+    row-gap: 5px;
+    column-gap: 25px;
   }
 }
