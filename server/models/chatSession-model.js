@@ -11,25 +11,25 @@ async function getChatSessionChatDetail(strSessionID) {
   return queryResult;
 }
 
-function createChatSession(strName) {
+async function createChatSession(strName) {
   if (!strName) {
     console.log("chatSession-model.createChatSession(): Missing session name!");
-    return false; 
+    return false;
   }
-  const data = { sessionID: uuidv4(), sessionName: strName, participants : "[]" };
-  knexops.insertDatabase("chatSessions", data); //async op but no need to wait
+  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]" };
+  const queryResult = knexops.insertDatabase("chatSessions", data); //async op but no need to wait
   return data;
 }
 
-function setChatGlobal(strSession_id, strSenderID, strMessage) {
+async function setChatGlobal(strSession_id, strSenderID, strMessage) {
   if (!strSession_id) {
     console.log("chatSession-model.setChatGlobal(): Missing sessionID!");
-    return false; 
+    return false;
   }
 
   if (!strSenderID || !strMessage) {
     console.log("chatSession-model.setChatGlobal(): Missing message!");
-    return false; 
+    return false;
   }
   const dataObj = {
     sessionID: strSession_id,
@@ -40,36 +40,36 @@ function setChatGlobal(strSession_id, strSenderID, strMessage) {
     messageID: uuidv4(),
   };
 
-  knexops.insertDatabase("chatSessionHist", dataObj); //async ops but no need to wait
+  const queryResult = await knexops.insertDatabase("chatSessionHist", dataObj); //async ops but no need to wait
   return dataObj;
 }
 
-function deleteSession(strSessionID) {
+async function deleteSession(strSessionID) {
   if (!strSessionID || typeof strSessionID !== "string") {
     console.log("chatSession-model.deleteSession(): Missing sessionID!");
-    return false; 
+    return false;
   }
-  const queryResult = knexops.deleteDatabase("chatSessions", { sessionID: strSessionID });
+  const queryResult = await knexops.deleteDatabase("chatSessions", { sessionID: strSessionID });
   return queryResult;
 }
 
-function updateSession(strSessionID, strName) {
+async function updateSession(strSessionID, strName) {
   if (!strSessionID || typeof strSessionID !== "string") {
     console.log("chatSession-model.updateSession(): Missing sessionID!");
-    return false; 
+    return false;
   }
-  const queryResult = knexops.updateDatabase("chatSessions", { sessionName: strName }, { sessionID: strSessionID });
+  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName }, { sessionID: strSessionID });
   return queryResult;
 }
 
 async function insertPerson(strSessionID, strPersonalityID) {
   if (!strSessionID) {
     console.log("chatSession-model.insertPerson(): Missing sessionID!");
-    return false; 
+    return false;
   }
   if (!strPersonalityID) {
     console.log("chatSession-model.insertPerson(): Missing PersonalityID!");
-    return false; 
+    return false;
   }
 
   const queryResult = await getPersons(strSessionID);
@@ -80,11 +80,11 @@ async function insertPerson(strSessionID, strPersonalityID) {
     const exitingRecordIndex = personsArray.indexOf(strPersonalityID);
     if (exitingRecordIndex === -1) {
       personsArray.push(strPersonalityID);
-  //    console.log("Add Person to existing Array");
+      //    console.log("Add Person to existing Array");
     }
   } else {
     personsArray.push(strPersonalityID);
-   // console.log("Add Person to new Array");
+    // console.log("Add Person to new Array");
   }
 
   const queryResult2 = await knexops.updateDatabase("chatSessions", { participants: JSON.stringify(personsArray) }, { sessionID: strSessionID });
@@ -94,11 +94,11 @@ async function insertPerson(strSessionID, strPersonalityID) {
 async function removePerson(strSessionID, strPersonalityID) {
   if (!strSessionID) {
     console.log("chatSession-model.removePerson(): Missing sessionID!");
-    return false; 
+    return false;
   }
   if (!strPersonalityID) {
     console.log("chatSession-model.removePerson(): Missing PersonalityID!");
-    return false; 
+    return false;
   }
 
   const queryResult = await getPersons(strSessionID);
@@ -123,11 +123,11 @@ async function removePerson(strSessionID, strPersonalityID) {
 async function getPersons(strSessionID) {
   if (!strSessionID) {
     console.log("chatSession-model.getPersons(): Missing sessionID!");
-    return false; 
+    return false;
   }
 
   const queryResult = await knexops.selectDatabase("participants", "chatSessions", { sessionID: strSessionID });
-  if (!queryResult[0]){
+  if (!queryResult[0]) {
     return false;
   }
   return JSON.parse(queryResult[0].participants);

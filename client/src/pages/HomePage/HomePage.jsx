@@ -27,8 +27,12 @@ export default function HomePage() {
   let chatDiv = useRef();
 
   useEffect(() => {
-    refetchSessionData();
-    refetchPersonalityData();
+    //Wrapping these in async function to ensure they load in this order on a network with latency 
+    const refreshData = async () => {
+      await refetchPersonalityData();
+      await refetchSessionData();   
+    };
+    refreshData();
     return () => {
       //ensure any active intervals are cleared if the user goes to a different page.
       clearInterval(autoChatInterval);
@@ -36,8 +40,16 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    refetchSessionDetailData();
-    refetchSessionPersonsData();
+    //Wrapping these in async function to ensure they load in this order on a network with latency.
+    const refreshData = async () => {
+      await refetchSessionDetailData();
+      await refetchSessionPersonsData();
+    };
+    //don't bother refreshing these data unless there is an active session
+    if (activeSession !== ""){
+      refreshData();
+    }
+    
   }, [activeSession]);
 
   useEffect(() => {
@@ -111,25 +123,27 @@ export default function HomePage() {
 
   async function refetchSessionData() {
     try {
-      setSessions([]);
       const response = await axios.get(webapi.URL + "/chatsession");
       setSessions(response.data);
-      if (response.data[0]){
-        setActiveSession(response.data[0].sessionID);        
+      if (response.data[0]) {
+        setActiveSession(response.data[0].sessionID);
       }
     } catch (error) {
       alert(`HomePage.refetchSessions() request failed with error: ${error}`);
+      return false;
     }
+    return true;
   }
 
   async function refetchPersonalityData() {
     try {
-      setPersonalities([]);
       const response = await axios.get(webapi.URL + "/personality");
       setPersonalities(response.data);
     } catch (error) {
       alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
+      return false;
     }
+    return true;
   }
 
   async function refetchSessionDetailData() {
@@ -139,7 +153,9 @@ export default function HomePage() {
       setSessionTitle();
     } catch (error) {
       alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
+      return false;
     }
+    return true;
   }
 
   async function refetchSessionPersonsData() {
@@ -152,7 +168,9 @@ export default function HomePage() {
       setActiveSessionPersons(personalityDataFiltered);
     } catch (error) {
       alert(`HomePage.refetchSessionPersonsData() request failed with error: ${error}`);
+      return false;
     }
+    return true;
   }
 
   function setSessionTitle() {
@@ -194,7 +212,7 @@ export default function HomePage() {
   }
 
   const handleSendChat = async (event) => {
-    if (!userInput.current.value){
+    if (!userInput.current.value) {
       return;
     }
     const personalitiesList = personalities.map((e) => {
@@ -223,8 +241,9 @@ export default function HomePage() {
       userInput.current.value = "";
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
-      return -1;
+      return false;
     }
+    return true;
   };
 
   const handleSessionChange = async (sessionID) => {
@@ -315,7 +334,7 @@ export default function HomePage() {
       });
       setActiveSessionPersons(personsFiltered);
       ChangeAutoScroll(true);
-      setResponses([...responses, { name: "JanusGPT",  content: `${personObj.name} left the chat!`, timestamp: Date.now() }]);
+      setResponses([...responses, { name: "JanusGPT", content: `${personObj.name} left the chat!`, timestamp: Date.now() }]);
     } catch (error) {
       alert(`HomePage.handleRemovePersonFromSession() request failed with error: ${error}`);
       return -1;
@@ -328,7 +347,7 @@ export default function HomePage() {
       const response = await axios.post(postURL);
       setActiveSessionPersons([...activeSessionPersons, personObj]);
       ChangeAutoScroll(true);
-      setResponses([...responses, { name: "JanusGPT",  content: `${personObj.name} entered the chat!`, timestamp: Date.now() }]);
+      setResponses([...responses, { name: "JanusGPT", content: `${personObj.name} entered the chat!`, timestamp: Date.now() }]);
     } catch (error) {
       alert(`HomePage.handleAddPersonToSession() request failed with error: ${error}`);
       return -1;
@@ -339,7 +358,7 @@ export default function HomePage() {
     <div className="HomePage">
       <div className="HomePage__selectionBar">
         <Participants activeSession={activeSession} activePersonalitiesObj={activeSessionPersons} personalitiesObj={personalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
-        </div>
+      </div>
       <div className="HomePage__side">
         <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} activeSession={activeSession} />
       </div>

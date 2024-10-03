@@ -9,6 +9,7 @@ import VisualSelectModal from "../VisualSelectModal/VisualSelectModal";
 export default function Participants({ activePersonalitiesObj, activeSession, personalitiesObj,  removePersonCallBack, addPersonCallBack }) {
   const [selectionModal, setSelectionModal] = useState(<></>);
 
+  //alert(`${activePersonalitiesObj} ---- ${activeSession}` );
   const addPersonsListArray = personalitiesObj.map(e => {
     return {"text" : e.name, "id": e.personalityID, "image" : webapi.URL + "/" + e.avatarImg}
   });
