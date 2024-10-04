@@ -14,7 +14,7 @@ async function getPersonalityDetails() {
   return queryResult;
 }
 
-async function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
+async function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice, intUserID) {
   if (!strName || typeof strName !== "string") {
     console.log("personality-model.createPersonality(): Missing or incorrect type for personality name!");
     return false; 
@@ -58,6 +58,7 @@ async function createPersonality(strName, strAvatarImg, floatTemperature, strCon
     avatarPrompt: strAvatarPrompt,
     voice: strVoice,
     personalityID: uuidv4(),
+    userID: intUserID,
   };
 
   const queryResult  = await knexops.insertDatabase("personalities", data);

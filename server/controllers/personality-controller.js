@@ -31,7 +31,7 @@ const httpCreatePersonality = async (req, res) => {
     return false;
   }
 
-  const result = await chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
+  const result = await chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice, req.body.requestedbyUser);
   if (result === false) {
     res.status(500).json({});
     return false;

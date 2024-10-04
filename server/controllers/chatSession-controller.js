@@ -6,7 +6,7 @@ const httpCreateSession = async (req, res) => {
     res.status(400).json({ "Error Message": "Must provide a session name" });
     return false;
   }
-  const result = await chatSessionModel.createChatSession(req.body.sessionName);
+  const result = await chatSessionModel.createChatSession(req.body.sessionName, req.body.requestedbyUser);
   if (result === false) {
     res.status(500).json({});
     return false;

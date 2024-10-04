@@ -11,12 +11,12 @@ async function getChatSessionChatDetail(strSessionID) {
   return queryResult;
 }
 
-async function createChatSession(strName) {
+async function createChatSession(strName, intUserID) {
   if (!strName) {
     console.log("chatSession-model.createChatSession(): Missing session name!");
     return false;
   }
-  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]" };
+  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]", userID : intUserID};
   const queryResult = knexops.insertDatabase("chatSessions", data); //async op but no need to wait
   return data;
 }
