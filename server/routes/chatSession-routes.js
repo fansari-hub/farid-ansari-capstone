@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const ChatSessionController = require("../controllers/chatSession-controller");
+const authorization = require("../middlewares/authorization")
+router.use(authorization.decodeToken);
 
 router.route("/")
 .get(ChatSessionController.httpGetSessions)

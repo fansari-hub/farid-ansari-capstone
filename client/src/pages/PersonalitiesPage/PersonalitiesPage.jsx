@@ -9,15 +9,28 @@ import { useState, useRef, useEffect } from "react";
 export default function PersonalitiesPage() {
   let [personalities, setPersonalities] = useState([]);
 
+  const sessionAuthToken = sessionStorage.getItem("accessToken");
+  const authHeader = (authToken) => {
+    return (
+      {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+  };
+
 
 
   useEffect(() => {
-    refetchPersonalities();
+    if(sessionAuthToken){
+      refetchPersonalities();
+    }
   }, []);
 
   async function refetchPersonalities(){
     try {
-      const response = await axios.get(webapi.URL + "/personality");
+      const response = await axios.get(webapi.URL + "/personality", authHeader(sessionAuthToken));
       setPersonalities(response.data);
     } catch (error) {
       alert(`HomePage.refetchPersonalities() request failed with error: ${error}`);
@@ -27,7 +40,7 @@ export default function PersonalitiesPage() {
   const handleUpdatePersonality = async (personalityObj) => {
     try {
       const updateURL = webapi.URL + "/personality/" + personalityObj.personalityID;
-      const response = await axios.put(updateURL, personalityObj);
+      const response = await axios.put(updateURL, personalityObj, authHeader(sessionAuthToken));
       refetchPersonalities();
     } catch (error) {
       alert(`PersonalitiesPage.handleUpdatePersonality() request failed with error: ${error}`);
@@ -38,7 +51,7 @@ export default function PersonalitiesPage() {
   const handleDeletePersonality = async (personalityID) => {
     try{
       const deleteURL = webapi.URL + "/personality/" + personalityID;
-      const response = await axios.delete(deleteURL);
+      const response = await axios.delete(deleteURL, authHeader(sessionAuthToken));
       refetchPersonalities();
     } catch (error){
       alert(`PersonalitiesPage.handleDeletePersonality() request failed with error: ${error}`);
@@ -50,7 +63,7 @@ export default function PersonalitiesPage() {
     try{
       const newPersonalityObj = {"name": "New Person", "avatarImg" : "", "temperature" : 1, "conditionPrompt" :"You are a useful assistant.", "avatarPrompt": "A profile picture of a useful assistant", "voice": "alloy"}
       const postURL = webapi.URL + "/personality";
-      const response = await axios.post(postURL, newPersonalityObj );
+      const response = await axios.post(postURL, newPersonalityObj, authHeader(sessionAuthToken) );
       setPersonalities([]);
       refetchPersonalities();
     }catch(error){
@@ -62,7 +75,7 @@ export default function PersonalitiesPage() {
   const handleGenerateAvatarImg = async (avatarPrompt, personalityID) =>{
     try{
       const postURL = webapi.URL + "/imagegen/avatar/" + personalityID
-      const response = await axios.post(postURL, {"prompt" : avatarPrompt});
+      const response = await axios.post(postURL, {"prompt" : avatarPrompt}, authHeader(sessionAuthToken));
       setPersonalities([]);
       refetchPersonalities();
     }catch(error){

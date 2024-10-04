@@ -3,3 +3,4 @@
 /public/TTS/*
 /public/avatarImg/*
 .DS_Store
+/config/FireBaseServiceAccount.json
