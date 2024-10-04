@@ -3,6 +3,11 @@ const chatPersonalityModel = require("../models/personality-model");
 
 
 async function generateAvatar(req, res){
+  if(await chatPersonalityModel.isAuthorized(req.params.id, req.body.requestedbyUser) === false){
+    res.status(401).json({ error: "User is not authorized to access data"});
+    return false;
+  }
+  
   if (!req.body.prompt || typeof req.body.prompt !== "string") {
     res.status(400).json({ error: "Must provide a Prompt String" });
     return false;
