@@ -8,7 +8,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 function SignInPage() {
 const navigate = useNavigate();
 
-const {authorizedUser, signInWithGoogle, logoutUser } = useContext(UserAuthorizedContext)
+const {authorizedUser, signInWithGoogle, logoutUser, userName } = useContext(UserAuthorizedContext)
 
 if (authorizedUser){
    navigate("/");
@@ -18,10 +18,14 @@ if (authorizedUser){
     <>
       <div className="SignInPage">
         <div className="SignInPage__left">
-        <Sidebar chatSessions={[]}/>
+        {/* <Sidebar chatSessions={[]}/> */}
         </div>
         <div className="SignInPage__main">
-          <div className="SignInPage__main__title">{authorizedUser ? "You are authorized" : "Please Sign-in"}</div>
+        
+          <div className="SignInPage__main__title">
+            <p>Welcome to JanusGPT!</p>
+            <br></br>
+            {authorizedUser ? `You are authorized ${userName}!` : "Please Sign in to continue"}</div>
           <div className="SignInPage__main__content">
             {authorizedUser ? (
               <button onClick={logoutUser}>Sign Out</button>

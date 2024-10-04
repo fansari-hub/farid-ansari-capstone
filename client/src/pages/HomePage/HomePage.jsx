@@ -6,6 +6,7 @@ import Participants from "../../components/Participants/Participants";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import soundChatDing from "../../assets/sounds/ding.mp3";
 const mainAudioChannel = new Audio();
 const speechAudioChannel = new Audio();
@@ -13,18 +14,19 @@ let autoScroll = false;
 let autoChatInterval;
 
 export default function HomePage() {
-  let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([]);
-  let [personalities, setPersonalities] = useState([]);
-  let [activeSession, setActiveSession] = useState("");
-  let [activeSessionTitle, setActiveSessionTitle] = useState("");
-  let [activeSessionPersons, setActiveSessionPersons] = useState([]);
-  let [chatlog, setChatlog] = useState([]);
+  const [responses, setResponses] = useState([]);
+  const [sessions, setSessions] = useState([]);
+  const [personalities, setPersonalities] = useState([]);
+  const [activeSession, setActiveSession] = useState("");
+  const [activeSessionTitle, setActiveSessionTitle] = useState("");
+  const [activeSessionPersons, setActiveSessionPersons] = useState([]);
+  const [chatlog, setChatlog] = useState([]);
 
-  let userInput = useRef();
-  let inputTTSflag = useRef();
-  let inputAutoChatFlag = useRef();
-  let chatDiv = useRef();
+  const userInput = useRef();
+  const inputTTSflag = useRef();
+  const inputAutoChatFlag = useRef();
+  const chatDiv = useRef();
+  const navigate = useNavigate();
 
   const sessionAuthToken = sessionStorage.getItem("accessToken");
   const authHeader = (authToken) => {
@@ -45,6 +47,8 @@ export default function HomePage() {
     };
     if(sessionAuthToken){
       refreshData();  
+    } else{
+      navigate("/signin");
     }
     
     return () => {

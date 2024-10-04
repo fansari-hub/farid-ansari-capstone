@@ -5,10 +5,11 @@ import PersonalityConfig from "../../components/PersonalityConfig/PersonalityCon
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function PersonalitiesPage() {
-  let [personalities, setPersonalities] = useState([]);
-
+  const [personalities, setPersonalities] = useState([]);
+  const navigate = useNavigate();
   const sessionAuthToken = sessionStorage.getItem("accessToken");
   const authHeader = (authToken) => {
     return (
@@ -25,6 +26,8 @@ export default function PersonalitiesPage() {
   useEffect(() => {
     if(sessionAuthToken){
       refetchPersonalities();
+    } else{
+      navigate("/signin");
     }
   }, []);
 
