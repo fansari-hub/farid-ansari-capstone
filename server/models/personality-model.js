@@ -4,17 +4,26 @@ const fs = require("fs");
 const IMAGE_FILE_BASE = "./public/";
 const IMAGE_FILE_PATH = "avatarImg/"
 
-async function getPersonalityList() {
-  const queryResult = await knexops.selectDatabase("personalityID", "personalities");
+async function isAuthorized(strPersonalityID, intUserID){
+  if (!strPersonalityID || !intUserID) {
+    return false;
+  }
+
+  const queryResult = await knexops.selectDatabase("personalityID", "personalities", { personalityID: strPersonalityID, userID: intUserID });
+  if (queryResult[0]?.personalityID) {
+    return true
+  } else {
+    return false;
+  }
+}
+
+
+async function getPersonalityDetails(intUserID) {
+  const queryResult = await knexops.selectDatabaseAll("personalities", {userID: intUserID}) ;
   return queryResult;
 }
 
-async function getPersonalityDetails() {
-  const queryResult = await knexops.selectDatabaseAll("personalities");
-  return queryResult;
-}
-
-async function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice) {
+async function createPersonality(strName, strAvatarImg, floatTemperature, strConditionPrompt, strAvatarPrompt, strVoice, intUserID) {
   if (!strName || typeof strName !== "string") {
     console.log("personality-model.createPersonality(): Missing or incorrect type for personality name!");
     return false; 
@@ -58,6 +67,7 @@ async function createPersonality(strName, strAvatarImg, floatTemperature, strCon
     avatarPrompt: strAvatarPrompt,
     voice: strVoice,
     personalityID: uuidv4(),
+    userID: intUserID,
   };
 
   const queryResult  = await knexops.insertDatabase("personalities", data);
@@ -138,4 +148,4 @@ async function updatePersonalityAvatar(strPersonalityID, strAvatarImg) {
   return IMAGE_FILE_PATH + filename;
 }
 
-module.exports = { getPersonalityList, getPersonalityDetails, createPersonality, updatePersonality, deletePersonality, updatePersonalityAvatar };
+module.exports = { getPersonalityDetails, createPersonality, updatePersonality, deletePersonality, updatePersonalityAvatar, isAuthorized };

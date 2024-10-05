@@ -27,7 +27,6 @@
     background-color: transparent;
     padding-top: 70px;
     padding-bottom: 0;
-
   }
 
   &__settings {
@@ -41,6 +40,15 @@
       font-size: 1rem;
       &:hover {
         color: cyan;
+      }
+    }
+    &__auth {
+      color: $colPrimary-MutedText;
+      font-family: monospace;
+      font-size: 1rem;
+      &:hover {
+        color: cyan;
+        cursor: pointer;
       }
     }
   }

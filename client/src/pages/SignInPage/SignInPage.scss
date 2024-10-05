@@ -1,0 +1,101 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.SignInPage {
+  display: flex;
+  background-color: $colPrimary-Background;
+
+  @include displayMobile {
+    flex-direction: column;
+  }
+
+  &__left {
+    background-color: $colPrimary-Background;
+    background-color: none;
+    position: fixed;
+    @include displayMobile {
+      position: relative;
+    }
+  }
+  &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8vh;
+    text-align: center;
+    min-height: 100vh;
+    color: $colPrimary-MainText;
+    font-size: calc(10px + 1vmin);
+    flex-grow: 1;
+    max-width: 1000px;
+    @include displayMobile {
+      margin: 0;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 0.25rem;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      @include displayMobile {
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+      }
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      padding-top: 50px;
+      max-width: 1280px;
+      text-align: left;
+      @include displayMobile {
+        padding-left: 0;
+      }
+      &__signInBlock {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        background-color: $colPrimary-ItemFill;
+        margin: 20px;
+        padding: 50px;
+        border: thin outset $colSecondary-MutedBorder;
+        border-radius: 15px;
+        @include displayMobile {
+          margin: 10px;
+        }
+        &__button {
+          border: 3px outset $colSecondary-MutedBorder;
+          box-shadow: 1px 1px black;
+          background-color: transparent;
+          color: $colPrimary-MainText;
+          height: 3rem;
+          width: 25rem;
+          border-radius: 20px;
+          @include displayMobile {
+            width: 10rem;
+            height: 3rem;
+          }
+          &:hover {
+            cursor: pointer;
+            background-color: $colSecondary-PositiveAction;
+            color: $colSecondary-PositiveActionTextHover;
+          }
+        }
+      }
+      &__logo {
+        border-radius: 25px;
+        border: thick inset $colSecondary-MutedBorder; 
+        box-shadow: 10px 10px 20px black ;
+        width: 25rem;
+        @include displayMobile{
+          width: 15rem;
+        }
+      }
+    }
+  }
+}

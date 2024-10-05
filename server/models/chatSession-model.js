@@ -1,8 +1,20 @@
 const knexops = require("./utils/knexops");
 const { v4: uuidv4 } = require("uuid");
 
-async function getChatSessions() {
-  const queryResult = await knexops.selectDatabaseAll("chatSessions");
+async function isAuthorized(strSessionID, intUserID){
+  if (!strSessionID || !intUserID) {
+    return false;
+  }
+  const queryResult = await knexops.selectDatabase("sessionID", "chatSessions", { sessionID: strSessionID, userID: intUserID });
+  if (queryResult[0]?.sessionID) {
+    return true
+  } else {
+    return false;
+  }
+}
+
+async function getChatSessions(intUserID) {
+  const queryResult = await knexops.selectDatabaseAll("chatSessions",{"userID": intUserID});
   return queryResult;
 }
 
@@ -11,12 +23,12 @@ async function getChatSessionChatDetail(strSessionID) {
   return queryResult;
 }
 
-async function createChatSession(strName) {
+async function createChatSession(strName, intUserID) {
   if (!strName) {
     console.log("chatSession-model.createChatSession(): Missing session name!");
     return false;
   }
-  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]" };
+  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]", userID : intUserID};
   const queryResult = knexops.insertDatabase("chatSessions", data); //async op but no need to wait
   return data;
 }
@@ -143,4 +155,5 @@ module.exports = {
   insertPerson,
   removePerson,
   getPersons,
+  isAuthorized,
 };

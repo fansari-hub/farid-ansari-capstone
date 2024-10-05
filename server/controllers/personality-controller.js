@@ -31,7 +31,7 @@ const httpCreatePersonality = async (req, res) => {
     return false;
   }
 
-  const result = await chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice);
+  const result = await chatPersonalityModel.createPersonality(req.body.name, req.body.avatarImg, req.body.temperature, req.body.conditionPrompt, req.body.avatarPrompt, req.body.voice, req.body.requestedbyUser);
   if (result === false) {
     res.status(500).json({});
     return false;
@@ -40,7 +40,7 @@ const httpCreatePersonality = async (req, res) => {
 };
 
 const httpGetPersonalities = async (req, res) => {
-  const result = await chatPersonalityModel.getPersonalityDetails();
+  const result = await chatPersonalityModel.getPersonalityDetails(req.body.requestedbyUser);
 
   if (result === false) {
     res.status(500).json({});
@@ -50,6 +50,11 @@ const httpGetPersonalities = async (req, res) => {
 };
 
 const httpUpdatePersonality = async (req, res) => {
+  if(await chatPersonalityModel.isAuthorized(req.params.id, req.body.requestedbyUser) === false){
+    res.status(401).json({ error: "User is not authorized to access data"});
+    return false;
+  }
+
   if (!req.body.name || typeof req.body.name !== "string") {
     res.status(400).json({ error: "Must provide a name string" });
     return false;
@@ -89,6 +94,11 @@ const httpUpdatePersonality = async (req, res) => {
 };
 
 const httpDeletePersonality = async (req, res) => {
+  if(await chatSessionModel.isAuthorized(req.params.id, req.body.requestedbyUser) === false){
+    res.status(401).json({ error: "User is not authorized to access data"});
+    return false;
+  }
+
   const result = await chatPersonalityModel.deletePersonality(req.params.id);
   if (result === false) {
     res.status(500).json({});

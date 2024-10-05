@@ -15,6 +15,8 @@ app.use((req, res, next) => {
   }
 });
 
+
+
 const PORT = process.env.PORT || 5050;
 
 const personalityRoutes = require('./routes/personality-routes');

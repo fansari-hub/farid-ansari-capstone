@@ -6,33 +6,67 @@ import Participants from "../../components/Participants/Participants";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import soundChatDing from "../../assets/sounds/ding.mp3";
+import { getAuth } from "firebase/auth";
 const mainAudioChannel = new Audio();
 const speechAudioChannel = new Audio();
 let autoScroll = false;
 let autoChatInterval;
 
-export default function HomePage() {
-  let [responses, setResponses] = useState([]);
-  let [sessions, setSessions] = useState([]);
-  let [personalities, setPersonalities] = useState([]);
-  let [activeSession, setActiveSession] = useState("");
-  let [activeSessionTitle, setActiveSessionTitle] = useState("");
-  let [activeSessionPersons, setActiveSessionPersons] = useState([]);
-  let [chatlog, setChatlog] = useState([]);
 
-  let userInput = useRef();
-  let inputTTSflag = useRef();
-  let inputAutoChatFlag = useRef();
-  let chatDiv = useRef();
+export default function HomePage() {
+  const [responses, setResponses] = useState([]);
+  const [sessions, setSessions] = useState([]);
+  const [personalities, setPersonalities] = useState([]);
+  const [activeSession, setActiveSession] = useState("");
+  const [activeSessionTitle, setActiveSessionTitle] = useState("");
+  const [activeSessionPersons, setActiveSessionPersons] = useState([]);
+  const [chatlog, setChatlog] = useState([]);
+  const userInput = useRef();
+  const inputTTSflag = useRef();
+  const inputAutoChatFlag = useRef();
+  const chatDiv = useRef();
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+
+  let sessionAuthToken = sessionStorage.getItem("accessToken");
+
+  function refreshSessionToken() {
+    
+    auth.currentUser
+      ?.getIdToken()
+      .then(function (idToken) {
+        sessionAuthToken = idToken;
+        sessionStorage.setItem("accessToken", idToken);
+      })
+      .catch(function (error) {
+        alert("Session Refresh Error");
+      });
+  };
+
+  const authHeader = (authToken) => {
+    refreshSessionToken();
+    return {
+      headers: {
+        Authorization: `Bearer ${sessionAuthToken}`,
+      },
+    };
+  };
 
   useEffect(() => {
-    //Wrapping these in async function to ensure they load in this order on a network with latency 
+    //Wrapping these in async function to ensure they load in this order on a network with latency
     const refreshData = async () => {
       await refetchPersonalityData();
-      await refetchSessionData();   
+      await refetchSessionData();
     };
-    refreshData();
+    if (sessionAuthToken) {
+      refreshData();
+    } else {
+      navigate("/signin");
+    }
+
     return () => {
       //ensure any active intervals are cleared if the user goes to a different page.
       clearInterval(autoChatInterval);
@@ -46,10 +80,9 @@ export default function HomePage() {
       await refetchSessionPersonsData();
     };
     //don't bother refreshing these data unless there is an active session
-    if (activeSession !== ""){
+    if (activeSession !== "") {
       refreshData();
     }
-    
   }, [activeSession]);
 
   useEffect(() => {
@@ -123,7 +156,7 @@ export default function HomePage() {
 
   async function refetchSessionData() {
     try {
-      const response = await axios.get(webapi.URL + "/chatsession");
+      const response = await axios.get(webapi.URL + "/chatsession", authHeader(sessionAuthToken));
       setSessions(response.data);
       if (response.data[0]) {
         setActiveSession(response.data[0].sessionID);
@@ -137,7 +170,7 @@ export default function HomePage() {
 
   async function refetchPersonalityData() {
     try {
-      const response = await axios.get(webapi.URL + "/personality");
+      const response = await axios.get(webapi.URL + "/personality", authHeader(sessionAuthToken));
       setPersonalities(response.data);
     } catch (error) {
       alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
@@ -148,7 +181,7 @@ export default function HomePage() {
 
   async function refetchSessionDetailData() {
     try {
-      const response = await axios.get(webapi.URL + "/chatsession/" + activeSession);
+      const response = await axios.get(webapi.URL + "/chatsession/" + activeSession, authHeader(sessionAuthToken));
       setChatlog(response.data);
       setSessionTitle();
     } catch (error) {
@@ -160,7 +193,7 @@ export default function HomePage() {
 
   async function refetchSessionPersonsData() {
     try {
-      const response = await axios.get(webapi.URL + "/chatsession/" + activeSession + "/participant");
+      const response = await axios.get(webapi.URL + "/chatsession/" + activeSession + "/participant", authHeader(sessionAuthToken));
       const activePersons = response.data;
       const personalityDataFiltered = personalities.filter((e) => {
         return activePersons.indexOf(e.personalityID) > -1;
@@ -188,7 +221,7 @@ export default function HomePage() {
         messageID: strMessageID,
       };
       const getURL = webapi.URL + "/ttsgen";
-      const response = await axios.post(getURL, ttsObj);
+      const response = await axios.post(getURL, ttsObj, authHeader(sessionAuthToken));
       speechAudioChannel.src = webapi.URL + "/" + response.data.result;
       speechAudioChannel.play();
     } catch (error) {
@@ -200,7 +233,7 @@ export default function HomePage() {
   async function handleSingleAudioPlayback(messageID) {
     try {
       const getURL = webapi.URL + "/ttsgen/" + messageID;
-      const response = await axios.get(getURL);
+      const response = await axios.get(getURL, authHeader(sessionAuthToken));
       if (response.data.ttsAudioFile) {
         speechAudioChannel.src = webapi.URL + "/" + response.data.ttsAudioFile;
         speechAudioChannel.play();
@@ -226,7 +259,7 @@ export default function HomePage() {
     });
     try {
       const postURL = webapi.URL + "/chatsession/" + activeSession;
-      const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value });
+      const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value }, authHeader(sessionAuthToken));
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       ChangeAutoScroll(true);
       if (response.data.message) {
@@ -254,7 +287,7 @@ export default function HomePage() {
   const handleAddSession = async () => {
     try {
       const postURL = webapi.URL + "/chatsession";
-      const response = await axios.post(postURL, { sessionName: "New Session" });
+      const response = await axios.post(postURL, { sessionName: "New Session" }, authHeader(sessionAuthToken));
       refetchSessionData();
     } catch (error) {
       alert(`HomePage.handleAddSesion() request failed with error: ${error}`);
@@ -265,7 +298,7 @@ export default function HomePage() {
   const handleDeleteSession = async (sessionID) => {
     try {
       const delURL = webapi.URL + "/chatsession/" + sessionID;
-      const response = await axios.delete(delURL);
+      const response = await axios.delete(delURL, authHeader(sessionAuthToken));
       refetchSessionData();
     } catch (error) {
       alert(`HomePage.handleAddSesion() request failed with error: ${error}`);
@@ -276,7 +309,7 @@ export default function HomePage() {
   const handleUpdateSession = async (sessionID, sessionName) => {
     try {
       const putURL = webapi.URL + "/chatsession/" + sessionID;
-      const response = await axios.put(putURL, { sessionName: sessionName });
+      const response = await axios.put(putURL, { sessionName: sessionName }, authHeader(sessionAuthToken));
       refetchSessionData();
     } catch (error) {
       alert(`HomePage.handleUpdateSession() request failed with error: ${error}`);
@@ -309,7 +342,7 @@ export default function HomePage() {
     });
     try {
       const getURL = webapi.URL + "/chatsession/" + currentActiveSession + "/auto";
-      const response = await axios.get(getURL);
+      const response = await axios.get(getURL, authHeader(sessionAuthToken));
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       ChangeAutoScroll(true);
       if (response.data.message) {
@@ -328,7 +361,7 @@ export default function HomePage() {
   const handleRemovePersonFromSession = async (personObj, sessionID) => {
     try {
       const delURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personObj.personalityID;
-      const response = await axios.delete(delURL);
+      const response = await axios.delete(delURL, authHeader(sessionAuthToken));
       const personsFiltered = activeSessionPersons.filter((e) => {
         return e.personalityID !== personObj.personalityID;
       });
@@ -344,7 +377,7 @@ export default function HomePage() {
   const handleAddPersonToSession = async (personObj, sessionID) => {
     try {
       const postURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personObj.personalityID;
-      const response = await axios.post(postURL);
+      const response = await axios.post(postURL, {}, authHeader(sessionAuthToken));
       setActiveSessionPersons([...activeSessionPersons, personObj]);
       ChangeAutoScroll(true);
       setResponses([...responses, { name: "JanusGPT", content: `${personObj.name} entered the chat!`, timestamp: Date.now() }]);
@@ -367,11 +400,10 @@ export default function HomePage() {
         <div ref={chatDiv} className="HomePage__main__content">
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
-       
       </div>
       <div className="HomePage__input">
-          <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} />
-        </div>
+        <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} />
+      </div>
     </div>
   );
 }

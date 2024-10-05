@@ -6,6 +6,8 @@ exports.up = function (knex) {
         table.string('sessionID').notNullable().unique();
         table.string('sessionName').notNullable();
         table.string('participants', 2000);
+        table.integer("userID");
+        table.foreign("userID").references("id").inTable("users").onUpdate("CASCADE").onDelete("CASCADE");
       })
       .createTable("chatSessionHist",(table) => {
       table.increments("id").primary();
