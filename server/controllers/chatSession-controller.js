@@ -64,7 +64,7 @@ const httpInsertChat = async (req, res) => {
     return false;
   }
 
-  await chatgptController.generateGPTChat(req.params.id, res);
+  await chatgptController.generateGPTChat(req.params.id, res, req);
   // The HTTP response will be send by chatGPT controller.
   return true;
 };
@@ -76,7 +76,7 @@ const httpForceBotChat = async (req, res) => {
     return false;
   }
 
-  await chatgptController.generateGPTChat(req.params.id, res);
+  await chatgptController.generateGPTChat(req.params.id, res, req);
   return true;
 };
 
