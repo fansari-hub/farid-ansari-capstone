@@ -1,37 +1,34 @@
 import "./SignInPage.scss";
+import UserConfig from "../../components/UserConfig/UserConfig";
 
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { UserAuthorizedContext } from "../../App";
 import Sidebar from "../../components/Sidebar/Sidebar";
 
 function SignInPage() {
-const navigate = useNavigate();
-
-const {authorizedUser, signInWithGoogle, logoutUser, userName } = useContext(UserAuthorizedContext)
-
-if (authorizedUser){
-   navigate("/");
-}
+  const { authorizedUser, signInWithGoogle, logoutUser, userName, userEmail } = useContext(UserAuthorizedContext);
 
   return (
     <>
       <div className="SignInPage">
         <div className="SignInPage__left">
-        {/* <Sidebar chatSessions={[]}/> */}
+          <Sidebar chatSessions={[]} />
         </div>
         <div className="SignInPage__main">
-        
           <div className="SignInPage__main__title">
             <p>Welcome to JanusGPT!</p>
-            <br></br>
-            {authorizedUser ? `You are authorized ${userName}!` : "Please Sign in to continue"}</div>
+            
+            {authorizedUser ? "": "Please Sign in to continue"}
+          </div>
           <div className="SignInPage__main__content">
             {authorizedUser ? (
-              <button onClick={logoutUser}>Sign Out</button>
+              <>
+              <UserConfig userObj={{"name" : userName, "email" : userEmail}} signOutCallBack={logoutUser}/>
+              </>
             ) : (
               <div className="SignInPage__main__content__signInBlock">
-                <button onClick={signInWithGoogle}>Sign in with Google</button>
+                <button className="SignInPage__main__content__signInBlock__button" onClick={signInWithGoogle}>Sign in with Google</button>
+                <button className="SignInPage__main__content__signInBlock__button" >Sign in with Email</button>
               </div>
             )}
           </div>

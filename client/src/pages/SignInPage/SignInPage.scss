@@ -21,13 +21,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10vh;
+    margin-top: 8vh;
     text-align: center;
     min-height: 100vh;
     color: $colPrimary-MainText;
     font-size: calc(10px + 1vmin);
     flex-grow: 1;
     max-width: 1000px;
+    @include displayMobile{
+      margin: 0;
+    }
 
     &__title {
       text-align: center;
@@ -44,12 +47,46 @@
     }
 
     &__content {
-        padding-top: 50px;
+      padding-top: 50px;
       padding-left: 150px;
       max-width: 1280px;
       text-align: left;
       @include displayMobile {
         padding-left: 0;
+      }
+      &__signInBlock{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        background-color: $colPrimary-ItemFill;
+        margin: 20px;
+        padding: 50px;
+        border: thin outset $colSecondary-MutedBorder;
+        box-shadow: 1px 1px black;
+        border-radius: 15px;
+        @include displayMobile {
+          margin: 10px;
+        }
+        &__button{
+          border: 3px outset $colSecondary-MutedBorder;
+          box-shadow: 1px 1px black;
+          background-color: transparent;
+          color: $colPrimary-MainText;
+          height: 3rem;
+          width: 25rem;
+          border-radius: 20px;
+          @include displayMobile {
+            width: 10rem;
+            height: 3rem;
+          }
+          &:hover {
+            cursor: pointer;
+            background-color: $colSecondary-PositiveAction;
+            color: $colSecondary-PositiveActionTextHover;
+          }
+
+        }
       }
     }
   }

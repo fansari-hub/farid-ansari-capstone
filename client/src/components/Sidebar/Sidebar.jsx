@@ -6,22 +6,22 @@ import SessionItem from "../SessionItem/SessionItem";
 
 export default function Sidebar({ chatSessions, switchSessionCallBack, addSessionCallback, deleteSessionCallback, updateSessionCallback, activeSession }) {
   const fieldListRef = useRef();
-  const navigate = useNavigate();
-  const { authorizedUser, logoutUser } = useContext(UserAuthorizedContext);
+  // const navigate = useNavigate();
+   const { authorizedUser } = useContext(UserAuthorizedContext);
 
-  function handleLogout() {
-    logoutUser();
-    navigate("/signin");
-  }
+  // function handleLogout() {
+  //   logoutUser();
+  //   navigate("/signin");
+  // }
 
   return (
     <>
       <div className="Sidebar">
         <div className="Sidebar__settings">
           {authorizedUser ? (
-            <p className="Sidebar__settings__auth" onClick={handleLogout}>
-              Sign out
-            </p>
+            <Link to="/signin">
+            <p className="Sidebar__settings__auth">Account</p>
+          </Link>
           ) : (
             <Link to="/signin">
               <p className="Sidebar__settings__auth">Sign In</p>
