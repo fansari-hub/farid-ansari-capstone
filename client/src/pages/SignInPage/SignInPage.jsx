@@ -1,5 +1,6 @@
 import "./SignInPage.scss";
 import UserConfig from "../../components/UserConfig/UserConfig";
+import defaultLogo from "../../assets/images/logo.webp";
 
 import { useContext } from "react";
 import { UserAuthorizedContext } from "../../App";
@@ -31,6 +32,7 @@ function SignInPage() {
                 <button className="SignInPage__main__content__signInBlock__button" >Sign in with Email</button>
               </div>
             )}
+            <img className="SignInPage__main__content__logo" src={defaultLogo}/>
           </div>
         </div>
       </div>
