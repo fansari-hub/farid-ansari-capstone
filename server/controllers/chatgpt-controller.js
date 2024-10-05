@@ -125,7 +125,7 @@ async function conversationManager(gptData, strSessionID, res) {
   const getlastMessage = gptData[0][gptData[0].length - 1].content;
 
   //  console.log("chatgpt-controller.conversationManager(): available bots : ", availableBots);
-  const directRecipientList = availableBots.filter((bot) => getlastMessage.includes(`@${bot.name}`) === true);
+  const directRecipientList = availableBots.filter((bot) => getlastMessage.toLowerCase().includes(`@${bot.name.toLowerCase()}`) === true);
 
   if (directRecipientList.length > 0) {
     directRecipientIndex = Math.floor(Math.random() * directRecipientList.length);
@@ -185,8 +185,6 @@ async function conversationManager(gptData, strSessionID, res) {
     console.log("chatgpt-controller.conversationManager() : failed on SetChatGlobal model call");
     return false;
   }
-
-  console.log("Hello Again, result = " + result);
   res.status(200).json(result);
   return true;
 }
