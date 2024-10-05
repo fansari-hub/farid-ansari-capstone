@@ -88,11 +88,20 @@ function App() {
   };
 
   const createAccountUsingEmail = (strEmail, strPassword, strName) => {
-    createUserWithEmailAndPassword(auth, strEmail, strPassword, strName)
+    createUserWithEmailAndPassword(auth, strEmail, strPassword)
       .then((userCredential) => {
         // Signed up
-        const token = userCredential.accessToken;
-        sessionStorage.setItem("accessToken", token);
+
+        auth.currentUser
+          .getIdToken(/* forceRefresh */ true)
+          .then(function (idToken) {
+            sessionStorage.setItem("accessToken", idToken);
+          })
+          .catch(function (error) {
+            // Handle error
+          });
+
+        //sessionStorage.setItem("accessToken", token);
         sessionStorage.setItem("userName", strName);
         sessionStorage.setItem("userEmail", strEmail);
         setAuthorizedUser(true);
@@ -108,14 +117,23 @@ function App() {
   };
 
   const signInWithEmail = (strEmail, strPassword, strName) => {
-    signInWithEmailAndPassword(auth, strEmail, strPassword, strName)
+    signInWithEmailAndPassword(auth, strEmail, strPassword)
       .then((userCredential) => {
         // Signed in
+
+        auth.currentUser
+          .getIdToken(/* forceRefresh */ true)
+          .then(function (idToken) {
+            sessionStorage.setItem("accessToken", idToken);
+          })
+          .catch(function (error) {
+            // Handle error
+          });
+
         const user = userCredential.user;
-        const token = userCredential.accessToken;
-        sessionStorage.setItem("accessToken", token);
-        sessionStorage.setItem("userName", strName);
-        sessionStorage.setItem("userEmail", strEmail);
+        console.log(user);
+        //sessionStorage.setItem("userName", user.displayName);
+        sessionStorage.setItem("userEmail", user.email);
         setAuthorizedUser(true);
         setUserName(user.displayName);
         setUserEmail(user.email);
@@ -127,7 +145,7 @@ function App() {
         return false;
       });
   };
-  
+
   const logoutUser = () => {
     signOut(auth)
       .then(() => {
