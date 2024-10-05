@@ -14,6 +14,7 @@ const speechAudioChannel = new Audio();
 let autoScroll = false;
 let autoChatInterval;
 
+
 export default function HomePage() {
   const [responses, setResponses] = useState([]);
   const [sessions, setSessions] = useState([]);
@@ -27,21 +28,29 @@ export default function HomePage() {
   const inputAutoChatFlag = useRef();
   const chatDiv = useRef();
   const navigate = useNavigate();
+  const auth = getAuth();
 
-  const sessionAuthToken = sessionStorage.getItem("accessToken");
 
-  const authHeader = (authToken) => {
-    const auth = getAuth();
-    let token;
+  let sessionAuthToken = sessionStorage.getItem("accessToken");
+
+  function refreshSessionToken() {
+    
     auth.currentUser
-      .getIdToken()
+      ?.getIdToken()
       .then(function (idToken) {
+        sessionAuthToken = idToken;
         sessionStorage.setItem("accessToken", idToken);
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        alert("Session Refresh Error");
+      });
+  };
+
+  const authHeader = (authToken) => {
+    refreshSessionToken();
     return {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${sessionAuthToken}`,
       },
     };
   };
