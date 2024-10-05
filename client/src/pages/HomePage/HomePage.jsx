@@ -8,6 +8,7 @@ import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import soundChatDing from "../../assets/sounds/ding.mp3";
+import { getAuth } from "firebase/auth";
 const mainAudioChannel = new Audio();
 const speechAudioChannel = new Audio();
 let autoScroll = false;
@@ -21,7 +22,6 @@ export default function HomePage() {
   const [activeSessionTitle, setActiveSessionTitle] = useState("");
   const [activeSessionPersons, setActiveSessionPersons] = useState([]);
   const [chatlog, setChatlog] = useState([]);
-
   const userInput = useRef();
   const inputTTSflag = useRef();
   const inputAutoChatFlag = useRef();
@@ -29,14 +29,21 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   const sessionAuthToken = sessionStorage.getItem("accessToken");
+
   const authHeader = (authToken) => {
-    return (
-      {
+    const auth = getAuth();
+    let token;
+    auth.currentUser
+      .getIdToken()
+      .then(function (idToken) {
+        sessionStorage.setItem("accessToken", idToken);
+      })
+      .catch(function (error) {});
+    return {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
-    }
-  );
+    };
   };
 
   useEffect(() => {
@@ -45,12 +52,12 @@ export default function HomePage() {
       await refetchPersonalityData();
       await refetchSessionData();
     };
-    if(sessionAuthToken){
-      refreshData();  
-    } else{
+    if (sessionAuthToken) {
+      refreshData();
+    } else {
       navigate("/signin");
     }
-    
+
     return () => {
       //ensure any active intervals are cleared if the user goes to a different page.
       clearInterval(autoChatInterval);

@@ -6,21 +6,28 @@ import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 export default function PersonalitiesPage() {
   const [personalities, setPersonalities] = useState([]);
   const navigate = useNavigate();
-  const sessionAuthToken = sessionStorage.getItem("accessToken");
+  let sessionAuthToken = sessionStorage.getItem("accessToken");
+  
   const authHeader = (authToken) => {
-    return (
-      {
+    const auth = getAuth();
+    let token;
+    auth.currentUser
+      .getIdToken()
+      .then(function (idToken) {
+        sessionStorage.setItem("accessToken", idToken);
+      })
+      .catch(function (error) {});
+    return {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
-    }
-  );
+    };
   };
-
 
 
   useEffect(() => {
