@@ -9,13 +9,13 @@ let sessionParticipants = [];
 
 const sessionData = {};
 
-async function generateGPTChat(strSessionID, res) {
+async function generateGPTChat(strSessionID, res, req) {
   if (!strSessionID && typeof strSessionID !== "string") {
     console.log("Chatgpt-controller.generateGPTChat(): You must provide a strSessionID string!");
     return false;
   }
 
-  personalityData = await personalityModel.getPersonalityDetails();
+  personalityData = await personalityModel.getPersonalityDetails(req.body.requestedbyUser);
   chatHistoryData = await chatSessionModel.getChatSessionChatDetail(strSessionID);
   sessionParticipants = await chatSessionModel.getPersons(strSessionID);
 
@@ -53,30 +53,28 @@ async function generateGPTChat(strSessionID, res) {
     const promptInstructions = `
     Engage with the user and others present, but focus on your own perspective and avoid focusing exclusively on any single individual. 
     Avoid engaging in prolonged one-on-one conversations. 
-    If the participants continue to discuss the same topics more than 10 responses in a row, suggest a new topic for discussion. 
+    If the participants continue to discuss the same topics more than 20 responses in a row, suggest a new topic for discussion. 
     Do not adopt the speaking styles of others. 
     When speaking to one of the individuals directly, precede their name with the @ symbole. 
     Use emojis occasionally to express emotions or emphasize points, but do so sparingly—much like a person would in casual conversation. 
     Do not include emojis in every message or sentence. 
     Focus on delivering clear and natural responses.
+    Try to keep your responses under 50 words, only use more words if it is required to express your idea.
     
     **Communication Guidelines**:
 
-- **Casual Language**: Communicate in a relaxed, conversational style, as people do in chat messages.
-- **Use Contractions and Informal Expressions**: Use words like "I'm," "you're," "don't," "can't," and expressions like "got it," "sounds good."
-- **Keep it Concise**: Write short sentences or phrases. Avoid lengthy explanations.
-- **Engage Naturally**: Ask questions, acknowledge others, and keep the conversation flowing naturally.
-- **Appropriate Slang**: Use common slang or colloquial terms where appropriate, but ensure they're widely understood.
-- **Avoid Formality**: Steer clear of overly formal or technical language unless necessary.
-- **Examples**:
-  - *"Hey, how's it going?"*
-  - *"Can't wait to see what happens next!"*
-  - *"Yeah, that makes sense."*
+    - **Casual Language**: Communicate in a relaxed, conversational style, as people do in chat messages.
+    - **Use Contractions and Informal Expressions**: Use words like "I'm," "you're," "don't," "can't," and expressions like "got it," "sounds good."
+    - **Keep it Concise**: Write short sentences or phrases. Avoid lengthy explanations.
+    - **Engage Naturally**: Ask questions, acknowledge others, and keep the conversation flowing naturally.
+    - **Appropriate Slang**: Use common slang or colloquial terms where appropriate, but ensure they're widely understood.
+    - **Avoid Formality**: Steer clear of overly formal or technical language unless necessary.
+    - **Examples**:
+      - *"Hey, how's it going?"*
+      - *"Can't wait to see what happens next!"*
+      - *"Yeah, that makes sense."*
 
-Remember, the goal is to sound like a person (or the character you are instruted to behave like) chatting naturally.`;
-
-
-
+    Remember, the goal is to sound like a person (or the character you are instruted to behave like) chatting naturally.`;
 
     const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")} and User. ${promptInstructions}`;
     personalChatHistory.push({ role: "system", content: systemPrompt });
@@ -181,7 +179,7 @@ async function conversationManager(gptData, strSessionID, res) {
   console.log(`****** ${personalityDataFiltered[selectedBotIndex].name} is responding to user ******`);
 
   const result = await chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[selectedBotIndex].personalityID, openAIresponse.reply);
-  
+
   if (result === false) {
     res.status(500).json({});
     console.log("chatgpt-controller.conversationManager() : failed on SetChatGlobal model call");
