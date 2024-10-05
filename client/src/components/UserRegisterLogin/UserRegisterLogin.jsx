@@ -40,47 +40,47 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
 
   return (
     <>
-      <div className="UserConfig">
+      <div className="UserRegisterLogin">
         <form>
           {loginType === "create" ? (
-            <div className="UserConfig__group">
-              <p className="UserConfig__group__label">Name</p>
-              <input ref={inputName} name="name" className="UserConfig__group__data" type="text" value={formData.name} onChange={handleChange}></input>
+            <div className="UserRegisterLogin__group">
+              <p className="UserRegisterLogin__group__label">Name</p>
+              <input ref={inputName} name="name" className="UserRegisterLogin__group__data" type="text" value={formData.name} onChange={handleChange}></input>
             </div>
           ) : (
             <></>
           )}
 
-          <div className="UserConfig__group">
-            <p className="UserConfig__group__label">Email</p>
-            <input ref={inputEmail} name="email" className="UserConfig__group__data" type="email" value={formData.email} onChange={handleChange}></input>
+          <div className="UserRegisterLogin__group">
+            <p className="UserRegisterLogin__group__label">Email</p>
+            <input ref={inputEmail} name="email" className="UserRegisterLogin__group__data" type="email" value={formData.email} onChange={handleChange}></input>
           </div>
-          <div className="UserConfig__group">
-            <p className="UserConfig__group__label">Password</p>
-            <input ref={inputPassword} name="password" className="UserConfig__group__data" type="password" value={formData.password} onChange={handleChange}></input>
+          <div className="UserRegisterLogin__group">
+            <p className="UserRegisterLogin__group__label">Password</p>
+            <input ref={inputPassword} name="password" className="UserRegisterLogin__group__data" type="password" value={formData.password} onChange={handleChange}></input>
           </div>
           {loginType === "create" ? (
-            <div className="UserConfig__group">
-              <p className="UserConfig__group__label">Confirm Pasword</p>
-              <input ref={inputConfirmPassword} name="confirmPassword" className="UserConfig__group__data" type="password" value={formData.confirmPassword} onChange={handleChange}></input>
+            <div className="UserRegisterLogin__group">
+              <p className="UserRegisterLogin__group__label">Confirm Pasword</p>
+              <input ref={inputConfirmPassword} name="confirmPassword" className="UserRegisterLogin__group__data" type="password" value={formData.confirmPassword} onChange={handleChange}></input>
             </div>
           ) : (
             <></>
           )}
 
           <br></br>
-          <div className="UserConfig__group">
+          <div className="UserRegisterLogin__group">
             {loginType === "create" ? (
-              <button className="UserConfig__group__save" onClick={handleRegister}>
+              <button className="UserRegisterLogin__group__register" onClick={handleRegister}>
                 Create Account
               </button>
             ) : (
-              <button className="UserConfig__group__save" onClick={handleLogin}>
+              <button className="UserRegisterLogin__group__register" onClick={handleLogin}>
                 Login
               </button>
             )}
 
-            <button className="UserConfig__group__delete" onClick={handleCancel}>
+            <button className="UserRegisterLogin__group__cancel" onClick={handleCancel}>
               Cancel
             </button>
             <div></div>

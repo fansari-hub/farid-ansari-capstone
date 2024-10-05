@@ -4,15 +4,15 @@
 
 .UserRegisterLogin {
   // @include revealing-animation;
-  background-color: $colPrimary-ItemFill;
+//  background-color: $colPrimary-ItemFill;
   //margin: 20px;
-  padding: 20px;
-  border: thin outset $colSecondary-MutedBorder;
-  box-shadow: 1px 1px black;
-  border-radius: 15px;
-  @include displayMobile {
-    margin: 10px;
-  }
+//  padding: 20px;
+//  border: thin outset $colSecondary-MutedBorder;
+//  box-shadow: 1px 1px black;
+//  border-radius: 15px;
+//  @include displayMobile {
+ //   margin: 10px;
+//  }
 
   &__group {
     margin-top: 20px;
@@ -54,18 +54,19 @@
       }
     }
 
-    &__Register {
+    &__register {
       border: 3px outset $colSecondary-MutedBorder;
       box-shadow: 1px 1px black;
       background-color: transparent;
       color: $colSecondary-PositiveActionText;
       height: 2rem;
-      width: 5rem;
+      width: fit-content;
+      padding-left: 1rem;
+      padding-right: 1rem;
       border-radius: 20px;
       @include displayMobile {
         margin-top: 10px;
         width: 50%;
-        height: 2rem;
       }
       &:hover {
         cursor: pointer;
@@ -73,19 +74,20 @@
         color: $colSecondary-PositiveActionTextHover;
       }
     }
-    &__Cancel {
+    &__cancel {
       margin-left: 1rem;
       border: 3px outset $colSecondary-MutedBorder;
       box-shadow: 1px 1px black;
       background-color: transparent;
       color: $colSecondary-NegativeActionText;
       height: 2rem;
-      width: 5rem;
+      width: fit-content;
+      padding-left: 1rem;
+      padding-right: 1rem;
       border-radius: 20px;
       @include displayMobile {
         margin-top: 10px;
         width: 50%;
-        height: 2rem;
       }
       &:hover {
         cursor: pointer;
