@@ -1,6 +1,8 @@
+import webapi from "../../utils/webapi.js";
 import utils from "../../utils/utils.js";
 import "./ResponseCard.scss";
 import defaultLogo from "../../assets/images/logo.webp"
+const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp"
 
 
 export default function ResponseCard({ responseObj, audioPlayCallBack }) {
@@ -22,7 +24,12 @@ export default function ResponseCard({ responseObj, audioPlayCallBack }) {
     <>
       <div className="ResponseCard">
         <div className="ResponseCard__left">
-          <img src={avatarImg} className="ResponseCard__left__image" onClick={handlePlayBack}/>
+          <img src={avatarImg} 
+                    onError={event => { 
+                      event.target.src = erroImgPath
+                      event.onerror = null;
+                      }} 
+          className="ResponseCard__left__image" onClick={handlePlayBack}/>
         </div>
         <div className="ResponseCard__right">
           <div className="ResponseCard__right__header">

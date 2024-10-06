@@ -3,6 +3,7 @@ import webapi from "../../utils/webapi";
 import "./PersonalityConfig.scss";
 import { useRef, useState, useEffect} from "react";
 import defaultLogo from "../../assets/images/logo.webp"
+const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp"
 
 export default function PersonalityConfig({ personalityObj, updateCallBack , deleteCallBack, generateImgCallBack}) {
   const [formData, setFormData] = useState( {...personalityObj} );
@@ -42,20 +43,27 @@ export default function PersonalityConfig({ personalityObj, updateCallBack , del
     generateImgCallBack(userAvatarPrompt.current.value, personalityObj.personalityID);
     userAvatarPrompt.current.style.backgroundColor="rgba(47, 79, 79, 0.195)";
   }
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     e.target.style.backgroundColor = "#4d2e02";
   }
-
-
+  
+  
   return (
     <>
       <div className="PersonalityConfig">
         <form id={personalityObj.personalityID}>
           <div className="PersonalityConfig__avatar">
-            <img className="PersonalityConfig__avatar__picture" src={avatarImage} alt="profile_pic"/>
+            <img className="PersonalityConfig__avatar__picture"
+            src={avatarImage} 
+            alt="profile_pic"
+            onError={event => { 
+            event.target.src = erroImgPath
+            event.onerror = null;
+            }} 
+            />
             <textarea ref={userAvatarPrompt} name="avatarPrompt" placeholder="Enter prompt to describe avatar profile picture and then press Generate Avatar " className="PersonalityConfig__avatar__prompt" value={formData.avatarPrompt} onChange={handleChange} ></textarea>
             <button className="PersonalityConfig__avatar__generate" onClick={handleGenerate}>Generate Avatar</button>
           </div>          
