@@ -15,54 +15,27 @@ function App() {
   const [authorizedUser, setAuthorizedUser] = useState(false || sessionStorage.getItem("accessToken"));
   const [userName, setUserName] = useState(false || sessionStorage.getItem("userName"));
   const [userEmail, setUserEmail] = useState(false || sessionStorage.getItem("userEmail"));
-  //const provider = new GoogleAuthProvider();
-  const providerGoogle = new GoogleAuthProvider();
-  const providerGitHub = new GithubAuthProvider();
+
   const auth = getAuth();
 
-  const signInWithGitHub = () => {
-    signInWithPopup(auth, providerGitHub)
+  const invokeSignInWithPopup = (providerIndex, provider) => {
+    signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GithubAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        if (user) {
-          user.getIdToken().then((tkn) => {
-            sessionStorage.setItem("accessToken", tkn);
-            sessionStorage.setItem("userName", user.displayName);
-            sessionStorage.setItem("userEmail", user.email);
-            setAuthorizedUser(true);
-            setUserName(user.displayName);
-            setUserEmail(user.email);
-          });
-        }
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        //const email = error.customData.email;
-        if (errorCode === "auth/account-exists-with-different-credential") {
-          alert("You have already have an emain account registered another authentication provider, please login using that provider.");
-          return false;
-        } else {
-          alert(`Authentication Error ${errorMessage}`);
-          return false;
-        }
-        //const credential = GithubAuthProvider.credentialFromError(error);
-      });
-  };
+        // This gives you a Token. You can use it to access the Google API.
+        let credential;
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, providerGoogle)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
+        if (providerIndex === 1) {
+          credential = GoogleAuthProvider.credentialFromResult(result);
+        } else if (providerIndex == 2) {
+          credential = GithubAuthProvider.credentialFromResult(result);
+        } else {
+          return false;
+        }
         const token = credential.accessToken;
         const user = result.user;
         if (user) {
-          user.getIdToken().then((tkn) => {
-            sessionStorage.setItem("accessToken", tkn);
+          user.getIdToken().then((token) => {
+            sessionStorage.setItem("accessToken", token);
             sessionStorage.setItem("userName", user.displayName);
             sessionStorage.setItem("userEmail", user.email);
             setAuthorizedUser(true);
@@ -74,7 +47,6 @@ function App() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        //const email = error.customData.email;
 
         if (errorCode === "auth/account-exists-with-different-credential") {
           alert("You have already have an email account registered another authentication provider, please login using that provider.");
@@ -85,6 +57,14 @@ function App() {
         }
         //const credential = GoogleAuthProvider.credentialFromError(error);
       });
+  };
+
+  const signInWithGitHub = () => {
+    invokeSignInWithPopup(2, new GithubAuthProvider());
+  };
+
+  const signInWithGoogle = () => {
+    invokeSignInWithPopup(1, new GoogleAuthProvider());
   };
 
   const createAccountUsingEmail = (strEmail, strPassword, strName) => {
