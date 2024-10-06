@@ -4,8 +4,8 @@ import PersonalityConfig from "../../components/PersonalityConfig/PersonalityCon
 
 import axios from "axios";
 import webapi from "../../utils/webapi";
-import { useState, useRef, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 
 export default function PersonalitiesPage() {
