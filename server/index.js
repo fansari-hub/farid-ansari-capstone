@@ -15,8 +15,6 @@ app.use((req, res, next) => {
   }
 });
 
-
-
 const PORT = process.env.PORT || 5050;
 
 const personalityRoutes = require('./routes/personality-routes');
@@ -25,6 +23,25 @@ const dallERoutes = require('./routes/dalle-routes');
 const ttsRoutes = require('./routes/tts-routes');
 
 app.use(express.static("public"));
+
+//for react static builds being server by this express server
+app.get('/setup', (req, res) => {
+  console.log("You are in rerouter");
+  res.sendFile(path.join(__dirname, 'public/index.html'), (err) => {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
+
+//for react static builds being server by this express server
+app.get('/signin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'), (err) => {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
 
 app.use('/personality', personalityRoutes);
 app.use('/chatsession', chatSessionRoutes);
