@@ -4,6 +4,7 @@ import { useState } from "react";
 import "./Participants.scss";
 import ParticipantSlot from "../ParticipantSlot/ParticipantSlot";
 import VisualSelectModal from "../VisualSelectModal/VisualSelectModal";
+import Icon from "../Icon/Icon";
 
 export default function Participants({ activePersonalitiesObj, activeSession, personalitiesObj,  removePersonCallBack, addPersonCallBack }) {
   const [selectionModal, setSelectionModal] = useState(<></>);
@@ -47,7 +48,7 @@ export default function Participants({ activePersonalitiesObj, activeSession, pe
     {selectionModal}
       <div className="Participants">
         <div className="Participants__add">
-          <div className="Participants__add__addIcon" onClick={() => handleShowSelectinModal()}>+</div>
+          <div className="Participants__add__addIcon"  onClick={() => handleShowSelectinModal()}><Icon iconIndex={9} iconName="Remove" actionType="positive" hideLabel={true} displayNaked={true} noGap={true} /></div>
           {(activePersonalitiesObj.length === 0) ? (<p className="Participants__add__text">Click to invite to chat</p>) : (<></>)}
         </div>
         <div className="Participants__list">

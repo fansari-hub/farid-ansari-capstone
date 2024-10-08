@@ -10,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+//  margin-bottom: 20px;
   background-color: $colPrimary-ItemFill;
   gap: 25px;
   border-bottom: thin solid rgba(0, 0, 0, 0.269) ;
@@ -27,22 +27,7 @@
       font-family: monospace;
     }
     &__addIcon {
-      height: 1.5rem;
-      width: 1.5rem;
-      border-radius: 250px;
-      border: thin outset $colSecondary-MutedBorder;
-      box-shadow: 1px 1px black;
-      background-color: $colPrimary-Background;
-      color: $colSecondary-PositiveActionText;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: 800;
-      margin: 0;
-      padding: 0;
-      margin-bottom: 10px;
-      &:hover {
-        cursor: pointer;
-      }
+     background-color: none;
     }
   }
   &__list {
@@ -53,7 +38,7 @@
     scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
     scrollbar-width: thin;
     padding-left: 5px;
-    padding-right: 10px;
+    padding-right: 15px;
     row-gap: 5px;
     column-gap: 25px;
   }

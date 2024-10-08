@@ -1,16 +1,15 @@
 import "./SessionItem.scss";
 import { useRef } from "react";
+import Icon from "../Icon/Icon";
 
 export default function SessionItem({ chatSession, switchSessionCallBack, deleteSessionCallback, updateSessionCallback, activeSession }) {
   const sessionRef = useRef();
 
   let sessionItemClass = "SessionItem__group__item";
 
-  if (chatSession.sessionID === activeSession){
-    sessionItemClass += " SessionItem__group__item--active"
+  if (chatSession.sessionID === activeSession) {
+    sessionItemClass += " SessionItem__group__item--active";
   }
-
-  
 
   function handleEditButton() {
     sessionRef.current.disabled = false;
@@ -44,26 +43,26 @@ export default function SessionItem({ chatSession, switchSessionCallBack, delete
           />
         </div>
         {deleteSessionCallback ? (
-          <button
+          <div
             className="SessionItem__group__delete"
-            onClick={() => {
+            onClick={(e) => {
               deleteSessionCallback(chatSession.sessionID);
             }}
           >
-            D
-          </button>
+            <Icon iconIndex={4} iconName={"Delete"} actionType="negative" hideLabel={true} displayNaked={true} />
+          </div>
         ) : (
           <></>
         )}
         {updateSessionCallback ? (
-          <button
+          <div
             className="SessionItem__group__edit"
             onClick={(e) => {
               handleEditButton();
             }}
           >
-            E
-          </button>
+            <Icon iconIndex={14} iconName={"Edit"} actionType="positive" hideLabel={true} displayNaked={true} />
+          </div>
         ) : (
           <></>
         )}

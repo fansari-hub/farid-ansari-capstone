@@ -3,6 +3,7 @@ import webapi from "../../utils/webapi";
 import "./UserConfig.scss";
 import { useRef, useState, useEffect} from "react";
 import defaultLogo from "../../assets/images/logo.webp"
+import Icon from "../Icon/Icon";
 
 export default function UserConfig({ userObj , deleteCallBack, signOutCallBack}) {
   const [formData, setFormData] = useState( {userObj} );
@@ -39,8 +40,8 @@ export default function UserConfig({ userObj , deleteCallBack, signOutCallBack})
           </div>
          <br></br>
           <div className="UserConfig__group">
-            <button className="UserConfig__group__save"  onClick={signOutCallBack}>Sign Out</button>
-            <button className="UserConfig__group__delete" onClick={handleDelete}>Delete Me</button>
+            <div className="UserConfig__group__save" onClick={signOutCallBack} ><Icon iconIndex={6} iconName={"Sign Out"} actionType="neutral" /></div>
+            <div className="UserConfig__group__delete" onClick={handleDelete} ><Icon iconIndex={4} iconName={"Delete Me"} actionType="negative" /></div>
             <div></div>
           </div>
         </form>

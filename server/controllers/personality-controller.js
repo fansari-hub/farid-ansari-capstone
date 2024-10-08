@@ -94,7 +94,7 @@ const httpUpdatePersonality = async (req, res) => {
 };
 
 const httpDeletePersonality = async (req, res) => {
-  if(await chatSessionModel.isAuthorized(req.params.id, req.body.requestedbyUser) === false){
+  if(await chatPersonalityModel.isAuthorized(req.params.id, req.body.requestedbyUser) === false){
     res.status(401).json({ error: "User is not authorized to access data"});
     return false;
   }
