@@ -12,6 +12,7 @@
   border-radius: 15px;
   @include displayMobile{
     margin: 10px;
+    width: 100%;
   }
   &__avatar{
     margin-top: 20px;
@@ -25,7 +26,7 @@
       border: 2px outset $colSecondary-MutedBorder;
       box-shadow: 1px 1px black ;
       height: 8rem;
-      border-radius: 100px;
+      border-radius: 50px;
       @include displayMobile{
         height: 5rem;
       }

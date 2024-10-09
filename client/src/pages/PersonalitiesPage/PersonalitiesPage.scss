@@ -24,6 +24,10 @@
     color: $colPrimary-MainText;
     font-size: calc(10px + 1vmin);
     flex-grow: 1;
+    @include displayMobile{
+      margin-left: 20px;
+      margin-right: 40px;
+    }
 
     &__title{
       text-align: left;
@@ -46,6 +50,7 @@
       text-align: left;
       @include displayMobile{
         padding-left: 0;
+        padding-right: 0;
       }
 
       &__bottom {
