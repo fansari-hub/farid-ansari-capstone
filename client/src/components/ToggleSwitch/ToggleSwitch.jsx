@@ -30,7 +30,7 @@ export default function ToggleSwitch({ toggleReference, defaultState, iconName, 
     <>
       <div className={toggleClass}>
         <img ref={toggleReference} className="ToggleSwitch__image" src={toggleIcon} alt={iconName} onClick={handleStateChange} togglevalue = {toggleState.toString()} />
-        <p className="ToggleSwitch__label">{hideLabel ? <></> : iconName}</p>
+        <p className="ToggleSwitch__label font-label">{hideLabel ? <></> : iconName}</p>
       </div>
     </>
   );

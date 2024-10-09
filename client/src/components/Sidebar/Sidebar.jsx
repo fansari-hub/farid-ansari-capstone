@@ -1,5 +1,5 @@
 import "./Sidebar.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRef, useContext } from "react";
 import { UserAuthorizedContext } from "../../App";
 import SessionItem from "../SessionItem/SessionItem";
@@ -7,13 +7,8 @@ import Icon from "../Icon/Icon";
 
 export default function Sidebar({ chatSessions, switchSessionCallBack, addSessionCallback, deleteSessionCallback, updateSessionCallback, activeSession }) {
   const fieldListRef = useRef();
-  // const navigate = useNavigate();
    const { authorizedUser } = useContext(UserAuthorizedContext);
 
-  // function handleLogout() {
-  //   logoutUser();
-  //   navigate("/signin");
-  // }
 
   return (
     <>
@@ -21,20 +16,20 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
         <div className="Sidebar__settings">
           {authorizedUser ? (
             <Link to="/signin">
-            <div className="Sidebar__settings__auth" ><Icon iconIndex={7} iconName={"Account"} actionType="neutral" displayNaked={true} /></div>
+            <div className="Sidebar__settings__auth font-menu" ><Icon iconIndex={7} iconName={"Account"} actionType="neutral" displayNaked={true} /></div>
           </Link>
           ) : (
             <Link to="/signin">
-              <div className="idebar__settings__auth"><Icon iconIndex={6} iconName={"Sign In"} actionType="neutral" displayNaked={true} /></div>
+              <div className="idebar__settings__auth font-menu"><Icon iconIndex={6} iconName={"Sign In"} actionType="neutral" displayNaked={true} /></div>
             </Link>
           )}
         
           <Link to="/setup">
-            <div className="Sidebar__settings__item" ><Icon iconIndex={11} iconName={"Personalities"} actionType="neutral" displayNaked={true}/></div>
+            <div className="Sidebar__settings__item font-menu" ><Icon iconIndex={11} iconName={"Personalities"} actionType="neutral" displayNaked={true}/></div>
           </Link>
         </div>
         <div className="Sidebar__sessionList">
-          <Link to="/">{chatSessions.length > 0 ? <></> : <div className="Sidebar__sessionList__title" ><Icon iconIndex={3} iconName={"Chat Sessions"} actionType="neutral" displayNaked={true}/></div>}</Link>
+          <Link to="/">{chatSessions.length > 0 ? <></> : <div className="Sidebar__sessionList__title font-menu" ><Icon iconIndex={3} iconName={"Chat Sessions"} actionType="neutral" displayNaked={true}/></div>}</Link>
           <hr className="Sidebar__sessionList__ruler" />
           <div className="Sidebar__sessionList__list">
             {chatSessions.map((i, x) => {

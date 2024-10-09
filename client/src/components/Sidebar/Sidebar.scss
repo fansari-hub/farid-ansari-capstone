@@ -6,7 +6,7 @@
   flex-direction: column;
   height: 100vh;
   margin-left: 10px;
-  margin-right: 30px;
+  margin-right: 10px;
   padding-right: 5px;
   overflow: auto;
   scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
@@ -34,12 +34,11 @@
       order: 0;
     }
     &__item {
-    background-color: none;
-    padding-top: 15px;
+      background-color: none;
+      padding-top: 15px;
     }
     &__auth {
-    //padding-top: 15px;
-    background-color: none;
+      background-color: none;
     }
   }
   &__sessionList {
@@ -58,12 +57,7 @@
       margin-left: 10px;
     }
     &__title {
-      color: $colPrimary-MutedText;
-      font-family: monospace;
-      font-size: 1rem;
-      &:hover {
-        color: $colSecondary-PositiveActionTextHover;
-      }
+      background-color: none;
     }
     &__ruler {
       width: 100%;
