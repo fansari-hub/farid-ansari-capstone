@@ -2,20 +2,19 @@
 @use "../../styles/partials/colors" as *;
 
 .ToggleSwitch {
+  background-color: none;
   height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  &--off{
+  &--off {
     color: $colPrimary-MainText;
-    filter:brightness(0.5);
-
+    filter: brightness(0.5);
   }
-  &--on{
+  &--on {
     color: $colPrimary-MainText;
-    filter:brightness(1);
-
+    filter: brightness(1);
   }
 
   &__image {
@@ -23,8 +22,8 @@
     @include displayMobile {
       height: 2.2rem;
     }
-    &:hover{
-        cursor: pointer;
+    &:hover {
+      cursor: pointer;
     }
   }
   &__label {
