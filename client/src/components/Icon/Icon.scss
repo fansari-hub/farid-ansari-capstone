@@ -1,0 +1,65 @@
+@use "../../styles//partials/mixins" as *;
+@use "../../styles/partials/colors" as *;
+
+.Icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: thin outset $colSecondary-MutedBorder;
+  box-shadow: 1px 1px black;
+  background-color: transparent;
+  width: 100%;
+  border-radius: 5px;
+  padding: 5px;
+  
+
+  &__image {
+    height: 1.5rem;
+    @include displayMobile {
+      height: 1.25rem;
+    }
+  }
+  &__label {
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+    @include displayMobile {
+      font-size: 1rem;
+    }
+  }
+  &--naked{
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    width: fit-content;
+  }
+  &--nogap{
+    gap: 0;
+  }
+  &--positive {
+    color: $colSecondary-PositiveActionTextHover;
+    &:hover {
+      cursor: pointer;
+      background-color: $colSecondary-PositiveAction;
+      color: $colSecondary-PositiveActionTextHover;
+    }
+  }
+  &--negative {
+    color: $colSecondary-NegativeActionTextHover;
+    &:hover {
+      cursor: pointer;
+      background-color: $colSecondary-NegativeAction;
+      color: $colSecondary-NegativeActionTextHover;
+    }
+  }
+  &--neutral {
+    color: $colPrimary-MutedText;
+    &:hover {
+      cursor: pointer;
+      background-color: $colPrimary-MutedText;
+      color: $colPrimary-MainText;;
+    }
+  }
+}
+

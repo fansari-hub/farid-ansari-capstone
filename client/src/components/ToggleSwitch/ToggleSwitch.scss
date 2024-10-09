@@ -1,0 +1,38 @@
+@use "../../styles//partials/mixins" as *;
+@use "../../styles/partials/colors" as *;
+
+.ToggleSwitch {
+  background-color: none;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  &--off {
+    color: $colPrimary-MainText;
+    filter: brightness(0.5);
+  }
+  &--on {
+    color: $colPrimary-MainText;
+    filter: brightness(1);
+  }
+
+  &__image {
+    height: 2.2rem;
+    @include displayMobile {
+      height: 2.2rem;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__label {
+    font-size: 1rem;
+    padding: 0;
+    //padding-left: 5px;
+    text-align: center;
+    @include displayMobile {
+      font-size: 1rem;
+    }
+  }
+}

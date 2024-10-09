@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   padding-bottom: 15px;
-  padding-left: 160px;
+  //padding-left: 80px;
   border-top: thin outset rgba(0, 0, 0, 0.251);
   margin-left: auto;
   margin-right: auto;
@@ -21,7 +21,7 @@
     margin-bottom: 0px;
     margin-top: 10px;
     margin-left: 60px;
-    margin-right: 20px;
+    margin-right: 90px;
     border-radius: 20px;
     height: 100px;
     pointer-events: none;
@@ -40,19 +40,26 @@
     justify-content: flex-start;
     max-width: 1100px;
     @include displayMobile{
-      padding-left: 25px;
+      //padding-left: 25px;
     }
     &__textbox {
       border-radius: 20px;
       font-size: 1rem;
       padding: 0.5rem;
       padding-left: 1rem;
-      margin: 10px;
-      width: 90%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      max-width: 1040px;
       border: thin inset $colSecondary-MutedBorder;
       background-color: $colPrimary-ItemFill;
       color: $colPrimary-MainText;
       resize: none;
+      @include displayMobile{
+        margin-left: auto;
+        margin-right: auto;
+        width: 95%;
+      }
     }
     &__buttons {
       width: 100%;
@@ -62,39 +69,17 @@
       gap: 20px;
       @include displayMobile {
         justify-content: center;
-        margin-left: -15px;
+        //margin-left: -15px;
       }
       &__group {
         display: flex;
-        align-items: flex-end;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        &__control {
-          height: 1.5rem;
-          width: 1.5rem;
-          padding: 0px;
-          margin: 0px;
-        }
-        &__label {
-          padding-left: 5px;
-          padding-bottom: 2px;
-          margin: 0px;
-          color: $colPrimary-MutedText;
-        }
+        align-items: center;
       }
       &__button {
-        font-size: 1rem;
-        width: 5rem;
-        height: 2rem;
-        margin-top: 10px;
-        background-color: $colPrimary-ItemFill;
-        color: $colPrimary-MainText;
-        border-width: thin;
-        border-radius: 5px;
-        &:hover {
-          background-color: $colPrimary-MutedText;
-          cursor: pointer;
-        }
+       width: 7rem;
+       @include displayMobile{
+        width: 6rem;
+       }
       }
     }
   }

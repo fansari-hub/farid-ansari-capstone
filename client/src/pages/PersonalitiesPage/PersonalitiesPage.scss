@@ -15,6 +15,7 @@
     position: fixed;
     @include displayMobile{
       position: relative;
+      //margin-top: -40px;
     }
   }
   &__main {
@@ -24,10 +25,14 @@
     color: $colPrimary-MainText;
     font-size: calc(10px + 1vmin);
     flex-grow: 1;
+    @include displayMobile{
+      margin-left: 20px;
+      margin-right: 40px;
+    }
 
     &__title{
       text-align: left;
-      padding-left: 170px;
+      padding-left: 210px;
       padding-bottom: 20px;
       font-size: 1.5rem;
       font-weight:400;
@@ -41,34 +46,21 @@
     }
 
     &__content {
-      padding-left: 150px;
+     padding-left: 185px;
       max-width: 1280px;
       text-align: left;
       @include displayMobile{
         padding-left: 0;
+        padding-right: 0;
       }
 
       &__bottom {
+        margin-top: 20px;
         margin-bottom: 20px;
         &__add {
+          background-color: none;
           margin-left: 20px;
-          border: 3px outset $colSecondary-MutedBorder;
-          box-shadow: 1px 1px black;
-          border-radius: 20px;
-          background-color: $colPrimary-ItemFill;
-          color: $colSecondary-PositiveActionText;
-          height: 2rem;
-          width: 10rem;
-          @include displayMobile{
-            margin-top: 20px;
-            margin-left: 0px;
-            width: 100%;
-          }
-          &:hover {
-            cursor: pointer;
-            background-color: $colSecondary-PositiveAction;
-            color: $colSecondary-PositiveActionTextHover;
-          }
+          margin-right: 20px;
         }
       }
     }

@@ -32,42 +32,10 @@
       }
     }
     &__delete {
-      height: 1.5rem;
-      width: 1.5rem;
-      border-radius: 5px;
-      border: thin outset $colSecondary-MutedBorder;
-      box-shadow: 1px 1px black;
-      background-color: $colPrimary-Background;
-      color: $colSecondary-NegativeActionText;
-      @include displayMobile{
-        height: 2rem;
-        width: 2rem;
-        margin-top: 5px
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: $colSecondary-NegativeAction;
-        color: $colSecondary-NegativeActionTextHover;
-      }
+      background-color: none;
     }
     &__edit {
-      height: 1.5rem;
-      width: 1.5rem;
-      border-radius: 5px;
-      border: thin outset $colSecondary-MutedBorder;
-      box-shadow: 1px 1px black;
-      background-color: $colPrimary-Background;
-      color: $colSecondary-PositiveActionText;
-      @include displayMobile{
-        height: 2rem;
-        width: 2rem;
-        margin-top: 5px;
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: $colSecondary-PositiveAction;
-        color: $colSecondary-PositiveActionTextHover;
-      }
+    background-color: none;
     }
   }
 }

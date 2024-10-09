@@ -19,28 +19,12 @@
         }
       }
       &__delete {
-        height: 1.4rem;
-        width: 1.4rem;
-        border-radius: 15px;
-        border: thin outset $colSecondary-MutedBorder;
-        box-shadow: 1px 1px black;
-        background-color: $colPrimary-Background;
-        color: $colSecondary-NegativeActionText;
-        text-align: center;
+        width: 25px;
         position: relative;
         top: -20px;
-        left: 46px;
-        font-size: 1rem;
-        margin: 0;
-        padding: 0;
-        &:hover {
-          cursor: pointer;
-        }
+        left: 50px;
         @include displayMobile{
-          font-size: 0.8rem;
-          height: 1.2rem;
-          width: 1.2rem;
-          left: 40px;
+        left: 40px;
         }
       }
     }

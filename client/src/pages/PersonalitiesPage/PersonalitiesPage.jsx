@@ -1,6 +1,7 @@
 import "./PersonalitiesPage.scss";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import PersonalityConfig from "../../components/PersonalityConfig/PersonalityConfig";
+import Icon from "../../components/Icon/Icon";
 
 import axios from "axios";
 import webapi from "../../utils/webapi";
@@ -112,9 +113,7 @@ export default function PersonalitiesPage() {
             <PersonalityConfig key={i.personalityID} personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} generateImgCallBack={handleGenerateAvatarImg} />
           ))}
           <div className="PersonalitiesPage__main__content__bottom">
-            <button className="PersonalitiesPage__main__content__bottom__add" onClick={handleAddPersonality}>
-              Add New Slot
-            </button>
+            <div className="PersonalitiesPage__main__content__bottom__add"  onClick={handleAddPersonality}><Icon iconIndex={9} iconName={"Add New Slot"} actionType="positive" /></div>
           </div>
         </div>
       </div>

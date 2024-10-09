@@ -17,6 +17,7 @@
   &__group {
     margin-top: 20px;
     display: flex;
+    gap: 20px;
     @include displayMobile {
       margin-top: 10px;
     }
@@ -24,10 +25,10 @@
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       font-size: 1rem;
       color: $colPrimary-MainText;
-      width: 14rem;
+      width: 8rem;
       @include displayMobile {
         font-size: 0.8rem;
-        width: 7rem;
+        width: 6rem;
       }
     }
 
@@ -55,43 +56,12 @@
     }
 
     &__save {
-      border: 3px outset $colSecondary-MutedBorder;
-      box-shadow: 1px 1px black;
-      background-color: transparent;
-      color: $colSecondary-PositiveActionText;
-      height: 2rem;
-      width: 5rem;
-      border-radius: 20px;
-      @include displayMobile {
-        margin-top: 10px;
-        width: 50%;
-        height: 2rem;
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: $colSecondary-PositiveAction;
-        color: $colSecondary-PositiveActionTextHover;
-      }
+      width: 50%;
+      background-color: none;
     }
     &__delete {
-      margin-left: 1rem;
-      border: 3px outset $colSecondary-MutedBorder;
-      box-shadow: 1px 1px black;
-      background-color: transparent;
-      color: $colSecondary-NegativeActionText;
-      height: 2rem;
-      width: 5rem;
-      border-radius: 20px;
-      @include displayMobile {
-        margin-top: 10px;
-        width: 50%;
-        height: 2rem;
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: $colSecondary-NegativeAction;
-        color: $colSecondary-NegativeActionTextHover;
-      }
+      width: 50%;
+      background-color: nonoe;
     }
   }
 }
