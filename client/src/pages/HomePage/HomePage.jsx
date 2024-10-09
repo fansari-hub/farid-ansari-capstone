@@ -129,13 +129,11 @@ export default function HomePage() {
   }, [responses]);
 
   function chatAutoPlay(strActiveSession, objResponses) {
-    //console.log("Chat Auto: Active Session is: " + activeSession + " checkbox value is: " + inputAutoChatFlag.current.checked);
-    if (inputAutoChatFlag.current.checked === true && strActiveSession !== "") {
+    if (inputAutoChatFlag.current.getAttribute("togglevalue") === "true" && strActiveSession !== "") {
       const randomPick = Math.floor(Math.random() * 3);
       //console.log(`randomPick ${randomPick}`);
       if (randomPick === 1) {
         console.log("Auto Chat Event: Active Session is: " + strActiveSession + " checkbox value is: " + inputAutoChatFlag.current.checked);
-        //console.log(objResponses);
         handleSendSkip("" + strActiveSession, objResponses);
       }
     }
@@ -265,7 +263,7 @@ export default function HomePage() {
       if (response.data.message) {
         setResponses([...responses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
-        if (inputTTSflag.current.checked === true) {
+        if (inputTTSflag.current.getAttribute("togglevalue") === "true") {
           getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       } else {
@@ -348,7 +346,7 @@ export default function HomePage() {
       if (response.data.message) {
         setResponses([...currentResponses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
-        if (inputTTSflag.current.checked === true) {
+        if (inputTTSflag.current.getAttribute("togglevalue") === "true") {
           getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       }

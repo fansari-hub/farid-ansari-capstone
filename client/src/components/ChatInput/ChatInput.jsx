@@ -1,6 +1,7 @@
 import "./ChatInput.scss";
 import logo from "../../assets/images/logo.webp";
 import Icon from "../Icon/Icon";
+import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
 export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, inputAutoChatFlag, skipCallBack }) {
 
@@ -14,12 +15,10 @@ export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, i
             <div className="ChatInput__input__buttons__button" onClick={sendChatCallBack} ><Icon iconIndex={3} iconName={"Send"} actionType="neutral" /></div>
             <div className="ChatInput__input__buttons__button" onClick={skipCallBack} ><Icon iconIndex={13} iconName={"Pass"} actionType="neutral" /></div>
             <div className="ChatInput__input__buttons__group">
-            <input ref={inputTTSflag} className="ChatInput__input__buttons__group__control" id="ttsBox" name="tts" type="checkbox"/>
-            <p className="ChatInput__input__buttons__group__label">Speech</p>
+            <ToggleSwitch toggleReference={inputTTSflag} defaultState={false} iconName="Speech" hideLabel={false}/>
             </div>
             <div className="ChatInput__input__buttons__group">
-            <input ref={inputAutoChatFlag} className="ChatInput__input__buttons__group__control" id="autoBox" name="tts" type="checkbox"/>
-            <p className="ChatInput__input__buttons__group__label">Auto</p>
+            <ToggleSwitch toggleReference={inputAutoChatFlag} defaultState={false} iconName="Auto" hideLabel={false}/>
             </div>
             
           </div>

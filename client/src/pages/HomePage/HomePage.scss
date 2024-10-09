@@ -19,6 +19,7 @@
     background-color: none;
     position: fixed;
     @include displayMobile {
+      padding-top: 10px;
       position: relative;
     }
   }

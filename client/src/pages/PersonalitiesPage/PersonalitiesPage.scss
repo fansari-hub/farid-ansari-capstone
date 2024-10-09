@@ -15,6 +15,7 @@
     position: fixed;
     @include displayMobile{
       position: relative;
+      //margin-top: -40px;
     }
   }
   &__main {
