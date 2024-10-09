@@ -1,5 +1,6 @@
 import "./UserRegisterLogin.scss";
 import { useRef, useState } from "react";
+import Icon from "../Icon/Icon";
 
 export default function UserRegisterLogin({ createUserCallBack, loginUserCallBack, cancelLoginCallback, loginType }) {
   const [formData, setFormData] = useState({});
@@ -71,18 +72,12 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
           <br></br>
           <div className="UserRegisterLogin__group">
             {loginType === "create" ? (
-              <button className="UserRegisterLogin__group__register" onClick={handleRegister}>
-                Create Account
-              </button>
+              <div className="UserRegisterLogin__group__register" onClick={handleRegister} ><Icon iconIndex={9} iconName={"Create Account"} actionType="positive" /></div>
             ) : (
-              <button className="UserRegisterLogin__group__register" onClick={handleLogin}>
-                Login
-              </button>
+              <div className="UserRegisterLogin__group__register" onClick={handleLogin} ><Icon iconIndex={8} iconName={"Login"} actionType="positive" /></div>
             )}
 
-            <button className="UserRegisterLogin__group__cancel" onClick={handleCancel}>
-              Cancel
-            </button>
+            <div className="UserRegisterLogin__group__cancel" onClick={handleCancel} ><Icon iconIndex={6} iconName={"Cancel"} actionType="negative" /></div>
             <div></div>
           </div>
         </form>
