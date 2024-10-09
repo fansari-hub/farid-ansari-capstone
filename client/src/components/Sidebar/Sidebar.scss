@@ -28,6 +28,7 @@
   }
 
   &__settings {
+    background-color: none;
     order: 0;
     @include displayMobile {
       margin-bottom: 20px;
@@ -49,12 +50,12 @@
     flex-direction: column;
 
     @include displayMobile {
+      background-color: none;
       flex-direction: row;
       flex-grow: 1;
       order: 1;
       justify-content: flex-end;
       margin-top: 0px;
-      margin-left: 10px;
     }
     &__title {
       background-color: none;
@@ -67,10 +68,7 @@
       }
     }
     &__list {
-      margin-top: 10px;
-      @include displayMobile {
-        margin-left: 10px;
-      }
+      margin-top: 0px;
     }
   }
   &__add {
