@@ -15,7 +15,7 @@
     position: fixed;
     @include displayMobile{
       position: relative;
-      //margin-top: -40px;
+      margin-top: -40px;
     }
   }
   &__main {
@@ -23,21 +23,16 @@
     margin: auto;
     min-height: 100vh;
     color: $colPrimary-MainText;
-    font-size: calc(10px + 1vmin);
     flex-grow: 1;
     @include displayMobile{
-      margin-left: 20px;
-      margin-right: 40px;
+      margin-left: 5px;
+      margin-right: 25px;
     }
 
     &__title{
       text-align: left;
       padding-left: 210px;
       padding-bottom: 20px;
-      font-size: 1.5rem;
-      font-weight:400;
-      letter-spacing: 0.25rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       @include displayMobile{
         padding-left :0;
         padding-right :0;

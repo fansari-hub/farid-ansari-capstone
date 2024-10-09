@@ -107,7 +107,7 @@ export default function PersonalitiesPage() {
         <Sidebar chatSessions={[]} />
       </div>
       <div className="PersonalitiesPage__main">
-        <h1 className="PersonalitiesPage__main__title">Configure Personas</h1>
+        <h1 className="PersonalitiesPage__main__title font-pageTitle">Configure Personas</h1>
         <div className="PersonalitiesPage__main__content">
           {personalities.map((i, x) => (
             <PersonalityConfig key={i.personalityID} personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} generateImgCallBack={handleGenerateAvatarImg} />

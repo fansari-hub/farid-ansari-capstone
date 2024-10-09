@@ -62,24 +62,28 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
                 event.onerror = null;
               }}
             />
-            <textarea ref={userAvatarPrompt} name="avatarPrompt" placeholder="Enter prompt to describe avatar profile picture and then press Generate Avatar " className="PersonalityConfig__avatar__prompt" value={formData.avatarPrompt} onChange={handleChange}></textarea>
+            <textarea ref={userAvatarPrompt} name="avatarPrompt" placeholder="Enter prompt to describe avatar profile picture and then press Generate Avatar " className="PersonalityConfig__avatar__prompt font-promptInput" value={formData.avatarPrompt} onChange={handleChange}></textarea>
+          </div>
+          
+          <div className="PersonalityConfig__group">
+            <p className="PersonalityConfig__group__label font-dataLabel"></p>
             <div className="PersonalityConfig__avatar__generate" onClick={handleGenerate} ><Icon iconIndex={1} iconName={"Generate Image"} actionType="neutral" /></div>
           </div>
           <div className="PersonalityConfig__group">
-            <p className="PersonalityConfig__group__label">Name</p>
-            <input ref={userInputName} name="name" className="PersonalityConfig__group__data" placeholder="Enter a name" type="text" value={formData.name} onChange={handleChange}></input>
+            <p className="PersonalityConfig__group__label font-dataLabel">Name</p>
+            <input ref={userInputName} name="name" className="PersonalityConfig__group__data font-input" placeholder="Enter a name" type="text" value={formData.name} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group">
-            <p className="PersonalityConfig__group__label">Temperature</p>
+            <p className="PersonalityConfig__group__label font-dataLabel">Temperature</p>
             <input ref={userInputTemperature} name="temperature" className="PersonalityConfig__group__data PersonalityConfig__group__data--noborder" type="range" step="0.1" min="0.0" max="1.0" value={formData.temperature} onChange={handleChange}></input>
           </div>
-          <div className="PersonalityConfig__group">
-            <p className="PersonalityConfig__group__label">Prompt</p>
-            <textarea ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
+          <div className="PersonalityConfig__group PersonalityConfig__group--column">
+            <p className="PersonalityConfig__group__label font-dataLabel">Prompt</p>
+            <textarea ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt font-promptInput" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
           </div>
           <div className="PersonalityConfig__group">
-            <p className="PersonalityConfig__group__label">TTS Voice</p>
-            <select ref={userInputVoice} name="voice" className="PersonalityConfig__group__data" type="text" value={formData.voice} onChange={handleChange}>
+            <p className="PersonalityConfig__group__label font-dataLabel" >TTS Voice</p>
+            <select ref={userInputVoice} name="voice" className="PersonalityConfig__group__data font-input" type="text" value={formData.voice} onChange={handleChange}>
               <option value="alloy">Alloy</option>
               <option value="echo">Echo</option>
               <option value="onyx">Onyx</option>
@@ -88,6 +92,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
             </select>
           </div>
           <div className="PersonalityConfig__group">
+           <div className="PersonalityConfig__group__label"></div>
           <div className="PersonalityConfig__group__btn" onClick={handleSave}><Icon iconIndex={12} iconName={"Save"} actionType="positive"  /></div>
           <div className="PersonalityConfig__group__btn" onClick={handleDelete}><Icon iconIndex={4} iconName={"Delete"} actionType="negative" /></div>
             

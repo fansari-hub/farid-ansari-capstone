@@ -8,6 +8,11 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
+  @include displayMobile{
+    flex-direction: column;
+    gap: 0px
+
+  }
   &--off {
     color: $colPrimary-MainText;
     filter: brightness(0.5);
@@ -18,21 +23,17 @@
   }
 
   &__image {
-    height: 2.2rem;
+    width: 2.2rem;
     @include displayMobile {
-      height: 2.2rem;
+      width: 2.0rem;
     }
     &:hover {
       cursor: pointer;
     }
   }
   &__label {
-    font-size: 1rem;
     padding: 0;
-    //padding-left: 5px;
+    margin: 0;
     text-align: center;
-    @include displayMobile {
-      font-size: 1rem;
-    }
   }
 }

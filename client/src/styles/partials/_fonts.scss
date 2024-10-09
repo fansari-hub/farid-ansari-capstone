@@ -1,0 +1,82 @@
+@use "./colors" as *;
+@use "./mixins" as *;
+
+.font-chat {
+  font-size: 1rem;
+  @include displayMobile {
+    font-size: 0.9rem;
+  }
+}
+
+.font-textbox {
+  font-size: 1rem;
+  @include displayMobile {
+    font-size: 1rem;
+  }
+}
+.font-promptInput {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1rem;
+  @include displayMobile {
+    font-size: 0.9rem;
+  }
+}
+
+.font-input {
+  font-size: 1rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  @include displayMobile {
+    font-size: 0.8rem;
+  }
+}
+
+.font-pageTitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.25rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.font-menu {
+  color: $colPrimary-MutedText;
+  font-family: monospace;
+  font-size: 1rem;
+  @include displayMobile {
+    font-size: 0.9rem;
+  }
+}
+
+.font-label {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  color: $colPrimary-MainText;
+  @include displayMobile {
+    font-size: 0.9rem;
+  }
+}
+
+.font-dataLabel {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  color: $colPrimary-MainText;
+  @include displayMobile {
+    font-size: 0.8rem;
+  }
+}
+
+.font-messageHeader {
+  font-size: 1rem;
+  font-family: monospace;
+  font-weight: 400;
+  letter-spacing: 0.1rem;
+  @include displayMobile {
+    font-size: 0.9rem;
+  }
+}
+
+.font-messageHeaderDate {
+  font-size: 0.9rem;
+  @include displayMobile {
+    font-size: 0.8rem;
+  }
+}

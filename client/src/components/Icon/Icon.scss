@@ -21,12 +21,8 @@
     }
   }
   &__label {
-    font-size: 1rem;
     margin: 0;
     text-align: center;
-    @include displayMobile {
-      font-size: 1rem;
-    }
   }
   &--naked{
     border: none;

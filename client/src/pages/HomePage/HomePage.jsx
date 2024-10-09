@@ -394,7 +394,7 @@ export default function HomePage() {
         <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} activeSession={activeSession} />
       </div>
       <div className="HomePage__main">
-        <h1 className="HomePage__main__title">{activeSessionTitle}</h1>
+        <h1 className="HomePage__main__title font-pageTitle">{activeSessionTitle}</h1>
         <div ref={chatDiv} className="HomePage__main__content">
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>

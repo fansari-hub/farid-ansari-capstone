@@ -33,10 +33,10 @@ export default function ResponseCard({ responseObj, audioPlayCallBack }) {
         </div>
         <div className="ResponseCard__right">
           <div className="ResponseCard__right__header">
-            <p className="ResponseCard__right__header__name">{responseObj.name}</p>
-            <p className="ResponseCard__right__header__date">{utils.getRelativeTime(responseObj.timestamp)}</p>
+            <p className="ResponseCard__right__header__name font-messageHeader">{responseObj.name}</p>
+            <p className="ResponseCard__right__header__date font-messageHeaderDate">{utils.getRelativeTime(responseObj.timestamp)}</p>
           </div>
-          <div className="ResponseCard__right__content" dangerouslySetInnerHTML={{ __html: responseObj.content }}></div>
+          <div className="ResponseCard__right__content font-chat" dangerouslySetInnerHTML={{ __html: responseObj.content }}></div>
         </div>
       </div>
     </>

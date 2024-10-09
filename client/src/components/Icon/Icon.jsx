@@ -49,7 +49,7 @@ if(noGap){
     <>
       <div className={colorClass}>
         <img className="Icon__image" src={imageList[iconIndex]} alt={iconName}/>
-        <p className="Icon__label">{(hideLabel)? (<></>):(iconName)}</p>
+        <p className="Icon__label font-label">{(hideLabel)? (<></>):(iconName)}</p>
       </div>
     </>
   );
