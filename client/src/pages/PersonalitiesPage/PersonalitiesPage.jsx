@@ -8,6 +8,7 @@ import webapi from "../../utils/webapi";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
+const MAX_PERSON = 12;
 
 export default function PersonalitiesPage() {
   const [personalities, setPersonalities] = useState([]);
@@ -78,6 +79,9 @@ export default function PersonalitiesPage() {
 
   const handleAddPersonality = async () => {
     try {
+      if (personalities.length >= MAX_PERSON-1){
+        alert(`Maximum number of personalities is ${MAX_PERSON}!`);
+      }
       const newPersonalityObj = { name: "New Person", avatarImg: "", temperature: 1, conditionPrompt: "You are a useful assistant.", avatarPrompt: "A profile picture of a useful assistant", voice: "alloy" };
       const postURL = webapi.URL + "/personality";
       const response = await axios.post(postURL, newPersonalityObj, authHeader(sessionAuthToken));

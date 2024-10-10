@@ -17,6 +17,10 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
   const handleRegister = (e) => {
     e.preventDefault();
 
+    if (inputName.current.value === "" || inputPassword.current.value === "" || inputConfirmPassword.current.value === "" || inputEmail.current.value === "") {
+      return false;
+    }
+
     if (!formData.password.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/g)) {
       alert("Failed password complexity requirements : minimun 8 characters AND at least one letter, one number and one special character.");
       return false;
@@ -31,6 +35,11 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
 
   const handleLogin = (e) => {
     e.preventDefault();
+
+    if (inputPassword.current.value === "" || inputEmail.current.value === "") {
+      return false;
+    }
+
     loginUserCallBack(formData.email, formData.password);
   };
 
@@ -72,12 +81,18 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
           <br></br>
           <div className="UserRegisterLogin__group">
             {loginType === "create" ? (
-              <div className="UserRegisterLogin__group__register" onClick={handleRegister} ><Icon iconIndex={9} iconName={"Create Account"} actionType="positive" /></div>
+              <div className="UserRegisterLogin__group__register" onClick={handleRegister}>
+                <Icon iconIndex={9} iconName={"Create Account"} actionType="positive" />
+              </div>
             ) : (
-              <div className="UserRegisterLogin__group__register" onClick={handleLogin} ><Icon iconIndex={8} iconName={"Login"} actionType="positive" /></div>
+              <div className="UserRegisterLogin__group__register" onClick={handleLogin}>
+                <Icon iconIndex={8} iconName={"Login"} actionType="positive" />
+              </div>
             )}
 
-            <div className="UserRegisterLogin__group__cancel" onClick={handleCancel} ><Icon iconIndex={6} iconName={"Cancel"} actionType="negative" /></div>
+            <div className="UserRegisterLogin__group__cancel" onClick={handleCancel}>
+              <Icon iconIndex={6} iconName={"Cancel"} actionType="negative" />
+            </div>
             <div></div>
           </div>
         </form>

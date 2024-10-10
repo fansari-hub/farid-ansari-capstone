@@ -22,6 +22,9 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
 
   const handleSave = (e) => {
     e.preventDefault();
+    if (userInputName.current.value === "" || userInputPrompt.current.value==="" || userAvatarPrompt.current.value ==="" || userInputVoice.current.value === ""){
+      return false;
+    }
     updateCallBack({ personalityID: personalityObj.personalityID, name: userInputName.current.value, avatarImg: personalityObj.avatarImg, temperature: +userInputTemperature.current.value, conditionPrompt: userInputPrompt.current.value, avatarPrompt: userAvatarPrompt.current.value, voice: userInputVoice.current.value });
     userInputName.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
     userInputTemperature.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
@@ -45,7 +48,12 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    e.target.style.backgroundColor = "#4d2e02";
+    if (e.target.value === ""){
+      e.target.style.backgroundColor = "#4d2e02";
+    } else{
+      e.target.style.backgroundColor = "#024d06";
+    }
+    
   };
 
   return (
