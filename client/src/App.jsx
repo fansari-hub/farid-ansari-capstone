@@ -6,7 +6,7 @@ import React from "react";
 import { createContext, useState } from "react";
 import "./App.scss";
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
+import {  createUserWithEmailAndPassword, signInWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
 import "./config/firebase-config";
 
 export const UserAuthorizedContext = createContext(null);
@@ -136,6 +136,16 @@ function App() {
         alert(error);
       });
   };
+
+  // const resetPassword = (strEmail) => {
+  //   auth.generatePasswordLink(strEmail)
+  //   .then ((link) => {
+  //     return sendCustomPasswordResetEmail(strEmail, "displayName", "link");
+  //   })
+  //   .catch ((error) =>{
+  //     alert(error);
+  //   });
+  // }
 
   return (
     <UserAuthorizedContext.Provider value={{ authorizedUser, createAccountUsingEmail, signInWithEmail, signInWithGoogle, signInWithGitHub, logoutUser, userName, userEmail }}>

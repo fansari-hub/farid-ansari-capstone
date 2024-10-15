@@ -48,6 +48,15 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
     cancelLoginCallback();
   };
 
+  const handlePasswordReset = (e) => {
+    e.preventDefault();
+    if (inputEmail.current.value === "") {
+      alert("Please enter your email address in order to request a password reset.");
+      return false;
+    }
+
+  }
+
   return (
     <>
       <div className="UserRegisterLogin">
@@ -80,20 +89,26 @@ export default function UserRegisterLogin({ createUserCallBack, loginUserCallBac
 
           <br></br>
           <div className="UserRegisterLogin__group">
+            <div className="UserRegisterLogin__group__buttons">
             {loginType === "create" ? (
-              <div className="UserRegisterLogin__group__register" onClick={handleRegister}>
+              <div className="UserRegisterLogin__group__buttons__btn" onClick={handleRegister}>
                 <Icon iconIndex={9} iconName={"Create Account"} actionType="positive" />
               </div>
             ) : (
-              <div className="UserRegisterLogin__group__register" onClick={handleLogin}>
+              <div className="UserRegisterLogin__group__buttons__btn" onClick={handleLogin}>
                 <Icon iconIndex={8} iconName={"Login"} actionType="positive" />
               </div>
             )}
-
-            <div className="UserRegisterLogin__group__cancel" onClick={handleCancel}>
-              <Icon iconIndex={6} iconName={"Cancel"} actionType="negative" />
+              <div className="UserRegisterLogin__group__buttons__btn" onClick={handleCancel}>
+                <Icon iconIndex={6} iconName={"Cancel"} actionType="negative" />
+              </div>
+              <div className="UserRegisterLogin__group__buttons__btn" onClick={handlePasswordReset}>
+                <Icon iconIndex={2} iconName={"Reset Password"} actionType="positive" />
+              </div>
+              <div className="UserRegisterLogin__group__buttons__btn" onClick={handleCancel}>
+                <Icon iconIndex={5} iconName={"Verify Email"} actionType="positive" />
+              </div>
             </div>
-            <div></div>
           </div>
         </form>
       </div>
