@@ -6,6 +6,7 @@ let personalityData = [];
 let personalityDataFiltered = [];
 let chatHistoryData = [];
 let sessionParticipants = [];
+let sessionInformation = [];
 
 const sessionData = {};
 
@@ -17,6 +18,7 @@ async function generateGPTChat(strSessionID, res, req) {
 
   personalityData = await personalityModel.getPersonalityDetails(req.body.requestedbyUser);
   chatHistoryData = await chatSessionModel.getChatSessionChatDetail(strSessionID);
+  sessionInformation = await chatSessionModel.getChatSessionSingle(strSessionID);
   sessionParticipants = await chatSessionModel.getPersons(strSessionID);
 
   const GPTPersonalityChats = [];
@@ -25,7 +27,12 @@ async function generateGPTChat(strSessionID, res, req) {
 
   if (sessionParticipants === false) {
     res.status(400).json({ error: "Error getting session participants, did you provide an existing session ID?" });
-    return;
+    return false;
+  }
+
+  if (sessionInformation === false) {
+    res.status(400).json({ error: "Error getting session information, did you provide an existing session ID?" });
+    return false;
   }
 
   personalityDataFiltered = personalityData.filter((e) => {
@@ -50,17 +57,31 @@ async function generateGPTChat(strSessionID, res, req) {
     let personalChatHistory = [];
 
     const currentPersonalityName = p.name;
-    const promptInstructions = `
-    Engage with the user and others present, but focus on your own perspective and avoid focusing exclusively on any single individual. 
-    Avoid engaging in prolonged one-on-one conversations. 
-    If the participants continue to discuss the same topics more than 20 responses in a row, suggest a new topic for discussion. 
+    let promptInstructions = `
+    Engage with the user and others present, but focus on your own perspective and avoid focusing exclusively on any single individual.
+    Avoid engaging in prolonged one-on-one conversations.
     Do not adopt the speaking styles of others. 
     When speaking to one of the individuals directly, precede their name with the @ symbole. 
-    Use emojis occasionally to express emotions or emphasize points, but do so sparingly—much like a person would in casual conversation. 
-    Do not include emojis in every message or sentence. 
-    Focus on delivering clear and natural responses.
-    Try to keep your responses under 50 words, only use more words if it is required to express your idea.
-    
+    Focus on delivering clear and natural responses.`
+    if (sessionInformation.optionTopics === 1){
+      promptInstructions += `
+      If the participants continue to discuss the same topics more than 20 responses in a row, suggest a new topic for discussion. `
+    }
+    if (sessionInformation.optionEmojii === 1){
+      promptInstructions += `
+      Use emojis occasionally to express emotions or emphasize points, but do so sparingly—much like a person would in casual conversation. Do not include emojis in every message or sentence.`
+    } else{
+      promptInstructions += `
+      Do not make use of emojiis.`
+    }
+    if (sessionInformation.optionShort === 1){
+      promptInstructions += `
+      Try to keep your responses under 50 words, only use more words if it is required to express your idea.`
+    }else{
+      promptInstructions += `
+      Try to keep your responses under 1000 words, only use more words if it is required to express your idea.`
+    }
+    promptInstructions +=`    
     **Communication Guidelines**:
 
     - **Casual Language**: Communicate in a relaxed, conversational style, as people do in chat messages.
@@ -75,8 +96,8 @@ async function generateGPTChat(strSessionID, res, req) {
       - *"Yeah, that makes sense."*
 
     Remember, the goal is to sound like a person (or the character you are instruted to behave like) chatting naturally.`;
-
     const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")} and User. ${promptInstructions}`;
+   // console.log(promptInstructions);
     personalChatHistory.push({ role: "system", content: systemPrompt });
 
     chatHistoryData.forEach((e) => {
@@ -147,7 +168,14 @@ async function conversationManager(gptData, strSessionID, res) {
   }
 
   //Update recent speakers & remove the oldest entry
-  const randomChanceToRegisterSpoken = Math.floor(Math.random() * ONE_IN_X_CHANCE_TO_TALK_AGAIN);
+  let randomChanceToRegisterSpoken;
+  if (sessionInformation.optionTurns === 1){
+     randomChanceToRegisterSpoken = Math.floor(Math.random() * ONE_IN_X_CHANCE_TO_TALK_AGAIN);
+  } else{
+    randomChanceToRegisterSpoken = 0;
+    console.log("IN FORCE TALK BRANCH");
+  }
+  
 
   if (randomChanceToRegisterSpoken !== 0) {
     recentSpeakers.push(personalityDataFiltered[selectedBotIndex].personalityID);

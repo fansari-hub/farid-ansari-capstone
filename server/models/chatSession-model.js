@@ -18,6 +18,11 @@ async function getChatSessions(intUserID) {
   return queryResult;
 }
 
+async function getChatSessionSingle(strSessionID) {
+  const queryResult = await knexops.selectDatabaseAll("chatSessions",{"sessionID": strSessionID});
+  return queryResult[0];
+}
+
 async function getChatSessionChatDetail(strSessionID) {
   const queryResult = await knexops.selectDatabaseAll("chatSessionHist", { sessionId: strSessionID });
   return queryResult;
@@ -28,7 +33,7 @@ async function createChatSession(strName, intUserID) {
     console.log("chatSession-model.createChatSession(): Missing session name!");
     return false;
   }
-  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]", userID : intUserID};
+  const data = { sessionID: uuidv4(), sessionName: strName, participants: "[]", userID : intUserID, optionTurns: 1, optionTopics: 1, optionEmojii: 1, optionShort: 1};
   const queryResult = knexops.insertDatabase("chatSessions", data); //async op but no need to wait
   return data;
 }
@@ -65,12 +70,22 @@ async function deleteSession(strSessionID) {
   return queryResult;
 }
 
-async function updateSession(strSessionID, strName) {
+async function updateSession(strSessionID, strName, boolTurns=1, boolTopics=1, boolEmojii=1, boolShort=1) {
   if (!strSessionID || typeof strSessionID !== "string") {
     console.log("chatSession-model.updateSession(): Missing sessionID!");
     return false;
   }
-  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName }, { sessionID: strSessionID });
+
+  if (typeof strName !== "string") {
+    console.log("chatSession-model.updateSession(): Bad SessionNamen provided!");
+    return false;
+  }
+
+  if(typeof boolTurns !=="number" || typeof boolTopics !=="number" || typeof boolEmojii !=="number" || typeof boolShort !=="number" ){
+    console.log("chatSession-model.updateSession(): Bad option format provided.");
+    return false;
+  }
+  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName, optionTurns : boolTurns, optionTopics: boolTopics, optionEmojii: boolEmojii, optionShort: boolShort }, { sessionID: strSessionID });
   return queryResult;
 }
 
@@ -156,4 +171,5 @@ module.exports = {
   removePerson,
   getPersons,
   isAuthorized,
+  getChatSessionSingle
 };

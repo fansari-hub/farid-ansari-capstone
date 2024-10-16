@@ -100,11 +100,30 @@ const httpUpdateSession = async (req, res) => {
     return false;
   }
 
-  if (!req.body.sessionName || typeof req.body.sessionName !== "string") {
-    res.status(400).json({ error: "Must provide a Session Name String" });
+  if (typeof req.body.sessionName !== "string") {
+    res.status(400).json({ error: "Session name must be a string!" });
     return false;
   }
-  const result = await chatSessionModel.updateSession(req.params.id, req.body.sessionName);
+
+  if (req.body.optionTurns !==undefined && (req.body.option === 0 || req.body.option === 1)){
+    res.status(400).json({ error: "Option Turns must be 0 or 1 value!" });
+    return false;
+  }
+  if (req.body.optionTopics !==undefined && (req.body.option === 0 || req.body.option === 1)){
+    res.status(400).json({ error: "Option Topics must be 0 or 1 value!" });
+    return false;
+    
+  }
+  if (req.body.optionEmojii !==undefined && (req.body.option === 0 || req.body.option === 1)){
+    res.status(400).json({ error: "Option Emojii must be  0 or 1 value!" });
+    return false;
+    
+  }
+  if (req.body.optionShort !==undefined && (req.body.option === 0 || req.body.option === 1)){
+    res.status(400).json({ error: "Option Short must be  0 or 1 value!" });
+    return false;
+  }
+  const result = await chatSessionModel.updateSession(req.params.id, req.body.sessionName, req.body.optionTurns, req.body.optionTopics , req.body.optionEmojii, req.body.optionShort);
   if (result === false) {
     res.status(500).json({});
     return false;
