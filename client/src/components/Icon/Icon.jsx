@@ -17,8 +17,10 @@ import iSettings from "../../assets/icons/settings_24dp_E8EAED_FILL0_wght400_GRA
 import iTTS from "../../assets/icons/text_to_speech_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg";
 import iToggleOff from "../../assets/icons/toggle_off_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg";
 import iToggleOn from "../../assets/icons/toggle_on_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg";
+import iEdit from "../../assets/icons/edit_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg";
+import iLogin from "../../assets/icons/login_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
 
-const imageList = [iAddCircle, iAddPhoto, iAutoPlay, iChat, iDelete, iExpand, iLogout, iManageAccount, iOpenMenu, iAddPerson, iRemovePerson, iPsychology, iSave, iSend, iSettings, iTTS, iToggleOff, iToggleOn];
+const imageList = [iAddCircle, iAddPhoto, iAutoPlay, iChat, iDelete, iExpand, iLogout, iManageAccount, iOpenMenu, iAddPerson, iRemovePerson, iPsychology, iSave, iSend, iSettings, iTTS, iToggleOff, iToggleOn, iEdit, iLogin];
 
 export default function Icon({ iconIndex, iconName, actionType, hideLabel, displayNaked, noGap }) {
 

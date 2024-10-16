@@ -20,7 +20,7 @@ export default function Sidebar({ chatSessions, switchSessionCallBack, addSessio
           </Link>
           ) : (
             <Link to="/signin">
-              <div className="idebar__settings__auth font-menu"><Icon iconIndex={6} iconName={"Sign In"} actionType="neutral" displayNaked={true} /></div>
+              <div className="idebar__settings__auth font-menu"><Icon iconIndex={19} iconName={"Sign In"} actionType="neutral" displayNaked={true} /></div>
             </Link>
           )}
         

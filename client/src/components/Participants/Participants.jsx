@@ -14,6 +14,9 @@ export default function Participants({ activePersonalitiesObj, activeSession, pe
     return {"text" : e.name, "id": e.personalityID, "image" : webapi.URL + "/" + e.avatarImg}
   });
 
+  if (!activeSession){
+    return <></>
+  }
 
 
 

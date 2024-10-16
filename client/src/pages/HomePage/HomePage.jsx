@@ -311,6 +311,9 @@ export default function HomePage() {
     try {
       const delURL = webapi.URL + "/chatsession/" + sessionID;
       const response = await axios.delete(delURL, authHeader(sessionAuthToken));
+      if (sessionID === activeSession){
+        setActiveSession("");
+      }
       refetchSessionData();
     } catch (error) {
       alert(`HomePage.handleAddSesion() request failed with error: ${error}`);
