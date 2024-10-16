@@ -61,7 +61,7 @@ export default function SessionItem({ chatSession, switchSessionCallBack, delete
               handleEditButton();
             }}
           >
-            <Icon iconIndex={14} iconName={"Edit"} actionType="positive" hideLabel={true} displayNaked={true} />
+            <Icon iconIndex={18} iconName={"Edit"} actionType="positive" hideLabel={true} displayNaked={true} />
           </div>
         ) : (
           <></>
