@@ -7,6 +7,10 @@ exports.up = function (knex) {
         table.string('sessionName').notNullable();
         table.string('participants', 2000);
         table.integer("userID").notNullable().unsigned();
+        table.integer("optionTurns").notNullable().unsigned();
+        table.integer("optionTopics").notNullable().unsigned();
+        table.integer("optionEmojii").notNullable().unsigned();
+        table.integer("optionShort").notNullable().unsigned();
         table.foreign("userID").references("id").inTable("users").onUpdate("CASCADE").onDelete("CASCADE");
       })
       .createTable("chatSessionHist",(table) => {
