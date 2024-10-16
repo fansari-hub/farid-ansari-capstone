@@ -23,11 +23,11 @@ export default function HomePage() {
   const [activeSession, setActiveSession] = useState("");
   const [activeSessionTitle, setActiveSessionTitle] = useState("");
   const [activeSessionPersons, setActiveSessionPersons] = useState([]);
+  const [activeSessionIndex, setActiveSessionIndex] = useState();
   const [chatlog, setChatlog] = useState([]);
   const userInput = useRef();
   const inputTTSflag = useRef();
   const inputAutoChatFlag = useRef();
-  // const chatDiv = useRef();
   const inputTakeTurnsFlag = useRef();
   const inputChangeTopicsFlag = useRef();
   const inputEmojiiFlag = useRef();
@@ -81,6 +81,7 @@ export default function HomePage() {
   useEffect(() => {
     //Wrapping these in async function to ensure they load in this order on a network with latency.
     const refreshData = async () => {
+      await refetchSessionData();
       await refetchSessionDetailData();
       await refetchSessionPersonsData();
     };
@@ -161,9 +162,9 @@ export default function HomePage() {
     try {
       const response = await axios.get(webapi.URL + "/chatsession", authHeader(sessionAuthToken));
       setSessions(response.data);
-      if (response.data[0]) {
-        setActiveSession(response.data[0].sessionID);
-      }
+    // if (response.data[0] && activeSessionIndex) {
+    //     setActiveSession(response.data[0].sessionID);
+    //   }
     } catch (error) {
       alert(`HomePage.refetchSessions() request failed with error: ${error}`);
       return false;
@@ -186,7 +187,8 @@ export default function HomePage() {
     try {
       const response = await axios.get(webapi.URL + "/chatsession/" + activeSession, authHeader(sessionAuthToken));
       setChatlog(response.data);
-      setSessionTitle();
+      //setSessionTitle();
+      setSessionIndex();
     } catch (error) {
       alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
       return false;
@@ -209,10 +211,17 @@ export default function HomePage() {
     return true;
   }
 
-  function setSessionTitle() {
-    const titleIndex = sessions.findIndex((o) => o.sessionID === activeSession);
-    if (titleIndex !== -1) {
-      setActiveSessionTitle(sessions[titleIndex].sessionName);
+  // function setSessionTitle() {
+  //   const titleIndex = sessions.findIndex((o) => o.sessionID === activeSession);
+  //   if (titleIndex !== -1) {
+  //     setActiveSessionTitle(sessions[titleIndex].sessionName);
+  //   }
+  // }
+
+  function setSessionIndex(){
+    const optionsIndex = sessions.findIndex((o) => o.sessionID === activeSession);
+    if (optionsIndex !== -1) {
+      setActiveSessionIndex(optionsIndex);
     }
   }
 
@@ -390,6 +399,30 @@ export default function HomePage() {
     }
   };
 
+  const handleChangeCurrentSessionOptions = async() => {
+    try {
+      if(sessions[activeSessionIndex]?.sessionName === undefined){
+        return;
+      }else{
+        
+      }
+      
+      const putURL = webapi.URL + "/chatsession/" + activeSession;
+      const response = await axios.put(putURL, 
+        { sessionName: sessions[activeSessionIndex].sessionName,
+          optionTurns: (inputTakeTurnsFlag.current.getAttribute("toggleValue") === "true") ? 1:0, 
+          optionShort: (inputShortResponseFlag.current.getAttribute("toggleValue") === "true") ? 1:0, 
+          optionTopics: (inputChangeTopicsFlag.current.getAttribute("toggleValue") === "true") ? 1:0, 
+          optionEmojii: (inputEmojiiFlag.current.getAttribute("toggleValue") === "true") ? 1:0 }, 
+          authHeader(sessionAuthToken));
+    } catch (error) {
+      alert(`HomePage.handleChangeCurrentSessionOptions() request failed with error: ${error}`);
+      console.log(inputTakeTurnsFlag.current.getAttribute("toggleValue") === "true" ? 1:0);
+      return -1;
+    }
+  };
+
+
   return (
     <div className="HomePage">
       <div className="HomePage__selectionBar">
@@ -399,13 +432,14 @@ export default function HomePage() {
         <Sidebar chatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} activeSession={activeSession} />
       </div>
       <div className="HomePage__main">
-        <h1 className="HomePage__main__title font-pageTitle">{activeSessionTitle}</h1>
-        <div className="HomePage__main__sessionOptions">
-              <ToggleSwitch toggleReference={inputTakeTurnsFlag} defaultState={false} iconName="Turns" hideLabel={false} />
-              <ToggleSwitch toggleReference={inputChangeTopicsFlag} defaultState={false} iconName="Topics" hideLabel={false} />
-              <ToggleSwitch toggleReference={inputEmojiiFlag} defaultState={false} iconName="Emojiis" hideLabel={false} />
-              <ToggleSwitch toggleReference={inputShortResponseFlag} defaultState={false} iconName="Short" hideLabel={false} />
-            </div>
+        <h1 className="HomePage__main__title font-pageTitle">{sessions[activeSessionIndex]?.sessionName}</h1>
+        {activeSession? <div className="HomePage__main__sessionOptions">
+              <ToggleSwitch toggleReference={inputTakeTurnsFlag} defaultState={!!sessions[activeSessionIndex]?.optionTurns} iconName="Turns" hideLabel={false} callback={handleChangeCurrentSessionOptions} />
+              <ToggleSwitch toggleReference={inputChangeTopicsFlag} defaultState={!!sessions[activeSessionIndex]?.optionTopics} iconName="Topics" hideLabel={false} callback={handleChangeCurrentSessionOptions}/>
+              <ToggleSwitch toggleReference={inputEmojiiFlag} defaultState={!!sessions[activeSessionIndex]?.optionEmojii} iconName="Emojiis" hideLabel={false}  callback={handleChangeCurrentSessionOptions}/>
+              <ToggleSwitch toggleReference={inputShortResponseFlag} defaultState={!!sessions[activeSessionIndex]?.optionShort} iconName="Short" hideLabel={false} callback={handleChangeCurrentSessionOptions}/>
+            </div> : <></>}
+        
         <div className="HomePage__main__content">
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>

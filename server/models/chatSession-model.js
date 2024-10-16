@@ -81,11 +81,11 @@ async function updateSession(strSessionID, strName, boolTurns=true, boolTopics=t
     return false;
   }
 
-  if(typeof boolTurns !=="boolean" || typeof boolTopics !=="boolean" || typeof boolEmojii !=="boolean" || typeof boolShort !=="boolean" ){
+  if(typeof boolTurns !=="number" || typeof boolTopics !=="number" || typeof boolEmojii !=="number" || typeof boolShort !=="number" ){
     console.log("chatSession-model.updateSession(): Bad option format provided.");
     return false;
   }
-  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName, optionTakeTurns : boolTurns, optionTopics: boolTopics, optionEmojii: boolEmojii, optionShort: boolShort }, { sessionID: strSessionID });
+  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName, optionTurns : boolTurns, optionTopics: boolTopics, optionEmojii: boolEmojii, optionShort: boolShort }, { sessionID: strSessionID });
   return queryResult;
 }
 

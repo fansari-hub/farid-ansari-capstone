@@ -63,20 +63,20 @@ async function generateGPTChat(strSessionID, res, req) {
     Do not adopt the speaking styles of others. 
     When speaking to one of the individuals directly, precede their name with the @ symbole. 
     Focus on delivering clear and natural responses.`
-    if (sessionInformation.optionTopics === true){
+    if (sessionInformation.optionTopics === 1){
       promptInstructions += `
       If the participants continue to discuss the same topics more than 20 responses in a row, suggest a new topic for discussion. `
     }
-    if (sessionInformation.optionEmojii === true){
+    if (sessionInformation.optionEmojii === 1){
       promptInstructions += `
       Use emojis occasionally to express emotions or emphasize points, but do so sparingly—much like a person would in casual conversation. Do not include emojis in every message or sentence.`
     } else{
       promptInstructions += `
       Do not make use of emojiis.`
     }
-    if (sessionInformation.optionShort === true){
+    if (sessionInformation.optionShort === 1){
       promptInstructions += `
-      Try to keep your responses under 75 words, only use more words if it is required to express your idea.`
+      Try to keep your responses under 50 words, only use more words if it is required to express your idea.`
     }else{
       promptInstructions += `
       Try to keep your responses under 1000 words, only use more words if it is required to express your idea.`
@@ -169,10 +169,11 @@ async function conversationManager(gptData, strSessionID, res) {
 
   //Update recent speakers & remove the oldest entry
   let randomChanceToRegisterSpoken;
-  if (sessionInformation.optionTurn === true){
+  if (sessionInformation.optionTurns === 1){
      randomChanceToRegisterSpoken = Math.floor(Math.random() * ONE_IN_X_CHANCE_TO_TALK_AGAIN);
   } else{
     randomChanceToRegisterSpoken = 0;
+    console.log("IN FORCE TALK BRANCH");
   }
   
 
