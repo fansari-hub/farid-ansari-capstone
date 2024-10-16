@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 app.use(express.json({limit: '1024kb'}));
 app.use(cors());
@@ -26,7 +27,6 @@ app.use(express.static("public"));
 
 //for react static builds being server by this express server
 app.get('/setup', (req, res) => {
-  console.log("You are in rerouter");
   res.sendFile(path.join(__dirname, 'public/index.html'), (err) => {
     if (err) {
       res.status(500).send(err)
