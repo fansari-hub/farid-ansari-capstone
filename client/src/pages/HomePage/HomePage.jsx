@@ -3,6 +3,7 @@ import ResponseList from "../../components/ResponseList/ResponseList";
 import ChatInput from "../../components/ChatInput/ChatInput";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Participants from "../../components/Participants/Participants";
+import ToggleSwitch from "../../components/ToggleSwitch/ToggleSwitch";
 import axios from "axios";
 import webapi from "../../utils/webapi";
 import { useState, useRef, useEffect } from "react";
@@ -26,7 +27,11 @@ export default function HomePage() {
   const userInput = useRef();
   const inputTTSflag = useRef();
   const inputAutoChatFlag = useRef();
-  const chatDiv = useRef();
+  // const chatDiv = useRef();
+  const inputTakeTurnsFlag = useRef();
+  const inputChangeTopicsFlag = useRef();
+  const inputEmojiiFlag = useRef();
+  const inputShortResponseFlag = useRef();
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -395,7 +400,13 @@ export default function HomePage() {
       </div>
       <div className="HomePage__main">
         <h1 className="HomePage__main__title font-pageTitle">{activeSessionTitle}</h1>
-        <div ref={chatDiv} className="HomePage__main__content">
+        <div className="HomePage__main__sessionOptions">
+              <ToggleSwitch toggleReference={inputTakeTurnsFlag} defaultState={false} iconName="Turns" hideLabel={false} />
+              <ToggleSwitch toggleReference={inputChangeTopicsFlag} defaultState={false} iconName="Topics" hideLabel={false} />
+              <ToggleSwitch toggleReference={inputEmojiiFlag} defaultState={false} iconName="Emojiis" hideLabel={false} />
+              <ToggleSwitch toggleReference={inputShortResponseFlag} defaultState={false} iconName="Short" hideLabel={false} />
+            </div>
+        <div className="HomePage__main__content">
           <ResponseList responses={responses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
       </div>

@@ -18,6 +18,11 @@ async function getChatSessions(intUserID) {
   return queryResult;
 }
 
+async function getChatSessionSingle(strSessionID) {
+  const queryResult = await knexops.selectDatabaseAll("chatSessions",{"sessionID": strSessionID});
+  return queryResult[0];
+}
+
 async function getChatSessionChatDetail(strSessionID) {
   const queryResult = await knexops.selectDatabaseAll("chatSessionHist", { sessionId: strSessionID });
   return queryResult;
@@ -65,12 +70,22 @@ async function deleteSession(strSessionID) {
   return queryResult;
 }
 
-async function updateSession(strSessionID, strName) {
+async function updateSession(strSessionID, strName, boolTurns=true, boolTopics=true, boolEmojii=true, boolShort=false) {
   if (!strSessionID || typeof strSessionID !== "string") {
     console.log("chatSession-model.updateSession(): Missing sessionID!");
     return false;
   }
-  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName }, { sessionID: strSessionID });
+
+  if (typeof strName !== "string") {
+    console.log("chatSession-model.updateSession(): Bad SessionNamen provided!");
+    return false;
+  }
+
+  if(typeof boolTurns !=="boolean" || typeof boolTopics !=="boolean" || typeof boolEmojii !=="boolean" || typeof boolShort !=="boolean" ){
+    console.log("chatSession-model.updateSession(): Bad option format provided.");
+    return false;
+  }
+  const queryResult = await knexops.updateDatabase("chatSessions", { sessionName: strName, optionTakeTurns : boolTurns, optionTopics: boolTopics, optionEmojii: boolEmojii, optionShort: boolShort }, { sessionID: strSessionID });
   return queryResult;
 }
 
@@ -156,4 +171,5 @@ module.exports = {
   removePerson,
   getPersons,
   isAuthorized,
+  getChatSessionSingle
 };

@@ -100,11 +100,30 @@ const httpUpdateSession = async (req, res) => {
     return false;
   }
 
-  if (!req.body.sessionName || typeof req.body.sessionName !== "string") {
-    res.status(400).json({ error: "Must provide a Session Name String" });
+  if (typeof req.body.sessionName !== "string") {
+    res.status(400).json({ error: "Session name must be a string!" });
     return false;
   }
-  const result = await chatSessionModel.updateSession(req.params.id, req.body.sessionName);
+
+  if (req.body.optionTurns !==undefined && typeof req.body.optionTurns !== "boolean"){
+    res.status(400).json({ error: "Option Turns must be boolean value!" });
+    return false;
+  }
+  if (req.body.optionTopics !==undefined && typeof req.body.optionTopics !== "boolean"){
+    res.status(400).json({ error: "Option Topics must be boolean value!" });
+    return false;
+    
+  }
+  if (req.body.optionEmojii !==undefined && typeof req.body.optionEmojii !== "boolean"){
+    res.status(400).json({ error: "Option Emojii must be boolean value!" });
+    return false;
+    
+  }
+  if (req.body.optionShort !==undefined && typeof req.body.optionShort !== "boolean"){
+    res.status(400).json({ error: "Option Short must be boolean value!" });
+    return false;
+  }
+  const result = await chatSessionModel.updateSession(req.params.id, req.body.sessionName, req.body.optionTurns, req.body.optionTopics , req.body.optionEmojii, req.body.optionShort);
   if (result === false) {
     res.status(500).json({});
     return false;
