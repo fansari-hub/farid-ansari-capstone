@@ -70,7 +70,7 @@ async function deleteSession(strSessionID) {
   return queryResult;
 }
 
-async function updateSession(strSessionID, strName, boolTurns=true, boolTopics=true, boolEmojii=true, boolShort=false) {
+async function updateSession(strSessionID, strName, boolTurns=1, boolTopics=1, boolEmojii=1, boolShort=1) {
   if (!strSessionID || typeof strSessionID !== "string") {
     console.log("chatSession-model.updateSession(): Missing sessionID!");
     return false;
