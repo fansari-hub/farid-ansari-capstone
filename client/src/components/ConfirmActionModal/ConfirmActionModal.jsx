@@ -8,7 +8,7 @@ export default function ConfirmActionModal({ callbackAccept, callbackReject, act
       <div className="ConfirmActionModal">
         <div className="ConfirmActionModal__float">
           <div className="ConfirmActionModal__float__container">
-            <p className="ConfirmActionModal__float__container__title">Are you sure you want to perform this {actiontype} action?</p>
+            <p className="ConfirmActionModal__float__container__title font-label">Are you sure you want to perform this {actiontype} action?</p>
             <div className="ConfirmActionModal__float__container__button" onClick={callbackAccept}>
               <Icon iconIndex={4} iconName={"Yes"} actionType={"negative"} displayNaked={false} noGap={false} />
             </div>

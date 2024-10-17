@@ -33,7 +33,10 @@
         max-height: 80vh;
         left: 25vw;
       }
-      &_button{
+      &__title{
+        background-color: none;
+      }
+      &__button{
         background-color: none;
       }
     }
