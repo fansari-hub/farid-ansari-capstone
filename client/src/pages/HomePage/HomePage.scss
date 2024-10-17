@@ -12,13 +12,16 @@
   &__selectionBar {
     max-width: 100%;
     position: fixed;
-    z-index: 100;
+    z-index: 1;
   }
 
   &__side {
     background-color: none;
     position: fixed;
+    top: 100px;
+    z-index: 1;
     @include displayMobile {
+      top: 70px;
       padding-top: 20px;
       position: relative;
     }
@@ -28,7 +31,7 @@
     flex-grow: 1;
     background-color: none;
     @include displayMobile{
-      padding-top: 20px;
+      padding-top: 100px;
     }
 
     &__title {

@@ -3,6 +3,7 @@ import "./PersonalityConfig.scss";
 import { useRef, useState, useEffect } from "react";
 import defaultLogo from "../../assets/images/logo.webp";
 import Icon from "../Icon/Icon";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp";
 
 export default function PersonalityConfig({ personalityObj, updateCallBack, deleteCallBack, generateImgCallBack }) {
@@ -13,6 +14,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
   const userInputPrompt = useRef();
   const userAvatarPrompt = useRef();
   const userInputVoice = useRef();
+  const [confirmModal, setConfirmModal] = useState(<></>);
 
   useEffect(() => {
     if (personalityObj.avatarImg && personalityObj.avatarImg !== "") {
@@ -53,11 +55,14 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
     } else{
       e.target.style.backgroundColor = "#024d06";
     }
-    
+  };
+  function handleShowConfirmDeleteModal(){
+    setConfirmModal( <ConfirmActionModal callbackAccept={(e) => {handleDelete(e);setConfirmModal(<></>);}} callbackReject={(e) => {setConfirmModal(<></>);}} actiontype="delete"/>);
   };
 
   return (
     <>
+    {confirmModal}
       <div className="PersonalityConfig">
         <form id={personalityObj.personalityID}>
           <div className="PersonalityConfig__avatar">
@@ -102,7 +107,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
           <div className="PersonalityConfig__group">
            <div className="PersonalityConfig__group__label"></div>
           <div className="PersonalityConfig__group__btn" onClick={handleSave}><Icon iconIndex={12} iconName={"Save"} actionType="positive"  /></div>
-          <div className="PersonalityConfig__group__btn" onClick={handleDelete}><Icon iconIndex={4} iconName={"Delete"} actionType="negative" /></div>
+          <div className="PersonalityConfig__group__btn" onClick={handleShowConfirmDeleteModal}><Icon iconIndex={4} iconName={"Delete"} actionType="negative" /></div>
             
             
             

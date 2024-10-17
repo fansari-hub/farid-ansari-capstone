@@ -13,9 +13,9 @@
     background-color: $colPrimary-Background;
     background-color: none;
     position: fixed;
+    margin-top: 20px;
     @include displayMobile{
       position: relative;
-      margin-top: -40px;
     }
   }
   &__main {

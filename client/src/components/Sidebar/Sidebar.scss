@@ -12,7 +12,8 @@
   scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
   scrollbar-width: thin;
   padding-bottom: 270px;
-  padding-top: 100px;
+  //padding-top: 20px;
+  //padding-top: 100px;
   gap: 10px;
 
   @include displayMobile {
@@ -23,7 +24,7 @@
     margin-top: 0;
     height: auto;
     background-color: transparent;
-    padding-top: 70px;
+    //padding-top: 70px;
     padding-bottom: 0;
   }
 
