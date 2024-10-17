@@ -1,9 +1,11 @@
 import "./SessionItem.scss";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Icon from "../Icon/Icon";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 
 export default function SessionItem({ chatSession, switchSessionCallBack, deleteSessionCallback, updateSessionCallback, activeSession }) {
   const sessionRef = useRef();
+  const [confirmModal, setConfirmModal] = useState(<></>);
 
   let sessionItemClass = "SessionItem__group__item";
 
@@ -21,8 +23,13 @@ export default function SessionItem({ chatSession, switchSessionCallBack, delete
     updateSessionCallback(chatSession.sessionID, sessionRef.current.value);
   }
 
+  function handleShowConfirmDeleteModal(){
+    setConfirmModal( <ConfirmActionModal callbackAccept={(e) => {deleteSessionCallback(chatSession.sessionID);setConfirmModal(<></>);}} callbackReject={(e) => {setConfirmModal(<></>);}} actiontype="delete"/>);
+  };
+
   return (
     <>
+    {confirmModal}
       <div className="SessionItem__group">
         <div
           className="SessionItem__group__itemContainer"
@@ -45,10 +52,7 @@ export default function SessionItem({ chatSession, switchSessionCallBack, delete
         {deleteSessionCallback ? (
           <div
             className="SessionItem__group__delete"
-            onClick={(e) => {
-              deleteSessionCallback(chatSession.sessionID);
-            }}
-          >
+            onClick={handleShowConfirmDeleteModal}>
             <Icon iconIndex={4} iconName={"Delete"} actionType="negative" hideLabel={true} displayNaked={true} />
           </div>
         ) : (

@@ -3,7 +3,13 @@ import logo from "../../assets/images/logo.webp";
 import Icon from "../Icon/Icon";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
-export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, inputAutoChatFlag, skipCallBack }) {
+export default function ChatInput({ sendChatCallBack, userInput, inputTTSflag, inputAutoChatFlag, skipCallBack, activeSession }) {
+
+  if (!activeSession){
+    return <></>
+  }
+
+
   return (
     <>
       <div className="ChatInput">

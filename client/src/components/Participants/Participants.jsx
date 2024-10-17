@@ -51,7 +51,7 @@ export default function Participants({ activePersonalitiesObj, activeSession, pe
     {selectionModal}
       <div className="Participants">
         <div className="Participants__add">
-          <div className="Participants__add__addIcon"  onClick={() => handleShowSelectinModal()}><Icon iconIndex={9} iconName="Remove" actionType="positive" hideLabel={true} displayNaked={true} noGap={true} /></div>
+          <div className="Participants__add__addIcon"  onClick={() => handleShowSelectinModal()}><Icon iconIndex={9} iconName="add person" actionType="positive" hideLabel={true} displayNaked={true} noGap={true} /></div>
           {(activePersonalitiesObj.length === 0) ? (<p className="Participants__add__text">Click to invite to chat</p>) : (<></>)}
         </div>
         <div className="Participants__list">

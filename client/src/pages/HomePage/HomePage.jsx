@@ -129,9 +129,11 @@ export default function HomePage() {
     }
     //this for auto chat, evertime responses are updated this gets reset
     clearInterval(autoChatInterval);
-    autoChatInterval = setInterval(() => {
-      chatAutoPlay(activeSession, responses);
-    }, 5000);
+    if(activeSession){
+      autoChatInterval = setInterval(() => {
+        chatAutoPlay(activeSession, responses);
+      }, 5000);
+    }
   }, [responses]);
 
   function chatAutoPlay(strActiveSession, objResponses) {
@@ -448,7 +450,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className="HomePage__input">
-        <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} />
+        <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} activeSession={activeSession} />
       </div>
     </div>
   );
