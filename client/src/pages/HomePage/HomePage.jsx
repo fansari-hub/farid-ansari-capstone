@@ -333,6 +333,7 @@ export default function HomePage() {
       const response = await axios.delete(delURL, authHeader(sessionAuthToken));
       if (sessionID === strActiveSession) {
         setStrActiveSession("");
+        clearInterval(timerAutoChatInterval); 
       }
       refetchSessionData();
     } catch (error) {
