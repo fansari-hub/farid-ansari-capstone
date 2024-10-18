@@ -8,7 +8,8 @@ const app = express();
 
 //get number of proxies (so rate limiting can work correct when deployed at a web hosting server like Heroku)
 if (process.env.NUMBER_OF_PROXIES > 0){
-  app.set('trust proxy', process.env.NUMBER_OF_PROXIES)
+  //app.set('trust proxy', process.env.NUMBER_OF_PROXIES)
+  app.set('trust proxy', true) //this value works with Heroku
   console.log(`Number of proxies specified is ${process.env.NUMBER_OF_PROXIES}, applied configuration to Express.`);
 }
 
