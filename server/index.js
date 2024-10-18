@@ -1,11 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+require("dotenv").config();
 
 const app = express();
+
+
+//get number of proxies (so rate limiting can work correct when deployed at a web hosting server like Heroku)
+if (process.env.NUMBER_OF_PROXIES > 0){
+  app.set('trust proxy', process.env.NUMBER_OF_PROXIES)
+  console.log(`Number of proxies specified is ${process.env.NUMBER_OF_PROXIES}, applied configuration to Express.`);
+}
+
 app.use(express.json({limit: '1024kb'}));
 app.use(cors());
-require("dotenv").config();
+
 
 const SERVER_LOGGING = true;
 
@@ -42,6 +51,11 @@ app.get('/signin', (req, res) => {
       res.status(500).send(err)
     }
   })
+})
+
+//endpoint returns the IP address of the IP address (for determining if the correct number of proxies has been configured for trust proxy)
+app.get('/myip', (req, res) => {
+  res.send(req.ip);
 })
 
 app.use('/personality', personalityRoutes);
