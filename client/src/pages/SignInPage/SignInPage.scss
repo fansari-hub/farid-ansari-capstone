@@ -90,10 +90,10 @@
       }
       &__logo {
         border-radius: 25px;
-        border: thick inset $colSecondary-MutedBorder; 
-        box-shadow: 10px 10px 20px black ;
+        border: thick inset $colSecondary-MutedBorder;
+        box-shadow: 10px 10px 20px black;
         width: 25rem;
-        @include displayMobile{
+        @include displayMobile {
           width: 15rem;
         }
       }

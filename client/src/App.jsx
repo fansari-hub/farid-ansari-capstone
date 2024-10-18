@@ -1,3 +1,10 @@
+/*****************************
+ * Component Page: App
+ * Purpose: Handles main routing to pages and holds function for dealing with user authentication and creation. 
+ *          Components access these user auth functions by using the context provider.
+ * Usage Notes: none
+ ****************************/
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import PersonalitiesPage from "./pages/PersonalitiesPage/PersonalitiesPage";
@@ -18,7 +25,8 @@ function App() {
 
   const auth = getAuth();
 
-  const invokeSignInWithPopup = (providerIndex, provider) => {
+  //FireBase login functionality via the popup method using selected provider.
+  function invokeSignInWithPopup(providerIndex, provider){
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Token. You can use it to access the Google API.
@@ -59,15 +67,18 @@ function App() {
       });
   };
 
-  const signInWithGitHub = () => {
+  //sign in with GitHub using Firebase
+  function signInWithGitHub(){
     invokeSignInWithPopup(2, new GithubAuthProvider());
   };
 
-  const signInWithGoogle = () => {
+  //sign in with Google using Firebase
+  function signInWithGoogle(){
     invokeSignInWithPopup(1, new GoogleAuthProvider());
   };
 
-  const createAccountUsingEmail = (strEmail, strPassword, strName) => {
+  //create email/password user using Firebase
+  function createAccountUsingEmail(strEmail, strPassword, strName){
     createUserWithEmailAndPassword(auth, strEmail, strPassword)
       .then((userCredential) => {
         // Signed up
@@ -96,7 +107,8 @@ function App() {
       });
   };
 
-  const signInWithEmail = (strEmail, strPassword, strName) => {
+  //sign in with email/password user using Firebase
+  function signInWithEmail(strEmail, strPassword, strName){
     signInWithEmailAndPassword(auth, strEmail, strPassword)
       .then((userCredential) => {
         // Signed in
@@ -126,7 +138,8 @@ function App() {
       });
   };
 
-  const logoutUser = () => {
+  //logout logged in user
+  function logoutUser(){
     signOut(auth)
       .then(() => {
         sessionStorage.clear();

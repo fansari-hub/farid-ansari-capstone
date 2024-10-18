@@ -1,64 +1,53 @@
+/*****************************
+ * Component Page: Home Page
+ * Purpose: Main application page where the actual chat interface is displayed to the user
+ * Notes: none
+ ****************************/
+
 import "./HomePage.scss";
+import soundChatDing from "../../assets/sounds/ding.mp3";
 import ResponseList from "../../components/ResponseList/ResponseList";
 import ChatInput from "../../components/ChatInput/ChatInput";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Participants from "../../components/Participants/Participants";
 import ToggleSwitch from "../../components/ToggleSwitch/ToggleSwitch";
+
 import axios from "axios";
 import webapi from "../../utils/webapi";
+import { getAuth } from "firebase/auth";
+
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import soundChatDing from "../../assets/sounds/ding.mp3";
-import { getAuth } from "firebase/auth";
+
+
 const mainAudioChannel = new Audio();
 const speechAudioChannel = new Audio();
-let autoScroll = false;
-let autoChatInterval;
-
+let boolAutoScrollFlag = false;
+let timerAutoChatInterval;
 
 export default function HomePage() {
-  const [objArrResponses, setResponses] = useState([]);
-  const [sessions, setSessions] = useState([]);
-  const [personalities, setPersonalities] = useState([]);
+  const [objArrayResponses, setobjArrayResponses] = useState([]);
+  const [objArraySessions, setObjArraySessions] = useState([]);
+  const [objArraypersonalities, setObjArraypersonalities] = useState([]);
   const [strActiveSession, setStrActiveSession] = useState("");
-  const [activeSessionPersons, setActiveSessionPersons] = useState([]);
+  const [objArrayActiveSessionPersons, setObjArrayActiveSessionPersons] = useState([]);
   const [activeSessionIndex, setActiveSessionIndex] = useState();
-  const [chatlog, setChatlog] = useState([]);
+  const [objArrayChatContent, setObjArrayChatContent] = useState([]);
+
   const refUserInput = useRef();
   const refTTSFlagInput = useRef();
   const refAutoChatFlagInput = useRef();
-  const inputTakeTurnsFlag = useRef();
-  const inputChangeTopicsFlag = useRef();
-  const inputEmojiiFlag = useRef();
-  const inputShortResponseFlag = useRef();
+  const refTakeTurnsFlag = useRef();
+  const refChangeTopicsFlag = useRef();
+  const refEmojiiFlag = useRef();
+  const refShortResponseFlag = useRef();
+
   const navigate = useNavigate();
   const auth = getAuth();
 
-
   let sessionAuthToken = sessionStorage.getItem("accessToken");
 
-  function refreshSessionToken() {
-    
-    auth.currentUser
-      ?.getIdToken()
-      .then(function (idToken) {
-        sessionAuthToken = idToken;
-        sessionStorage.setItem("accessToken", idToken);
-      })
-      .catch(function (error) {
-        alert("Session Refresh Error");
-      });
-  };
-
-  const authHeader = (authToken) => {
-    refreshSessionToken();
-    return {
-      headers: {
-        Authorization: `Bearer ${sessionAuthToken}`,
-      },
-    };
-  };
-
+  // Upon load, refresh personality and session data, forward user to login page if not signed in, clear all existing timers on unload
   useEffect(() => {
     //Wrapping these in async function to ensure they load in this order on a network with latency
     const refreshData = async () => {
@@ -73,10 +62,11 @@ export default function HomePage() {
 
     return () => {
       //ensure any active intervals are cleared if the user goes to a different page.
-      clearInterval(autoChatInterval);
+      clearInterval(timerAutoChatInterval);
     };
   }, []);
 
+  // When active session changes, refresh all data
   useEffect(() => {
     //Wrapping these in async function to ensure they load in this order on a network with latency.
     const refreshData = async () => {
@@ -84,14 +74,15 @@ export default function HomePage() {
       await refetchSessionDetailData();
       await refetchSessionPersonsData();
     };
-    //don't bother refreshing these data unless there is an active session
+    //don't bother refreshing these data unless there is an active session selected (ignores blank or null values as trigger)
     if (strActiveSession !== "") {
       refreshData();
     }
   }, [strActiveSession]);
 
+  // Upon changes to chat or personality data, refresh chat content state
   useEffect(() => {
-    const personalitiesList = personalities.map((e) => {
+    const objArraypersonalitiesList = objArraypersonalities.map((e) => {
       const obj = {
         name: e.name,
         personalityID: e.personalityID,
@@ -99,13 +90,13 @@ export default function HomePage() {
       };
       return obj;
     });
-    const sessionChat = chatlog.map((e) => {
-      const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === e.senderID);
+    const sessionChat = objArrayChatContent.map((e) => {
+      const senderNameIndex = objArraypersonalitiesList.findIndex((o) => o.personalityID === e.senderID);
 
       let senderName, avatarImg;
       if (senderNameIndex !== -1) {
-        senderName = personalitiesList[senderNameIndex].name;
-        avatarImg = personalitiesList[senderNameIndex].avatarImg;
+        senderName = objArraypersonalitiesList[senderNameIndex].name;
+        avatarImg = objArraypersonalitiesList[senderNameIndex].avatarImg;
       } else {
         senderName = "You";
       }
@@ -119,22 +110,48 @@ export default function HomePage() {
       };
       return obj;
     });
-    setResponses(sessionChat);
-  }, [chatlog, personalities]);
+    setobjArrayResponses(sessionChat);
+  }, [objArrayChatContent, objArraypersonalities]);
 
+
+  // Upon changes to chat content, scroll down (if enabled) and reset auto-chat timers
   useEffect(() => {
-    if (autoScroll === true) {
+    if (boolAutoScrollFlag === true) {
       window.scrollTo({ top: 99999, left: 0, behavior: "smooth" });
     }
-    //this for auto chat, evertime objArrResponses are updated this gets reset
-    clearInterval(autoChatInterval);
-    if(strActiveSession){
-      autoChatInterval = setInterval(() => {
-        chatAutoPlay(strActiveSession, objArrResponses);
+    //this for auto chat, evertime objArrayResponses are updated this gets reset
+    clearInterval(timerAutoChatInterval);
+    if (strActiveSession) {
+      timerAutoChatInterval = setInterval(() => {
+        chatAutoPlay(strActiveSession, objArrayResponses);
       }, 5000);
     }
-  }, [objArrResponses]);
+  }, [objArrayResponses]);
 
+  //function refreshes firebase sesion token upon request.
+  function refreshSessionToken() {
+    auth.currentUser
+      ?.getIdToken()
+      .then(function (idToken) {
+        sessionAuthToken = idToken;
+        sessionStorage.setItem("accessToken", idToken);
+      })
+      .catch(function (error) {
+        alert("Session Refresh Error");
+      });
+  }
+
+  //function returns required authorization header with sesionToken information used for authenticating with the backend API
+  function authHeader(_authToken) {
+    refreshSessionToken(); //always refresh session token to ensure user has latest token before returning header
+    return {
+      headers: {
+        Authorization: `Bearer ${sessionAuthToken}`,
+      },
+    };
+  }
+
+  //function for personalities to automatically chat without user interact, managed by a interval timer.
   function chatAutoPlay(strActiveSession, objResponses) {
     if (refAutoChatFlagInput.current.getAttribute("togglevalue") === "true" && strActiveSession !== "") {
       const randomPick = Math.floor(Math.random() * 3);
@@ -146,26 +163,26 @@ export default function HomePage() {
     }
   }
 
-  function ChangeAutoScroll(flag) {
+  //function to enable/disable boolAutoScrollFlag flag, controlled by other functions as needed.
+  function ChangeboolAutoScrollFlag(flag) {
     if (flag === true) {
-      autoScroll = true;
+      boolAutoScrollFlag = true;
     } else {
-      autoScroll = false;
+      boolAutoScrollFlag = false;
     }
   }
 
+  //function to play a chat "ding" sound
   function playNewMessagSound() {
     mainAudioChannel.src = soundChatDing;
     mainAudioChannel.play();
   }
 
+  //function reponsible for fetching session data from the backend.
   async function refetchSessionData() {
     try {
       const response = await axios.get(webapi.URL + "/chatsession", authHeader(sessionAuthToken));
-      setSessions(response.data);
-    // if (response.data[0] && activeSessionIndex) {
-    //     setActiveSession(response.data[0].sessionID);
-    //   }
+      setObjArraySessions(response.data);
     } catch (error) {
       alert(`HomePage.refetchSessions() request failed with error: ${error}`);
       return false;
@@ -173,22 +190,23 @@ export default function HomePage() {
     return true;
   }
 
+  //function reponsible for fetching personality data from the backend.
   async function refetchPersonalityData() {
     try {
       const response = await axios.get(webapi.URL + "/personality", authHeader(sessionAuthToken));
-      setPersonalities(response.data);
+      setObjArraypersonalities(response.data);
     } catch (error) {
-      alert(`HomePage.fetchPersonalities() request failed with error: ${error}`);
+      alert(`HomePage.fetchobjArraypersonalities() request failed with error: ${error}`);
       return false;
     }
     return true;
   }
 
+  //function reponsible for fetching chat conent data from the backend.
   async function refetchSessionDetailData() {
     try {
       const response = await axios.get(webapi.URL + "/chatsession/" + strActiveSession, authHeader(sessionAuthToken));
-      setChatlog(response.data);
-      //setSessionTitle();
+      setObjArrayChatContent(response.data);
       setSessionIndex();
     } catch (error) {
       alert(`HomePage.fetchChatHistory() request failed with error: ${error}`);
@@ -197,14 +215,15 @@ export default function HomePage() {
     return true;
   }
 
+  //function reponsible for fetching persons active in the active session from the backend
   async function refetchSessionPersonsData() {
     try {
       const response = await axios.get(webapi.URL + "/chatsession/" + strActiveSession + "/participant", authHeader(sessionAuthToken));
       const activePersons = response.data;
-      const personalityDataFiltered = personalities.filter((e) => {
+      const personalityDataFiltered = objArraypersonalities.filter((e) => {
         return activePersons.indexOf(e.personalityID) > -1;
       });
-      setActiveSessionPersons(personalityDataFiltered);
+      setObjArrayActiveSessionPersons(personalityDataFiltered);
     } catch (error) {
       alert(`HomePage.refetchSessionPersonsData() request failed with error: ${error}`);
       return false;
@@ -212,20 +231,15 @@ export default function HomePage() {
     return true;
   }
 
-  // function setSessionTitle() {
-  //   const titleIndex = sessions.findIndex((o) => o.sessionID === activeSession);
-  //   if (titleIndex !== -1) {
-  //     setActiveSessionTitle(sessions[titleIndex].sessionName);
-  //   }
-  // }
-
-  function setSessionIndex(){
-    const optionsIndex = sessions.findIndex((o) => o.sessionID === strActiveSession);
+  //function that determines the index of the currrent active sesion in objArraySessions so the active session can be referred as needed
+  function setSessionIndex() {
+    const optionsIndex = objArraySessions.findIndex((o) => o.sessionID === strActiveSession);
     if (optionsIndex !== -1) {
       setActiveSessionIndex(optionsIndex);
     }
   }
 
+  //function responsible for requesting new TTS audio to be generated on the backend, and then playing it back locally once generated.
   async function getAndPlayTTS(strText, strVoice, strMessageID) {
     try {
       const ttsObj = {
@@ -243,6 +257,7 @@ export default function HomePage() {
     }
   }
 
+  //function responsible from getting and playing previously generated TTS audio from the backend based on messageID
   async function handleSingleAudioPlayback(messageID) {
     try {
       const getURL = webapi.URL + "/ttsgen/" + messageID;
@@ -257,11 +272,12 @@ export default function HomePage() {
     }
   }
 
-  const handleSendChat = async (event) => {
+  //function to send new chat input from the user to the backend and receive replies
+  async function handleSendChat(event){
     if (!refUserInput.current.value) {
       return;
     }
-    const personalitiesList = personalities.map((e) => {
+    const objArraypersonalitiesList = objArraypersonalities.map((e) => {
       const obj = {
         name: e.name,
         personalityID: e.personalityID,
@@ -273,16 +289,16 @@ export default function HomePage() {
     try {
       const postURL = webapi.URL + "/chatsession/" + strActiveSession;
       const response = await axios.post(postURL, { senderID: "User", message: refUserInput.current.value }, authHeader(sessionAuthToken));
-      const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      ChangeAutoScroll(true);
+      const senderNameIndex = objArraypersonalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
+      ChangeboolAutoScrollFlag(true);
       if (response.data.message) {
-        setResponses([...objArrResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
+        setobjArrayResponses([...objArrayResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }, { name: objArraypersonalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: objArraypersonalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
         if (refTTSFlagInput.current.getAttribute("togglevalue") === "true") {
-          getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID);
+          getAndPlayTTS(response.data.message, objArraypersonalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       } else {
-        setResponses([...objArrResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }]);
+        setobjArrayResponses([...objArrayResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }]);
       }
       refUserInput.current.value = "";
     } catch (error) {
@@ -292,12 +308,14 @@ export default function HomePage() {
     return true;
   };
 
-  const handleSessionChange = async (sessionID) => {
-    ChangeAutoScroll(false);
+  //function for handling session change by the user
+  async function handleSessionChange(sessionID){
+    ChangeboolAutoScrollFlag(false);
     setStrActiveSession(sessionID);
   };
 
-  const handleAddSession = async () => {
+  //function for handling session add by the user
+  async function handleAddSession(){
     try {
       const postURL = webapi.URL + "/chatsession";
       const response = await axios.post(postURL, { sessionName: "New Session" }, authHeader(sessionAuthToken));
@@ -308,11 +326,12 @@ export default function HomePage() {
     }
   };
 
-  const handleDeleteSession = async (sessionID) => {
+  //function for handling session delete by the user
+  async function handleDeleteSession(sessionID){
     try {
       const delURL = webapi.URL + "/chatsession/" + sessionID;
       const response = await axios.delete(delURL, authHeader(sessionAuthToken));
-      if (sessionID === strActiveSession){
+      if (sessionID === strActiveSession) {
         setStrActiveSession("");
       }
       refetchSessionData();
@@ -322,7 +341,8 @@ export default function HomePage() {
     }
   };
 
-  const handleUpdateSession = async (sessionID, sessionName) => {
+  //function for handling session name change by the user
+  async function handleUpdateSession(sessionID, sessionName){
     try {
       const putURL = webapi.URL + "/chatsession/" + sessionID;
       const response = await axios.put(putURL, { sessionName: sessionName }, authHeader(sessionAuthToken));
@@ -333,7 +353,8 @@ export default function HomePage() {
     }
   };
 
-  const handleSendSkip = async (strAutoChatSession, objAutoChatResponses) => {
+  //function for "skip chat" where the user forces a chat reply from the server without inputting anything
+  async function handleSendSkip(strAutoChatSession, objAutoChatResponses){
     let currentActiveSession;
     let currentResponses;
 
@@ -344,10 +365,10 @@ export default function HomePage() {
       currentResponses = objAutoChatResponses;
     } else {
       currentActiveSession = strActiveSession;
-      currentResponses = objArrResponses;
+      currentResponses = objArrayResponses;
     }
 
-    const personalitiesList = personalities.map((e) => {
+    const objArraypersonalitiesList = objArraypersonalities.map((e) => {
       const obj = {
         name: e.name,
         personalityID: e.personalityID,
@@ -359,13 +380,13 @@ export default function HomePage() {
     try {
       const getURL = webapi.URL + "/chatsession/" + currentActiveSession + "/auto";
       const response = await axios.get(getURL, authHeader(sessionAuthToken));
-      const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
-      ChangeAutoScroll(true);
+      const senderNameIndex = objArraypersonalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
+      ChangeboolAutoScrollFlag(true);
       if (response.data.message) {
-        setResponses([...currentResponses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
+        setobjArrayResponses([...currentResponses, { name: objArraypersonalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: objArraypersonalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
         if (refTTSFlagInput.current.getAttribute("togglevalue") === "true") {
-          getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID);
+          getAndPlayTTS(response.data.message, objArraypersonalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       }
     } catch (error) {
@@ -374,78 +395,77 @@ export default function HomePage() {
     }
   };
 
-  const handleRemovePersonFromSession = async (personObj, sessionID) => {
+  //function for handling personality remove from active session by the user
+  async function handleRemovePersonFromSession(personObj, sessionID){
     try {
       const delURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personObj.personalityID;
       const response = await axios.delete(delURL, authHeader(sessionAuthToken));
-      const personsFiltered = activeSessionPersons.filter((e) => {
+      const personsFiltered = objArrayActiveSessionPersons.filter((e) => {
         return e.personalityID !== personObj.personalityID;
       });
-      setActiveSessionPersons(personsFiltered);
-      ChangeAutoScroll(true);
-      setResponses([...objArrResponses, { name: "JanusGPT", content: `${personObj.name} left the chat!`, timestamp: Date.now() }]);
+      setObjArrayActiveSessionPersons(personsFiltered);
+      ChangeboolAutoScrollFlag(true);
+      setobjArrayResponses([...objArrayResponses, { name: "JanusGPT", content: `${personObj.name} left the chat!`, timestamp: Date.now() }]);
     } catch (error) {
       alert(`HomePage.handleRemovePersonFromSession() request failed with error: ${error}`);
       return -1;
     }
   };
 
-  const handleAddPersonToSession = async (personObj, sessionID) => {
+  //function for handling personality add from active session by the user
+  async function handleAddPersonToSession(personObj, sessionID){
     try {
       const postURL = webapi.URL + "/chatsession/" + sessionID + "/participant/" + personObj.personalityID;
       const response = await axios.post(postURL, {}, authHeader(sessionAuthToken));
-      setActiveSessionPersons([...activeSessionPersons, personObj]);
-      ChangeAutoScroll(true);
-      setResponses([...objArrResponses, { name: "JanusGPT", content: `${personObj.name} entered the chat!`, timestamp: Date.now() }]);
+      setObjArrayActiveSessionPersons([...objArrayActiveSessionPersons, personObj]);
+      ChangeboolAutoScrollFlag(true);
+      setobjArrayResponses([...objArrayResponses, { name: "JanusGPT", content: `${personObj.name} entered the chat!`, timestamp: Date.now() }]);
     } catch (error) {
       alert(`HomePage.handleAddPersonToSession() request failed with error: ${error}`);
       return -1;
     }
   };
 
-  const handleChangeCurrentSessionOptions = async() => {
+ //function for handling changes to the curret session options/flags by the user
+  async function handleChangeCurrentSessionOptions(){
     try {
-      if(sessions[activeSessionIndex]?.sessionName === undefined){
+      if (objArraySessions[activeSessionIndex]?.sessionName === undefined) {
         return;
-      }else{
-        
+      } else {
       }
-      
+
       const putURL = webapi.URL + "/chatsession/" + strActiveSession;
-      const response = await axios.put(putURL, 
-        { sessionName: sessions[activeSessionIndex].sessionName,
-          optionTurns: (inputTakeTurnsFlag.current.getAttribute("toggleValue") === "true") ? 1:0, 
-          optionShort: (inputShortResponseFlag.current.getAttribute("toggleValue") === "true") ? 1:0, 
-          optionTopics: (inputChangeTopicsFlag.current.getAttribute("toggleValue") === "true") ? 1:0, 
-          optionEmojii: (inputEmojiiFlag.current.getAttribute("toggleValue") === "true") ? 1:0 }, 
-          authHeader(sessionAuthToken));
+      const response = await axios.put(putURL, { sessionName: objArraySessions[activeSessionIndex].sessionName, optionTurns: refTakeTurnsFlag.current.getAttribute("toggleValue") === "true" ? 1 : 0, optionShort: refShortResponseFlag.current.getAttribute("toggleValue") === "true" ? 1 : 0, optionTopics: refChangeTopicsFlag.current.getAttribute("toggleValue") === "true" ? 1 : 0, optionEmojii: refEmojiiFlag.current.getAttribute("toggleValue") === "true" ? 1 : 0 }, authHeader(sessionAuthToken));
     } catch (error) {
       alert(`HomePage.handleChangeCurrentSessionOptions() request failed with error: ${error}`);
-      console.log(inputTakeTurnsFlag.current.getAttribute("toggleValue") === "true" ? 1:0);
+      console.log(refTakeTurnsFlag.current.getAttribute("toggleValue") === "true" ? 1 : 0);
       return -1;
     }
   };
 
-
   return (
     <div className="HomePage">
       <div className="HomePage__selectionBar">
-        <Participants strActiveSession={strActiveSession} objArrayActivePersonalities={activeSessionPersons} objArrayPersonalities={personalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
+        <Participants strActiveSession={strActiveSession} objArrayActiveobjArraypersonalities={objArrayActiveSessionPersons} objArrayobjArraypersonalities={objArraypersonalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
       </div>
       <div className="HomePage__side">
-        <Sidebar objArrChatSessions={sessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} strActiveSession={strActiveSession} />
+        <Sidebar objArrChatSessions={objArraySessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} strActiveSession={strActiveSession} />
       </div>
       <div className="HomePage__main">
-        <h1 className="HomePage__main__title font-pageTitle">{sessions[activeSessionIndex]?.sessionName}</h1>
-        {strActiveSession? <div className="HomePage__main__sessionOptions">
-              <ToggleSwitch refToggleInput={inputTakeTurnsFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionTurns} strIconName="Turns" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
-              <ToggleSwitch refToggleInput={inputChangeTopicsFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionTopics} strIconName="Topics" boolHideLabel={false} callback={handleChangeCurrentSessionOptions}/>
-              <ToggleSwitch refToggleInput={inputEmojiiFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionEmojii} strIconName="Emojiis" boolHideLabel={false}  callback={handleChangeCurrentSessionOptions}/>
-              <ToggleSwitch refToggleInput={inputShortResponseFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionShort} strIconName="Short" boolHideLabel={false} callback={handleChangeCurrentSessionOptions}/>
-            </div> : <></>}
-        
+        <h1 className="HomePage__main__title font-pageTitle">{objArraySessions[activeSessionIndex]?.sessionName}</h1>
+        {strActiveSession ? (
+          <div className="HomePage__main__sessionOptions">
+            <ToggleSwitch refToggleInput={refTakeTurnsFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionTurns} strIconName="Turns" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+            <ToggleSwitch refToggleInput={refChangeTopicsFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionTopics} strIconName="Topics" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+            <ToggleSwitch refToggleInput={refEmojiiFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionEmojii} strIconName="Emojiis" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+            <ToggleSwitch refToggleInput={refShortResponseFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionShort} strIconName="Short" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+          </div>
+        ) : (
+          <></>
+        )}
+
         <div className="HomePage__main__content">
-          <ResponseList objArrResponses={objArrResponses} audioPlayCallBack={handleSingleAudioPlayback} />
+          <ResponseList objArrayResponses={objArrayResponses} audioPlayCallBack={handleSingleAudioPlayback} />
         </div>
       </div>
       <div className="HomePage__input">
