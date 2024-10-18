@@ -36,8 +36,10 @@
     align-items: flex-start;
     justify-content: flex-start;
     max-width: 1100px;
+    padding-right: 40px;
     @include displayMobile {
       //padding-left: 25px;
+      padding-right: 10px;
     }
     &__textbox {
       border-radius: 10px;

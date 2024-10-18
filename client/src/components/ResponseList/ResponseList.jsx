@@ -1,5 +1,5 @@
 /*****************************
- * Component: RespondCardList
+ * Component: RespondList
  * Purpose: Creates a list of ResponseCards to display the content of a active chat session
  * Prop notes: none
  * Usage notes: none
