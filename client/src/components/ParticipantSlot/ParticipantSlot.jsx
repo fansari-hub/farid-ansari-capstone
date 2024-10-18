@@ -1,35 +1,43 @@
+/*****************************
+ * Component: ParticipantSlot
+ * Purpose: A single participant (with remove action), used to build list of session participants by the "Participants" component.
+ * Prop notes: none
+ * Usage notes: none
+ ****************************/
 import webapi from "../../utils/webapi";
 
 import "./ParticipantSlot.scss";
-import { useState } from "react";
 import defaultLogo from "../../assets/images/logo.webp";
 import Icon from "../Icon/Icon";
-const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp"
+const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp";
 
+export default function ParticipantSlot({ objPersonality, strActiveSession, removePersonCallBack }) {
 
-export default function ParticipantSlot({ personalitiesObj, activeSession, removePersonCallBack }) {
-  
   let profileImage = defaultLogo;
-  if (personalitiesObj.avatarImg){
-    profileImage = webapi.URL + "/" + personalitiesObj.avatarImg;
+  
+  if (objPersonality.avatarImg) {
+    profileImage = webapi.URL + "/" + objPersonality.avatarImg;
   }
 
-  
-  const handleRemovePerson = (personID) => {
-    removePersonCallBack(personID, activeSession);
+  function handleRemovePerson(personID){
+    removePersonCallBack(personID, strActiveSession);
   };
-
 
   return (
     <>
       <div className="ParticipantSlot__group">
-        <img className="ParticipantSlot__group__image" src={profileImage} alt="avatar_icon"
-          onError={event => { 
-            event.target.src = erroImgPath
+        <img
+          className="ParticipantSlot__group__image"
+          src={profileImage}
+          alt="avatar_icon"
+          onError={(event) => {
+            event.target.src = erroImgPath;
             event.onerror = null;
-            }} 
+          }}
         />
-        <div className="ParticipantSlot__group__delete"  onClick={() => handleRemovePerson(personalitiesObj)}><Icon iconIndex={10} iconName="Remove" actionType="negative" hideLabel={true} displayNaked={true} noGap={true} /></div>
+        <div className="ParticipantSlot__group__delete" onClick={() => handleRemovePerson(objPersonality)}>
+          <Icon iconIndex={10} strIconName="Remove" strActionType="negative" boolHideLabel={true} boolDisplayNaked={true} boolNoGap={true} />
+        </div>
       </div>
     </>
   );

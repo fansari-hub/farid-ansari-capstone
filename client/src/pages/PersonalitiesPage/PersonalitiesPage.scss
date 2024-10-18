@@ -5,7 +5,7 @@
   display: flex;
   background-color: $colPrimary-Background;
 
-  @include displayMobile{
+  @include displayMobile {
     flex-direction: column;
   }
 
@@ -14,7 +14,7 @@
     background-color: none;
     position: fixed;
     margin-top: 20px;
-    @include displayMobile{
+    @include displayMobile {
       position: relative;
     }
   }
@@ -24,27 +24,27 @@
     min-height: 100vh;
     color: $colPrimary-MainText;
     flex-grow: 1;
-    @include displayMobile{
+    @include displayMobile {
       margin-left: 5px;
       margin-right: 25px;
     }
 
-    &__title{
+    &__title {
       text-align: left;
       padding-left: 210px;
       padding-bottom: 20px;
-      @include displayMobile{
-        padding-left :0;
-        padding-right :0;
+      @include displayMobile {
+        padding-left: 0;
+        padding-right: 0;
         text-align: center;
       }
     }
 
     &__content {
-     padding-left: 185px;
+      padding-left: 185px;
       max-width: 1280px;
       text-align: left;
-      @include displayMobile{
+      @include displayMobile {
         padding-left: 0;
         padding-right: 0;
       }

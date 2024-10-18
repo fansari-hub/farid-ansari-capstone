@@ -13,12 +13,12 @@
     top: 10vh;
     left: 35vw;
     @include displayMobile {
-        left: 10vw;
-        top: 5vh;
+      left: 10vw;
+      top: 5vh;
     }
 
     &__closeButton {
-      position:relative;
+      position: relative;
       left: -20px;
       top: 20px;
       font-size: 2rem;

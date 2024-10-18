@@ -1,3 +1,10 @@
+/*****************************
+ * Component: RespondCard
+ * Purpose: Displays a single chat response (by user or chat personality)
+ * Prop notes: none
+ * Usage notes: none
+ ****************************/
+
 import webapi from "../../utils/webapi.js";
 import utils from "../../utils/utils.js";
 import "./ResponseCard.scss";
@@ -5,19 +12,18 @@ import defaultLogo from "../../assets/images/logo.webp"
 const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp"
 
 
-export default function ResponseCard({ responseObj, audioPlayCallBack }) {
+export default function ResponseCard({ objResponse, audioPlayCallBack }) {
   let avatarImg;
   
-  if (responseObj.name === "You" || responseObj.name === "JanusGPT"){
+  if (objResponse.name === "You" || objResponse.name === "JanusGPT"){
     avatarImg = defaultLogo;
-  }
-  else{
-    avatarImg = responseObj.avatarImg
+  }else{
+    avatarImg = objResponse.avatarImg
   }
 
 
   function handlePlayBack(){
-    audioPlayCallBack(responseObj.messageID);
+    audioPlayCallBack(objResponse.messageID);
   }
   
   return (
@@ -33,10 +39,10 @@ export default function ResponseCard({ responseObj, audioPlayCallBack }) {
         </div>
         <div className="ResponseCard__right">
           <div className="ResponseCard__right__header">
-            <p className="ResponseCard__right__header__name font-messageHeader">{responseObj.name}</p>
-            <p className="ResponseCard__right__header__date font-messageHeaderDate">{utils.getRelativeTime(responseObj.timestamp)}</p>
+            <p className="ResponseCard__right__header__name font-messageHeader">{objResponse.name}</p>
+            <p className="ResponseCard__right__header__date font-messageHeaderDate">{utils.getRelativeTime(objResponse.timestamp)}</p>
           </div>
-          <div className="ResponseCard__right__content font-chat" dangerouslySetInnerHTML={{ __html: responseObj.content }}></div>
+          <div className="ResponseCard__right__content font-chat" dangerouslySetInnerHTML={{ __html: objResponse.content }}></div>
         </div>
       </div>
     </>

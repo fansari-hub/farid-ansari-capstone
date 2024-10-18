@@ -1,3 +1,9 @@
+/*****************************
+ * Component Page: SignInPage
+ * Purpose: Page for user login / signup and signout
+ * Notes: uses context provided by the App component/page to link to appropriate user authentication callback functions.
+ ****************************/
+
 import "./SignInPage.scss";
 import UserConfig from "../../components/UserConfig/UserConfig";
 import defaultLogo from "../../assets/images/logo.webp";
@@ -12,27 +18,27 @@ function SignInPage() {
   const [formActive, setFormActive] = useState(false);
   const [formMode, setFormMode] = useState("login");
 
-  const handleEmailLogin = () => {
+  function handleEmailLogin(){
     setFormMode("login");
     setFormActive(true);
   };
 
-  const handleEmailRegister = () => {
+  function handleEmailRegister(){
     setFormMode("create");
     setFormActive(true);
   };
 
-  const callbackEmailRegister = async (strEmail, strPassword, strName) => {
+  async function callbackEmailRegister(strEmail, strPassword, strName){
     await createAccountUsingEmail(strEmail, strPassword, strName);
     setFormActive(false);
   };
 
-  const callbackEmailLogin = async (strEmail, strPassword) => {
+  async function callbackEmailLogin(strEmail, strPassword){
     await signInWithEmail(strEmail, strPassword);
     setFormActive(false);
   };
 
-  const handleCancelForm = () => {
+  function handleCancelForm(){
     setFormActive(false);
   };
 
@@ -40,7 +46,7 @@ function SignInPage() {
     <>
       <div className="SignInPage">
         <div className="SignInPage__left">
-          <Sidebar chatSessions={[]} />
+          <Sidebar objArrChatSessions={[]} />
         </div>
         <div className="SignInPage__main">
           <div className="SignInPage__main__title">
@@ -56,7 +62,7 @@ function SignInPage() {
             ) : (
               <div className="SignInPage__main__content__signInBlock">
                 {formActive ? (
-                  <UserRegisterLogin createUserCallBack={callbackEmailRegister} loginUserCallBack={callbackEmailLogin} cancelLoginCallback={handleCancelForm} loginType={formMode} />
+                  <UserRegisterLogin createUserCallBack={callbackEmailRegister} loginUserCallBack={callbackEmailLogin} cancelLoginCallback={handleCancelForm} strLoginType={formMode} />
                 ) : (
                   <>
                     <button className="SignInPage__main__content__signInBlock__button" onClick={signInWithGoogle}>

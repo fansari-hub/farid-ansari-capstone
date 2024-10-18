@@ -2,33 +2,32 @@
 @use "../../styles//partials/mixins" as *;
 
 .ParticipantSlot {
-    &__group {
-      height: 70px;
-      @include displayMobile{
-        height: 60px;
+  &__group {
+    height: 70px;
+    @include displayMobile {
+      height: 60px;
+    }
+    &__image {
+      height: 60px;
+      border-radius: 50px;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px;
+      padding: 0;
+      margin: 0;
+      @include displayMobile {
+        height: 50px;
       }
-      &__image {
-        height: 60px;
-        border-radius: 50px;
-        border: thin outset $colSecondary-MutedBorder;
-        box-shadow: 1px 1px;
-        padding: 0;
-        margin: 0;
-        @include displayMobile {
-          height: 50px;
-        }
-      }
-      &__delete {
-        scale: 1.1;
-        //width: 25px;
-        position: relative;
-        top: -25px;
-        left: 55px;
-        @include displayMobile{
+    }
+    &__delete {
+      scale: 1.1;
+      position: relative;
+      top: -25px;
+      left: 55px;
+      @include displayMobile {
         left: 40px;
         top: -15px;
-        scale: 1.0;
-        }
+        scale: 1;
       }
     }
   }
+}

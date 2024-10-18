@@ -10,9 +10,9 @@
   align-items: center;
   background-color: $colPrimary-ItemFill;
   gap: 50px;
-  border-bottom: thin solid rgba(0, 0, 0, 0.269) ;
+  border-bottom: thin solid rgba(0, 0, 0, 0.269);
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.24);
-  @include displayMobile{
+  @include displayMobile {
     gap: 30px;
   }
   &__add {
@@ -21,28 +21,28 @@
     align-items: center;
     justify-items: flex-start;
     gap: 12px;
-    &__text{
-      color : $colPrimary-MutedText;
+    &__text {
+      color: $colPrimary-MutedText;
       padding-bottom: 10px;
       font-family: monospace;
     }
     &__addIcon {
-     background-color: none;
-     scale: 1.5;
-     margin-left: 20px;
-     flex-grow: 0.25;
+      background-color: none;
+      scale: 1.5;
+      margin-left: 20px;
+      flex-grow: 0.25;
     }
   }
   &__list {
     flex-grow: 0.75;
     display: flex;
     align-items: flex-end;
-    overflow:auto;
+    overflow: auto;
     scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
     scrollbar-width: thin;
     row-gap: 5px;
     column-gap: 35px;
-    @include displayMobile{
+    @include displayMobile {
       column-gap: 25px;
       padding-right: 40px;
     }

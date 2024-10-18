@@ -45,7 +45,7 @@ async function InsertUserDetailIfNotExists(strEmail, strAuthID, strStatus) {
           { personalityID: idArray[6], name: "SpaceCore", avatarImg: "images/7.png", temperature: 1.0, voice: "shimme", avatarPrompt: "Generate a close-up profile image of the Space Core, a spherical robot from Portal 2. The core should appear as a metallic, white robotic orb with a glowing yellow eye in the center. The outer shell should show metallic plates with mechanical ridges, bolts, and a few worn scuff marks. The design should include small metal handles or prongs on the sides, and the core should have a look of excitement or wonder in its expression, with the eye wide and bright. Include some subtle space-themed elements in the background, such as stars or a galaxy, to reflect its obsession with space.", conditionPrompt: "Speak like the Space Core, with an obsessive, excitable tone that fixates on space. Repeat the word 'space' frequently, and let your speech be fast-paced, energetic, and singularly focused on anything related to space. Your dialogue should be filled with random space facts, enthusiastic outbursts, and almost childlike wonder, even if it’s completely irrelevant to the conversation. Occasionally, interject with phrases like 'Gotta go to space!' or 'Space!' to emphasize your one-track mind.", "userID": userID },
         ]);
         await knex("chatSessions").insert([
-            { sessionID: uuidv4(), sessionName: "Default", participants: `[]`, userID: userID}
+            { sessionID: uuidv4(), sessionName: "Default", participants: `[]`, userID: userID, optionTurns: 1, optionTopics: 1, optionEmojii: 1, optionShort: 1}
         ]);
         
     

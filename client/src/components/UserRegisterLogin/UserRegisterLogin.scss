@@ -3,17 +3,6 @@
 @use "../../styles//partials/mixins" as *;
 
 .UserRegisterLogin {
-  // @include revealing-animation;
-  //  background-color: $colPrimary-ItemFill;
-  //margin: 20px;
-  //  padding: 20px;
-  //  border: thin outset $colSecondary-MutedBorder;
-  //  box-shadow: 1px 1px black;
-  //  border-radius: 15px;
-  //  @include displayMobile {
-  //   margin: 10px;
-  //  }
-
   &__group {
     margin-top: 20px;
     display: flex;
