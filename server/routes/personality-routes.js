@@ -7,7 +7,7 @@ const slowDown = require('express-slow-down');
 
 const rateLimiter = rateLimit({
 	windowMs: 0.1667 * 60 * 1000, // 10 second window
-	limit: 10, // Limit each IP to x requests per window
+	limit: 15, // Limit each IP to x requests per window
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 })
