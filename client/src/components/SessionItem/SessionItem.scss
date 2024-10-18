@@ -25,7 +25,7 @@
       &:enabled {
         color: $colPrimary-ItemFill;
       }
-      &--active{
+      &--active {
         color: $colPrimary-MainText;
         font-weight: bolder;
       }
@@ -34,7 +34,7 @@
       background-color: none;
     }
     &__edit {
-    background-color: none;
+      background-color: none;
     }
   }
 }

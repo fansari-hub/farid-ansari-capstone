@@ -8,10 +8,9 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
-  @include displayMobile{
+  @include displayMobile {
     flex-direction: column;
-    gap: 0px
-
+    gap: 0px;
   }
   &--off {
     color: $colPrimary-MainText;
@@ -25,7 +24,7 @@
   &__image {
     width: 2.2rem;
     @include displayMobile {
-      width: 2.0rem;
+      width: 2rem;
     }
     &:hover {
       cursor: pointer;

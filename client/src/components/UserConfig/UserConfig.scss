@@ -3,9 +3,7 @@
 @use "../../styles//partials/mixins" as *;
 
 .UserConfig {
-  // @include revealing-animation;
   background-color: $colPrimary-ItemFill;
-  //margin: 20px;
   padding: 20px;
   border: thin outset $colSecondary-MutedBorder;
   box-shadow: 1px 1px black;

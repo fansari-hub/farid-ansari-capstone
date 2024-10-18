@@ -55,10 +55,10 @@ export default function PersonalitiesPage() {
     }
   }
 
-  const handleUpdatePersonality = async (personalityObj) => {
+  const handleUpdatePersonality = async (objPersonality) => {
     try {
-      const updateURL = webapi.URL + "/personality/" + personalityObj.personalityID;
-      const response = await axios.put(updateURL, personalityObj, authHeader(sessionAuthToken));
+      const updateURL = webapi.URL + "/personality/" + objPersonality.personalityID;
+      const response = await axios.put(updateURL, objPersonality, authHeader(sessionAuthToken));
       refetchPersonalities();
     } catch (error) {
       alert(`PersonalitiesPage.handleUpdatePersonality() request failed with error: ${error}`);
@@ -108,16 +108,16 @@ export default function PersonalitiesPage() {
   return (
     <div className="PersonalitiesPage">
       <div className="PersonalitiesPage__left">
-        <Sidebar chatSessions={[]} />
+        <Sidebar objArrChatSessions={[]} />
       </div>
       <div className="PersonalitiesPage__main">
         <h1 className="PersonalitiesPage__main__title font-pageTitle">Configure Personas</h1>
         <div className="PersonalitiesPage__main__content">
           {personalities.map((i, x) => (
-            <PersonalityConfig key={i.personalityID} personalityObj={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} generateImgCallBack={handleGenerateAvatarImg} />
+            <PersonalityConfig key={i.personalityID} objPersonality={i} updateCallBack={handleUpdatePersonality} deleteCallBack={handleDeletePersonality} generateImgCallBack={handleGenerateAvatarImg} />
           ))}
           <div className="PersonalitiesPage__main__content__bottom">
-            <div className="PersonalitiesPage__main__content__bottom__add"  onClick={handleAddPersonality}><Icon iconIndex={9} iconName={"Add New Slot"} actionType="positive" /></div>
+            <div className="PersonalitiesPage__main__content__bottom__add"  onClick={handleAddPersonality}><Icon iconIndex={9} strIconName={"Add New Slot"} strActionType="positive" /></div>
           </div>
         </div>
       </div>

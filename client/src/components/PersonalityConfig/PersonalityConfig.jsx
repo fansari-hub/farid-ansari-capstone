@@ -1,3 +1,10 @@
+/*****************************
+ * Component: PesonalityConfig
+ * Purpose: Displays a configuration card to review/setup a single personality.
+ * Prop notes: none
+ * Usage notes: none
+ ****************************/
+
 import webapi from "../../utils/webapi";
 import "./PersonalityConfig.scss";
 import { useRef, useState, useEffect } from "react";
@@ -6,9 +13,10 @@ import Icon from "../Icon/Icon";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 const erroImgPath = webapi.URL + "/images/" + "brokenProfilePic.webp";
 
-export default function PersonalityConfig({ personalityObj, updateCallBack, deleteCallBack, generateImgCallBack }) {
-  const [formData, setFormData] = useState({ ...personalityObj });
+export default function PersonalityConfig({ objPersonality, updateCallBack, deleteCallBack, generateImgCallBack }) {
+  const [formData, setFormData] = useState({ ...objPersonality });
   const [avatarImage, setAvatarImage] = useState(defaultLogo);
+
   const userInputName = useRef();
   const userInputTemperature = useRef();
   const userInputPrompt = useRef();
@@ -16,55 +24,69 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
   const userInputVoice = useRef();
   const [confirmModal, setConfirmModal] = useState(<></>);
 
+  //Upon mount, see if there is a existing generated avatar image, if yes, replace default image.
   useEffect(() => {
-    if (personalityObj.avatarImg && personalityObj.avatarImg !== "") {
-      setAvatarImage(webapi.URL + "/" + personalityObj.avatarImg);
+    if (objPersonality.avatarImg && objPersonality.avatarImg !== "") {
+      setAvatarImage(webapi.URL + "/" + objPersonality.avatarImg);
     }
   }, []);
 
-  const handleSave = (e) => {
+  function handleSave(e) {
     e.preventDefault();
-    if (userInputName.current.value === "" || userInputPrompt.current.value==="" || userAvatarPrompt.current.value ==="" || userInputVoice.current.value === ""){
+
+    if (userInputName.current.value === "" || userInputPrompt.current.value === "" || userAvatarPrompt.current.value === "" || userInputVoice.current.value === "") {
       return false;
     }
-    updateCallBack({ personalityID: personalityObj.personalityID, name: userInputName.current.value, avatarImg: personalityObj.avatarImg, temperature: +userInputTemperature.current.value, conditionPrompt: userInputPrompt.current.value, avatarPrompt: userAvatarPrompt.current.value, voice: userInputVoice.current.value });
+
+    updateCallBack({ personalityID: objPersonality.personalityID, name: userInputName.current.value, avatarImg: objPersonality.avatarImg, temperature: +userInputTemperature.current.value, conditionPrompt: userInputPrompt.current.value, avatarPrompt: userAvatarPrompt.current.value, voice: userInputVoice.current.value });
     userInputName.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
     userInputTemperature.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
     userInputPrompt.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
     userAvatarPrompt.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
     userInputVoice.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
-  };
+  }
 
-  const handleDelete = (e) => {
+  function handleDelete(e) {
     e.preventDefault();
-    deleteCallBack(personalityObj.personalityID);
-  };
+    deleteCallBack(objPersonality.personalityID);
+  }
 
-  const handleGenerate = (e) => {
+  function handleGenerate(e) {
     e.preventDefault();
     setAvatarImage(defaultLogo);
-    generateImgCallBack(userAvatarPrompt.current.value, personalityObj.personalityID);
+    generateImgCallBack(userAvatarPrompt.current.value, objPersonality.personalityID);
     userAvatarPrompt.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
-  };
+  }
 
-  const handleChange = (e) => {
+  function handleChange(e) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    if (e.target.value === ""){
+    if (e.target.value === "") {
       e.target.style.backgroundColor = "#4d2e02";
-    } else{
+    } else {
       e.target.style.backgroundColor = "#024d06";
     }
-  };
-  function handleShowConfirmDeleteModal(){
-    setConfirmModal( <ConfirmActionModal callbackAccept={(e) => {handleDelete(e);setConfirmModal(<></>);}} callbackReject={(e) => {setConfirmModal(<></>);}} actiontype="delete"/>);
-  };
+  }
+
+  function handleShowConfirmDeleteModal() {
+    setConfirmModal( <ConfirmActionModal
+        callbackAccept={(e) => {
+          handleDelete(e);
+          setConfirmModal(<></>);
+        }}
+        callbackReject={(e) => {
+          setConfirmModal(<></>);
+        }}
+        strActionType="delete"
+      />
+    );
+  }
 
   return (
     <>
-    {confirmModal}
+      {confirmModal}
       <div className="PersonalityConfig">
-        <form id={personalityObj.personalityID}>
+        <form id={objPersonality.personalityID}>
           <div className="PersonalityConfig__avatar">
             <img
               className="PersonalityConfig__avatar__picture"
@@ -77,10 +99,12 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
             />
             <textarea ref={userAvatarPrompt} name="avatarPrompt" placeholder="Enter prompt to describe avatar profile picture and then press Generate Avatar " className="PersonalityConfig__avatar__prompt font-promptInput" value={formData.avatarPrompt} onChange={handleChange}></textarea>
           </div>
-          
+
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label font-dataLabel"></p>
-            <div className="PersonalityConfig__avatar__generate" onClick={handleGenerate} ><Icon iconIndex={1} iconName={"Generate Image"} actionType="neutral" /></div>
+            <div className="PersonalityConfig__avatar__generate" onClick={handleGenerate}>
+              <Icon iconIndex={1} strIconName={"Generate Image"} strActionType="neutral" />
+            </div>
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label font-dataLabel">Name</p>
@@ -95,7 +119,7 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
             <textarea ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt font-promptInput" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
           </div>
           <div className="PersonalityConfig__group">
-            <p className="PersonalityConfig__group__label font-dataLabel" >TTS Voice</p>
+            <p className="PersonalityConfig__group__label font-dataLabel">TTS Voice</p>
             <select ref={userInputVoice} name="voice" className="PersonalityConfig__group__data font-input" type="text" value={formData.voice} onChange={handleChange}>
               <option value="alloy">Alloy</option>
               <option value="echo">Echo</option>
@@ -105,12 +129,13 @@ export default function PersonalityConfig({ personalityObj, updateCallBack, dele
             </select>
           </div>
           <div className="PersonalityConfig__group">
-           <div className="PersonalityConfig__group__label"></div>
-          <div className="PersonalityConfig__group__btn" onClick={handleSave}><Icon iconIndex={12} iconName={"Save"} actionType="positive"  /></div>
-          <div className="PersonalityConfig__group__btn" onClick={handleShowConfirmDeleteModal}><Icon iconIndex={4} iconName={"Delete"} actionType="negative" /></div>
-            
-            
-            
+            <div className="PersonalityConfig__group__label"></div>
+            <div className="PersonalityConfig__group__btn" onClick={handleSave}>
+              <Icon iconIndex={12} strIconName={"Save"} strActionType="positive" />
+            </div>
+            <div className="PersonalityConfig__group__btn" onClick={handleShowConfirmDeleteModal}>
+              <Icon iconIndex={4} strIconName={"Delete"} strActionType="negative" />
+            </div>
           </div>
         </form>
       </div>

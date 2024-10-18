@@ -40,7 +40,7 @@ function SignInPage() {
     <>
       <div className="SignInPage">
         <div className="SignInPage__left">
-          <Sidebar chatSessions={[]} />
+          <Sidebar objArrChatSessions={[]} />
         </div>
         <div className="SignInPage__main">
           <div className="SignInPage__main__title">
@@ -56,7 +56,7 @@ function SignInPage() {
             ) : (
               <div className="SignInPage__main__content__signInBlock">
                 {formActive ? (
-                  <UserRegisterLogin createUserCallBack={callbackEmailRegister} loginUserCallBack={callbackEmailLogin} cancelLoginCallback={handleCancelForm} loginType={formMode} />
+                  <UserRegisterLogin createUserCallBack={callbackEmailRegister} loginUserCallBack={callbackEmailLogin} cancelLoginCallback={handleCancelForm} strLoginType={formMode} />
                 ) : (
                   <>
                     <button className="SignInPage__main__content__signInBlock__button" onClick={signInWithGoogle}>
