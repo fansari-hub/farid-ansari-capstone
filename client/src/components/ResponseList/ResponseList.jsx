@@ -6,12 +6,12 @@
  ****************************/
 import ResponseCard from "../ResponseCard/ResponseCard.jsx";
 
-export default function ResponseList({ objArrResponses, audioPlayCallBack }) {
+export default function ResponseList({ objArrayResponses, audioPlayCallBack }) {
   
   return (
     <>
       <div className="ResponseList">
-        {objArrResponses.map((i, x) => (
+        {objArrayResponses.map((i, x) => (
           <ResponseCard objResponse={i} audioPlayCallBack={audioPlayCallBack} key={x} />
         ))}
       </div>

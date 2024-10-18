@@ -446,7 +446,7 @@ export default function HomePage() {
   return (
     <div className="HomePage">
       <div className="HomePage__selectionBar">
-        <Participants strActiveSession={strActiveSession} objArrayActiveobjArraypersonalities={objArrayActiveSessionPersons} objArrayobjArraypersonalities={objArraypersonalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
+        <Participants strActiveSession={strActiveSession} objArrayActivePersonalities={objArrayActiveSessionPersons} objArrayPersonalities={objArraypersonalities} removePersonCallBack={handleRemovePersonFromSession} addPersonCallBack={handleAddPersonToSession} />
       </div>
       <div className="HomePage__side">
         <Sidebar objArrChatSessions={objArraySessions} switchSessionCallBack={handleSessionChange} addSessionCallback={handleAddSession} deleteSessionCallback={handleDeleteSession} updateSessionCallback={handleUpdateSession} strActiveSession={strActiveSession} />
