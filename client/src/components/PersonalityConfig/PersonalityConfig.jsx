@@ -17,11 +17,11 @@ export default function PersonalityConfig({ objPersonality, updateCallBack, dele
   const [formData, setFormData] = useState({ ...objPersonality });
   const [avatarImage, setAvatarImage] = useState(defaultLogo);
 
-  const userInputName = useRef();
-  const userInputTemperature = useRef();
-  const userInputPrompt = useRef();
+  const refUserInputName = useRef();
+  const refUserInputTemperature = useRef();
+  const refUserInputPrompt = useRef();
   const userAvatarPrompt = useRef();
-  const userInputVoice = useRef();
+  const refUserInputVoice = useRef();
   const [confirmModal, setConfirmModal] = useState(<></>);
 
   //Upon mount, see if there is a existing generated avatar image, if yes, replace default image.
@@ -34,16 +34,16 @@ export default function PersonalityConfig({ objPersonality, updateCallBack, dele
   function handleSave(e) {
     e.preventDefault();
 
-    if (userInputName.current.value === "" || userInputPrompt.current.value === "" || userAvatarPrompt.current.value === "" || userInputVoice.current.value === "") {
+    if (refUserInputName.current.value === "" || refUserInputPrompt.current.value === "" || userAvatarPrompt.current.value === "" || refUserInputVoice.current.value === "") {
       return false;
     }
 
-    updateCallBack({ personalityID: objPersonality.personalityID, name: userInputName.current.value, avatarImg: objPersonality.avatarImg, temperature: +userInputTemperature.current.value, conditionPrompt: userInputPrompt.current.value, avatarPrompt: userAvatarPrompt.current.value, voice: userInputVoice.current.value });
-    userInputName.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
-    userInputTemperature.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
-    userInputPrompt.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
+    updateCallBack({ personalityID: objPersonality.personalityID, name: refUserInputName.current.value, avatarImg: objPersonality.avatarImg, temperature: +refUserInputTemperature.current.value, conditionPrompt: refUserInputPrompt.current.value, avatarPrompt: userAvatarPrompt.current.value, voice: refUserInputVoice.current.value });
+    refUserInputName.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
+    refUserInputTemperature.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
+    refUserInputPrompt.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
     userAvatarPrompt.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
-    userInputVoice.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
+    refUserInputVoice.current.style.backgroundColor = "rgba(47, 79, 79, 0.195)";
   }
 
   function handleDelete(e) {
@@ -108,19 +108,19 @@ export default function PersonalityConfig({ objPersonality, updateCallBack, dele
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label font-dataLabel">Name</p>
-            <input ref={userInputName} name="name" className="PersonalityConfig__group__data font-input" placeholder="Enter a name" type="text" value={formData.name} onChange={handleChange}></input>
+            <input ref={refUserInputName} name="name" className="PersonalityConfig__group__data font-input" placeholder="Enter a name" type="text" value={formData.name} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label font-dataLabel">Temperature</p>
-            <input ref={userInputTemperature} name="temperature" className="PersonalityConfig__group__data PersonalityConfig__group__data--noborder" type="range" step="0.1" min="0.0" max="1.0" value={formData.temperature} onChange={handleChange}></input>
+            <input ref={refUserInputTemperature} name="temperature" className="PersonalityConfig__group__data PersonalityConfig__group__data--noborder" type="range" step="0.1" min="0.0" max="1.0" value={formData.temperature} onChange={handleChange}></input>
           </div>
           <div className="PersonalityConfig__group PersonalityConfig__group--column">
             <p className="PersonalityConfig__group__label font-dataLabel">Prompt</p>
-            <textarea ref={userInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt font-promptInput" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
+            <textarea ref={refUserInputPrompt} name="conditionPrompt" className="PersonalityConfig__group__prompt font-promptInput" placeholder="Enter a prompt that describes the personality and the role you want this character to take." value={formData.conditionPrompt} onChange={handleChange}></textarea>
           </div>
           <div className="PersonalityConfig__group">
             <p className="PersonalityConfig__group__label font-dataLabel">TTS Voice</p>
-            <select ref={userInputVoice} name="voice" className="PersonalityConfig__group__data font-input" type="text" value={formData.voice} onChange={handleChange}>
+            <select ref={refUserInputVoice} name="voice" className="PersonalityConfig__group__data font-input" type="text" value={formData.voice} onChange={handleChange}>
               <option value="alloy">Alloy</option>
               <option value="echo">Echo</option>
               <option value="onyx">Onyx</option>

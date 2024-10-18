@@ -13,7 +13,7 @@ import iToggleOff from "../../assets/icons/toggle_off_24dp_E8EAED_FILL0_wght400_
 import iToggleOn from "../../assets/icons/toggle_on_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg";
 import { useEffect, useState } from "react";
 
-export default function ToggleSwitch({ toggleReference, boolDefaultState, strIconName, boolHideLabel, callback }) {
+export default function ToggleSwitch({ refToggleInput, boolDefaultState, strIconName, boolHideLabel, callback }) {
   const [toggleState, setToggleState] = useState("");
   const [toggleIcon, setToggleIcon] = useState(iToggleOff);
   const [toggleClass, setToggleClass] = useState("ToggleSwitch ToggleSwitch--off");
@@ -59,7 +59,7 @@ export default function ToggleSwitch({ toggleReference, boolDefaultState, strIco
   return (
     <>
       <div className={toggleClass}>
-        <img ref={toggleReference} className="ToggleSwitch__image" src={toggleIcon} alt={strIconName} onClick={handleStateChange} togglevalue={toggleState.toString()} />
+        <img ref={refToggleInput} className="ToggleSwitch__image" src={toggleIcon} alt={strIconName} onClick={handleStateChange} togglevalue={toggleState.toString()} />
         <p className="ToggleSwitch__label font-label">{boolHideLabel ? <></> : strIconName}</p>
       </div>
     </>

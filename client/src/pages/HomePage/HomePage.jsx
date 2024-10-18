@@ -24,9 +24,9 @@ export default function HomePage() {
   const [activeSessionPersons, setActiveSessionPersons] = useState([]);
   const [activeSessionIndex, setActiveSessionIndex] = useState();
   const [chatlog, setChatlog] = useState([]);
-  const userInput = useRef();
-  const inputTTSflag = useRef();
-  const inputAutoChatFlag = useRef();
+  const refUserInput = useRef();
+  const refTTSFlagInput = useRef();
+  const refAutoChatFlagInput = useRef();
   const inputTakeTurnsFlag = useRef();
   const inputChangeTopicsFlag = useRef();
   const inputEmojiiFlag = useRef();
@@ -136,11 +136,11 @@ export default function HomePage() {
   }, [objArrResponses]);
 
   function chatAutoPlay(strActiveSession, objResponses) {
-    if (inputAutoChatFlag.current.getAttribute("togglevalue") === "true" && strActiveSession !== "") {
+    if (refAutoChatFlagInput.current.getAttribute("togglevalue") === "true" && strActiveSession !== "") {
       const randomPick = Math.floor(Math.random() * 3);
       //console.log(`randomPick ${randomPick}`);
       if (randomPick === 1) {
-        console.log("Auto Chat Event: Active Session is: " + strActiveSession + " checkbox value is: " + inputAutoChatFlag.current.checked);
+        console.log("Auto Chat Event: Active Session is: " + strActiveSession + " checkbox value is: " + refAutoChatFlagInput.current.checked);
         handleSendSkip("" + strActiveSession, objResponses);
       }
     }
@@ -258,7 +258,7 @@ export default function HomePage() {
   }
 
   const handleSendChat = async (event) => {
-    if (!userInput.current.value) {
+    if (!refUserInput.current.value) {
       return;
     }
     const personalitiesList = personalities.map((e) => {
@@ -272,19 +272,19 @@ export default function HomePage() {
     });
     try {
       const postURL = webapi.URL + "/chatsession/" + strActiveSession;
-      const response = await axios.post(postURL, { senderID: "User", message: userInput.current.value }, authHeader(sessionAuthToken));
+      const response = await axios.post(postURL, { senderID: "User", message: refUserInput.current.value }, authHeader(sessionAuthToken));
       const senderNameIndex = personalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       ChangeAutoScroll(true);
       if (response.data.message) {
-        setResponses([...objArrResponses, { name: "You", content: userInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
+        setResponses([...objArrResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
-        if (inputTTSflag.current.getAttribute("togglevalue") === "true") {
+        if (refTTSFlagInput.current.getAttribute("togglevalue") === "true") {
           getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       } else {
-        setResponses([...objArrResponses, { name: "You", content: userInput.current.value, timestamp: Date.now() }]);
+        setResponses([...objArrResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }]);
       }
-      userInput.current.value = "";
+      refUserInput.current.value = "";
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
       return false;
@@ -364,7 +364,7 @@ export default function HomePage() {
       if (response.data.message) {
         setResponses([...currentResponses, { name: personalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: personalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
-        if (inputTTSflag.current.getAttribute("togglevalue") === "true") {
+        if (refTTSFlagInput.current.getAttribute("togglevalue") === "true") {
           getAndPlayTTS(response.data.message, personalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       }
@@ -438,10 +438,10 @@ export default function HomePage() {
       <div className="HomePage__main">
         <h1 className="HomePage__main__title font-pageTitle">{sessions[activeSessionIndex]?.sessionName}</h1>
         {strActiveSession? <div className="HomePage__main__sessionOptions">
-              <ToggleSwitch toggleReference={inputTakeTurnsFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionTurns} strIconName="Turns" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
-              <ToggleSwitch toggleReference={inputChangeTopicsFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionTopics} strIconName="Topics" boolHideLabel={false} callback={handleChangeCurrentSessionOptions}/>
-              <ToggleSwitch toggleReference={inputEmojiiFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionEmojii} strIconName="Emojiis" boolHideLabel={false}  callback={handleChangeCurrentSessionOptions}/>
-              <ToggleSwitch toggleReference={inputShortResponseFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionShort} strIconName="Short" boolHideLabel={false} callback={handleChangeCurrentSessionOptions}/>
+              <ToggleSwitch refToggleInput={inputTakeTurnsFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionTurns} strIconName="Turns" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+              <ToggleSwitch refToggleInput={inputChangeTopicsFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionTopics} strIconName="Topics" boolHideLabel={false} callback={handleChangeCurrentSessionOptions}/>
+              <ToggleSwitch refToggleInput={inputEmojiiFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionEmojii} strIconName="Emojiis" boolHideLabel={false}  callback={handleChangeCurrentSessionOptions}/>
+              <ToggleSwitch refToggleInput={inputShortResponseFlag} boolDefaultState={!!sessions[activeSessionIndex]?.optionShort} strIconName="Short" boolHideLabel={false} callback={handleChangeCurrentSessionOptions}/>
             </div> : <></>}
         
         <div className="HomePage__main__content">
@@ -449,7 +449,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className="HomePage__input">
-        <ChatInput sendChatCallBack={handleSendChat} userInput={userInput} skipCallBack={handleSendSkip} inputTTSflag={inputTTSflag} inputAutoChatFlag={inputAutoChatFlag} strActiveSession={strActiveSession} />
+        <ChatInput sendChatCallBack={handleSendChat} refUserInput={refUserInput} skipCallBack={handleSendSkip} refTTSFlagInput={refTTSFlagInput} refAutoChatFlagInput={refAutoChatFlagInput} strActiveSession={strActiveSession} />
       </div>
     </div>
   );
