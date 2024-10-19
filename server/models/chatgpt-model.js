@@ -3,7 +3,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 const chatSend = async (tokens, floatTemp = 1, strSessionID, strPersonalityID) => {
-  console.log("****** OpenAI POST REQ: Sendng*****");
+  console.log("****** OpenAI POST REQ: Sending*****");
   //console.log("***** Temperature: " + floatTemp);
   try {
     const response = await axios.post(
