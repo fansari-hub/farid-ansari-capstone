@@ -1,0 +1,48 @@
+// Animation from https://codepen.io/travishorn/pen/YyGVRG
+
+.LoadAnimation {
+  &__wrapper {
+    background-color: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    padding: 0px;
+    margin: 0;
+  }
+
+  &__ball {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    margin: 0 7px;
+    box-shadow: 2px 2px 4px;
+
+    animation: 1.3s bounce ease infinite;
+
+    &--col1 {
+      background-color: cadetblue;
+    }
+
+    &--col2 {
+      background-color: cyan;
+      animation-delay: 0.25s;
+    }
+
+    &--col3 {
+      background-color: rgb(193, 245, 245);
+      animation-delay: 0.5s;
+    }
+
+    &--col4 {
+      background-color: white;
+      animation-delay: 0.75s;
+    }
+  }
+
+  @keyframes bounce {
+    50% {
+      transform: translateY(12px);
+    }
+  }
+}
