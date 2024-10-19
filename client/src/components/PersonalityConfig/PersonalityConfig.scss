@@ -1,0 +1,117 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles/partials/anims" as *;
+@use "../../styles//partials/mixins" as *;
+
+.PersonalityConfig {
+  background-color: $colPrimary-ItemFill;
+  margin: 20px;
+  padding: 20px;
+  border: thin outset $colSecondary-MutedBorder;
+  box-shadow: 1px 1px black;
+  border-radius: 15px;
+  @include displayMobile {
+    margin: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  &__avatar {
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 2.3rem;
+    @include displayMobile {
+      gap: 0.6rem;
+    }
+    &__picture {
+      border: 2px outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      height: 8rem;
+      border-radius: 10px;
+      @include displayMobile {
+        height: 5rem;
+      }
+    }
+    &__generate {
+      background-color: none;
+      padding-bottom: 20px;
+      flex-grow: 1;
+    }
+    &__prompt {
+      height: 8rem;
+      flex-grow: 1;
+      padding: 1rem;
+      width: 100%;
+      background-color: $colPrimary-Background;
+      color: $colPrimary-MainText;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      border-radius: 10px;
+      @include displayMobile {
+        height: 10rem;
+        padding: 0.8rem;
+      }
+    }
+  }
+  &__group {
+    margin-top: 20px;
+    display: flex;
+    @include displayMobile {
+      margin-top: 10px;
+      &--column {
+        @include displayMobile {
+          flex-direction: column;
+        }
+      }
+    }
+    &__label {
+      width: 10rem;
+      @include displayMobile {
+        width: 7rem;
+      }
+    }
+
+    &__data {
+      flex-grow: 1;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      background-color: $colPrimary-Background;
+      color: $colPrimary-MainText;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      border-radius: 10px;
+      @include displayMobile {
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+      }
+      &--noborder {
+        border: none;
+        box-shadow: none;
+      }
+    }
+    &__prompt {
+      height: 8rem;
+      flex-grow: 1;
+      padding: 1rem;
+      background-color: $colPrimary-Background;
+      color: $colPrimary-MainText;
+      border: thin outset $colSecondary-MutedBorder;
+      box-shadow: 1px 1px black;
+      border-radius: 10px;
+      @include displayMobile {
+        height: 10rem;
+        padding: 0.5rem;
+      }
+    }
+    &__btn {
+      width: 130px;
+      margin-top: 5px;
+      margin-left: 5px;
+      margin-right: 5px;
+      @include displayMobile {
+        width: 35%;
+      }
+    }
+  }
+}

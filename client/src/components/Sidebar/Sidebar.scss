@@ -1,0 +1,84 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-right: 5px;
+  overflow: auto;
+  scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
+  scrollbar-width: thin;
+  padding-bottom: 270px;
+  gap: 10px;
+
+  @include displayMobile {
+    overflow: unset;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0;
+    height: auto;
+    background-color: transparent;
+    padding-bottom: 0;
+  }
+
+  &__settings {
+    background-color: none;
+    order: 0;
+    @include displayMobile {
+      margin-bottom: 20px;
+      order: 0;
+    }
+    &__item {
+      background-color: none;
+      padding-top: 15px;
+    }
+    &__auth {
+      background-color: none;
+    }
+  }
+  &__sessionList {
+    margin-top: 50px;
+    order: 1;
+    background-color: none;
+    display: flex;
+    flex-direction: column;
+
+    @include displayMobile {
+      background-color: none;
+      flex-direction: row;
+      flex-grow: 1;
+      order: 1;
+      justify-content: flex-end;
+      margin-top: 0px;
+    }
+    &__title {
+      background-color: none;
+    }
+    &__ruler {
+      width: 100%;
+      border: thin inset $colSecondary-MutedBorder;
+      @include displayMobile {
+        display: none;
+      }
+    }
+    &__list {
+      margin-top: 0px;
+    }
+  }
+  &__add {
+    margin-top: 20px;
+    width: 100%;
+    order: 2;
+
+    @include displayMobile {
+      margin-top: 0;
+      flex-grow: 1;
+      order: 2;
+      align-self: center;
+    }
+  }
+}

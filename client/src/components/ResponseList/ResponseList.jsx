@@ -1,13 +1,18 @@
-import utils from "../../utils/utils.js";
+/*****************************
+ * Component: RespondList
+ * Purpose: Creates a list of ResponseCards to display the content of a active chat session
+ * Prop notes: none
+ * Usage notes: none
+ ****************************/
 import ResponseCard from "../ResponseCard/ResponseCard.jsx";
 
-export default function ResponseList({ responses, _callback }) {
-
+export default function ResponseList({ objArrayResponses, audioPlayCallBack }) {
+  
   return (
     <>
       <div className="ResponseList">
-        {responses.map((i) => (
-          <ResponseCard name={i.name} content={i.content} timestamp={utils.getRelativeTime(i.timestamp)} image={i.image} key={i.id}/>
+        {objArrayResponses.map((i, x) => (
+          <ResponseCard objResponse={i} audioPlayCallBack={audioPlayCallBack} key={x} />
         ))}
       </div>
     </>

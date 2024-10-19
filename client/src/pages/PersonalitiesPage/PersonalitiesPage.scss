@@ -1,0 +1,63 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.PersonalitiesPage {
+  display: flex;
+  background-color: $colPrimary-Background;
+
+  @include displayMobile {
+    flex-direction: column;
+  }
+
+  &__left {
+    background-color: $colPrimary-Background;
+    background-color: none;
+    position: fixed;
+    margin-top: 20px;
+    @include displayMobile {
+      position: relative;
+    }
+  }
+  &__main {
+    text-align: center;
+    margin: auto;
+    min-height: 100vh;
+    color: $colPrimary-MainText;
+    flex-grow: 1;
+    @include displayMobile {
+      margin-left: 5px;
+      margin-right: 25px;
+    }
+
+    &__title {
+      text-align: left;
+      padding-left: 210px;
+      padding-bottom: 20px;
+      @include displayMobile {
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+      }
+    }
+
+    &__content {
+      padding-left: 185px;
+      max-width: 1280px;
+      text-align: left;
+      @include displayMobile {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      &__bottom {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        &__add {
+          background-color: none;
+          margin-left: 20px;
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+}

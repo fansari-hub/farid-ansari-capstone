@@ -1,4 +1,6 @@
 /node_modules
 .env
-/public/*.wav
-/public/images/*
+/public/TTS/*
+/public/avatarImg/*
+.DS_Store
+/config/FireBaseServiceAccount.json

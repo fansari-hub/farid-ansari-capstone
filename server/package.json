@@ -4,6 +4,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-rate-limit": "^7.4.1",
+    "express-slow-down": "^2.0.3",
+    "firebase-admin": "^12.6.0",
     "knex": "^3.1.0",
     "mysql2": "^3.11.3",
     "nodeman": "^1.1.2",
@@ -15,7 +18,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:migrate": "knex migrate:latest",
+    "db:undo": "knex migrate:down",
+    "db:rollback": "knex migrate:rollback",
+    "db:seed": "knex seed:run"
   },
   "keywords": [],
   "author": "",

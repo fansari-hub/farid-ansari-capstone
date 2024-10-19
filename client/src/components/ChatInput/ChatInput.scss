@@ -1,0 +1,85 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.ChatInput {
+  background-color: none;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 15px;
+  border-top: thin outset rgba(0, 0, 0, 0.251);
+  margin-left: auto;
+  margin-right: auto;
+  @include displayMobile {
+    padding-left: 0px;
+  }
+
+  &__logo {
+    flex-grow: 0;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    margin-left: 60px;
+    margin-right: 90px;
+    border-radius: 20px;
+    height: 100px;
+    pointer-events: none;
+    border: thick inset $colSecondary-MutedBorder;
+    @include displayMobile {
+      display: none;
+    }
+  }
+  &__input {
+    flex-grow: 1;
+    margin-right: 0px;
+    background-color: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    max-width: 1100px;
+    padding-right: 40px;
+    @include displayMobile {
+      //padding-left: 25px;
+      padding-right: 10px;
+    }
+    &__textbox {
+      border-radius: 10px;
+      padding: 0.5rem;
+      padding-left: 1rem;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      max-width: 1040px;
+      border: thin inset $colSecondary-MutedBorder;
+      background-color: $colPrimary-ItemFill;
+      color: $colPrimary-MainText;
+      resize: none;
+      @include displayMobile {
+        margin-left: auto;
+        margin-right: auto;
+        width: 95%;
+      }
+    }
+    &__buttons {
+      width: 100%;
+      justify-content: flex-start;
+      margin-left: 15px;
+      display: flex;
+      gap: 20px;
+      @include displayMobile {
+        justify-content: center;
+        margin: 0;
+        gap: 20px;
+      }
+      &__group {
+        display: flex;
+        align-items: center;
+      }
+      &__button {
+        width: 7rem;
+        @include displayMobile {
+          width: 6rem;
+        }
+      }
+    }
+  }
+}

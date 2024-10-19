@@ -1,0 +1,50 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.Participants {
+  width: 100vw;
+  padding-top: 10px;
+  padding-bottom: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $colPrimary-ItemFill;
+  gap: 50px;
+  border-bottom: thin solid rgba(0, 0, 0, 0.269);
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.24);
+  @include displayMobile {
+    gap: 30px;
+  }
+  &__add {
+    background-color: none;
+    display: flex;
+    align-items: center;
+    justify-items: flex-start;
+    gap: 12px;
+    &__text {
+      color: $colPrimary-MutedText;
+      padding-bottom: 10px;
+      font-family: monospace;
+    }
+    &__addIcon {
+      background-color: none;
+      scale: 1.5;
+      margin-left: 20px;
+      flex-grow: 0.25;
+    }
+  }
+  &__list {
+    flex-grow: 0.75;
+    display: flex;
+    align-items: flex-end;
+    overflow: auto;
+    scrollbar-color: $colSecondary-MutedBorder $colPrimary-ItemFill;
+    scrollbar-width: thin;
+    row-gap: 5px;
+    column-gap: 35px;
+    @include displayMobile {
+      column-gap: 25px;
+      padding-right: 40px;
+    }
+  }
+}

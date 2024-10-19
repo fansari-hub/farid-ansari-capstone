@@ -1,0 +1,85 @@
+@use "../../styles/partials/colors" as *;
+@use "../../styles//partials/mixins" as *;
+
+.VisualSelectModal {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  z-index: 3;
+  &__float {
+    position: fixed;
+    top: 10vh;
+    left: 35vw;
+    @include displayMobile {
+      left: 10vw;
+      top: 5vh;
+    }
+
+    &__closeButton {
+      position: relative;
+      left: -20px;
+      top: 20px;
+      font-size: 2rem;
+      height: 2.5rem;
+      width: 2.5rem;
+      text-align: center;
+      background-color: $colPrimary-ItemFill;
+      border: 1px outset $colSecondary-MutedBorder;
+      border-radius: 50px;
+      box-shadow: 5px 5px rgba(0, 0, 0, 0.656);
+      color: $colSecondary-NegativeActionTextHover;
+      margin: 0;
+      padding: 0;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &__container {
+      max-height: 80vh;
+      overflow: scroll;
+      scrollbar-color: cyan $colPrimary-ItemFill;
+      scrollbar-width: thin;
+      height: fit-content;
+      background-color: $colPrimary-ItemFill;
+      border: thick outset $colSecondary-MutedBorder;
+      border-radius: 10px;
+      box-shadow: 5px 5px rgba(0, 0, 0, 0.656);
+      width: 400px;
+      padding: 20px 10px 20px 20px;
+      margin: 0px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      @include displayMobile {
+        width: 280px;
+        max-height: 80vh;
+        left: 25vw;
+      }
+      &__group {
+        &__item {
+          &__label {
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            position: relative;
+            top: 100px;
+            left: 0px;
+            font-size: 1rem;
+            color: $colSecondary-PositiveActionTextHover;
+            background-color: rgba(0, 0, 0, 0.623);
+          }
+          &__image {
+            height: 100px;
+            border: thick outset $colSecondary-MutedBorder;
+            box-shadow: 2px 2px black;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}
