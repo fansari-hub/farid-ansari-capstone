@@ -307,6 +307,7 @@ export default function HomePage() {
         }
       } 
       setBoolChatControlEnabled(true);
+      refUserInput.current.focus();
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
       setBoolChatControlEnabled(true);
