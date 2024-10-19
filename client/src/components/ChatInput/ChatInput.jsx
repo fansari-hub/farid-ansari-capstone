@@ -9,11 +9,27 @@ import logo from "../../assets/images/logo.webp";
 import Icon from "../Icon/Icon";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 
-export default function ChatInput({ sendChatCallBack, refUserInput, refTTSFlagInput, refAutoChatFlagInput, skipCallBack, strActiveSession }) {
+export default function ChatInput({ sendChatCallBack, refUserInput, refTTSFlagInput, refAutoChatFlagInput, skipCallBack, strActiveSession, boolChatControlEnabled }) {
   
   // Don't render anything if there is no active session
   if (!strActiveSession) {
     return <></>;
+  }
+
+  if (refUserInput.current){
+    if(!boolChatControlEnabled){
+      refUserInput.current.disabled = true;
+    }else{
+      refUserInput.current.disabled = false;
+      refUserInput.current.focus();
+    }
+  }
+  
+
+  function handlePressEnter(event){
+    if (event.key === "Enter"){
+      sendChatCallBack();
+    }
   }
 
   return (
@@ -21,12 +37,12 @@ export default function ChatInput({ sendChatCallBack, refUserInput, refTTSFlagIn
       <div className="ChatInput">
         <img src={logo} className="ChatInput__logo" alt="logo" />
         <div className="ChatInput__input">
-          <textarea className="ChatInput__input__textbox font-textbox" ref={refUserInput} id="refUserInput" rows="4" placeholder="Type your message to JanusGPT here."></textarea>
+          <textarea className="ChatInput__input__textbox font-textbox" ref={refUserInput} id="refUserInput" rows="4" onKeyDown={handlePressEnter} placeholder={boolChatControlEnabled?("Type your message to JanusGPT here."):("Please wait....")} ></textarea>
           <div className="ChatInput__input__buttons">
-            <div className="ChatInput__input__buttons__button" onClick={sendChatCallBack}>
-              <Icon iconIndex={3} strIconName={"Send"} strActionType="neutral" />
+            <div className="ChatInput__input__buttons__button" onClick={boolChatControlEnabled?(sendChatCallBack):(() => {})}>
+              <Icon iconIndex={3} strIconName={"Send"} strActionType="neutral"/>
             </div>
-            <div className="ChatInput__input__buttons__button" onClick={skipCallBack}>
+            <div className="ChatInput__input__buttons__button" onClick={boolChatControlEnabled?(skipCallBack):(() => {})}>
               <Icon iconIndex={13} strIconName={"Pass"} strActionType="neutral" />
             </div>
             <div className="ChatInput__input__buttons__group">

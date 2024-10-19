@@ -2,27 +2,20 @@ const chatgptModel = require("../models/chatgpt-model");
 const personalityModel = require("../models/personality-model");
 const chatSessionModel = require("../models/chatSession-model");
 
-let personalityData = [];
-let personalityDataFiltered = [];
-let chatHistoryData = [];
-let sessionParticipants = [];
-let sessionInformation = [];
-
 const sessionData = {};
 
 async function generateGPTChat(strSessionID, res, req) {
+  
   if (!strSessionID && typeof strSessionID !== "string") {
     console.log("Chatgpt-controller.generateGPTChat(): You must provide a strSessionID string!");
     return false;
   }
 
-  personalityData = await personalityModel.getPersonalityDetails(req.body.requestedbyUser);
-  chatHistoryData = await chatSessionModel.getChatSessionChatDetail(strSessionID);
-  sessionInformation = await chatSessionModel.getChatSessionSingle(strSessionID);
-  sessionParticipants = await chatSessionModel.getPersons(strSessionID);
-
+  const personalityData = await personalityModel.getPersonalityDetails(req.body.requestedbyUser);
+  const chatHistoryData = await chatSessionModel.getChatSessionChatDetail(strSessionID);
+  const sessionInformation = await chatSessionModel.getChatSessionSingle(strSessionID);
+  const sessionParticipants = await chatSessionModel.getPersons(strSessionID);
   const GPTPersonalityChats = [];
-
   let membersPresent = "";
 
   if (sessionParticipants === false) {
@@ -35,7 +28,7 @@ async function generateGPTChat(strSessionID, res, req) {
     return false;
   }
 
-  personalityDataFiltered = personalityData.filter((e) => {
+  const personalityDataFiltered = personalityData.filter((e) => {
     return sessionParticipants.indexOf(e.personalityID) >= 0;
   });
 
@@ -47,11 +40,6 @@ async function generateGPTChat(strSessionID, res, req) {
   personalityDataFiltered.forEach((p) => {
     membersPresent += p.name + ", ";
   });
-
-  console.log("chatpgtcontroller-generateGPTChat(): members present = ", membersPresent);
-  if (chatHistoryData.length > 0) {
-    console.log("chatpgtcontroller-generateGPTChat(): last senderID in msg data = " + chatHistoryData[chatHistoryData.length - 1].senderID);
-  }
 
   personalityDataFiltered.forEach((p) => {
     let personalChatHistory = [];
@@ -97,7 +85,6 @@ async function generateGPTChat(strSessionID, res, req) {
 
     Remember, the goal is to sound like a person (or the character you are instruted to behave like) chatting naturally.`;
     const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")} and User. ${promptInstructions}`;
-   // console.log(promptInstructions);
     personalChatHistory.push({ role: "system", content: systemPrompt });
 
     chatHistoryData.forEach((e) => {
@@ -123,10 +110,11 @@ async function generateGPTChat(strSessionID, res, req) {
     GPTPersonalityChats.push(personalChatHistory);
     return true;
   });
-  await conversationManager(GPTPersonalityChats, strSessionID, res);
+
+  await conversationManager(GPTPersonalityChats, strSessionID, personalityDataFiltered, sessionInformation, res);
 }
 
-async function conversationManager(gptData, strSessionID, res) {
+async function conversationManager(gptData, strSessionID, personalityDataFiltered, sessionInformation, res) {
   const MAX_RECENT_SPEAKERS = 2;
   const ONE_IN_X_CHANCE_TO_TALK_AGAIN = 4;
 
@@ -139,20 +127,16 @@ async function conversationManager(gptData, strSessionID, res) {
     // Reset recentSpeakers if all bots have spoken recently
     recentSpeakers = [];
     availableBots = [...personalityDataFiltered];
-    console.log(`chatgpt-controller.conversationManager(): Random choice -> Recent speakers reset...All bots are free to speak again. `);
+    // console.log(`chatgpt-controller.conversationManager(): Random choice -> Recent speakers reset...All bots are free to speak again. `);
   }
 
   let directRecipientIndex = -1;
   const getlastMessage = gptData[0][gptData[0].length - 1].content;
-
-  //  console.log("chatgpt-controller.conversationManager(): available bots : ", availableBots);
   const directRecipientList = availableBots.filter((bot) => getlastMessage.toLowerCase().includes(`@${bot.name.toLowerCase()}`) === true);
 
   if (directRecipientList.length > 0) {
     directRecipientIndex = Math.floor(Math.random() * directRecipientList.length);
   }
-  //console.log("chatgpt-controller.conversationManager(): directRecipientListFiltered contains: ", directRecipientList);
-  //console.log("chatgpt-controller.conversationManager(): directRecipientIndex value: ", directRecipientIndex);
 
   //Select Bots randomly from available bots or based on @ mentions
   let selectedBotIndex;
@@ -173,23 +157,22 @@ async function conversationManager(gptData, strSessionID, res) {
      randomChanceToRegisterSpoken = Math.floor(Math.random() * ONE_IN_X_CHANCE_TO_TALK_AGAIN);
   } else{
     randomChanceToRegisterSpoken = 0;
-    console.log("IN FORCE TALK BRANCH");
   }
   
 
   if (randomChanceToRegisterSpoken !== 0) {
     recentSpeakers.push(personalityDataFiltered[selectedBotIndex].personalityID);
-    console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name} will added to recent speakers `);
+    // console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name} will added to recent speakers `);
   } else {
-    console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name}  not added to recent speakers so might speak again `);
+    // console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name}  not added to recent speakers so might speak again `);
     if (recentSpeakers.length > MAX_RECENT_SPEAKERS - 1) {
-      console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
+      // console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
       recentSpeakers.shift();
     }
   }
 
   if (recentSpeakers.length > MAX_RECENT_SPEAKERS) {
-    console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
+    // console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
     recentSpeakers.shift();
   }
 
@@ -197,23 +180,15 @@ async function conversationManager(gptData, strSessionID, res) {
   sessionData[strSessionID] = { recentSpeakers };
 
   console.log(`****** Chat will be sent to ${personalityDataFiltered[selectedBotIndex].name} ******`);
-  const openAIresponse = await chatgptModel.chatSend(gptData[selectedBotIndex], personalityDataFiltered[selectedBotIndex].temperature);
+  const openAIresponse = await chatgptModel.chatSend(gptData[selectedBotIndex], personalityDataFiltered[selectedBotIndex].temperature, strSessionID, personalityDataFiltered[selectedBotIndex].personalityID);
   if (openAIresponse === false) {
     res.status(500).json({});
     console.log("chatgpt-controller.conversationManager() : failed on getting response from OpenAI  using chatgptModel");
     return false;
   }
 
-  console.log(`****** ${personalityDataFiltered[selectedBotIndex].name} is responding to user ******`);
-
-  const result = await chatSessionModel.setChatGlobal(strSessionID, personalityDataFiltered[selectedBotIndex].personalityID, openAIresponse.reply);
-
-  if (result === false) {
-    res.status(500).json({});
-    console.log("chatgpt-controller.conversationManager() : failed on SetChatGlobal model call");
-    return false;
-  }
-  res.status(200).json(result);
+  console.log(`****** ${personalityDataFiltered[selectedBotIndex].name} responded.******`);
+  res.status(200).json(openAIresponse);
   return true;
 }
 

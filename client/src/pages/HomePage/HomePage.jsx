@@ -11,6 +11,7 @@ import ChatInput from "../../components/ChatInput/ChatInput";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Participants from "../../components/Participants/Participants";
 import ToggleSwitch from "../../components/ToggleSwitch/ToggleSwitch";
+import LoadAnimation from "../../components/LoadAnimation/LoadAnimation";
 
 import axios from "axios";
 import webapi from "../../utils/webapi";
@@ -33,6 +34,7 @@ export default function HomePage() {
   const [objArrayActiveSessionPersons, setObjArrayActiveSessionPersons] = useState([]);
   const [activeSessionIndex, setActiveSessionIndex] = useState();
   const [objArrayChatContent, setObjArrayChatContent] = useState([]);
+  const [boolChatControlEnabled, setBoolChatControlEnabled] = useState(true);
 
   const refUserInput = useRef();
   const refTTSFlagInput = useRef();
@@ -287,22 +289,28 @@ export default function HomePage() {
       return obj;
     });
     try {
-      const postURL = webapi.URL + "/chatsession/" + strActiveSession;
-      const response = await axios.post(postURL, { senderID: "User", message: refUserInput.current.value }, authHeader(sessionAuthToken));
-      const senderNameIndex = objArraypersonalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
+      const strUserChatInput = refUserInput.current.value;
+      refUserInput.current.value = "";
+      const objPriorResponsesAndUser = [...objArrayResponses, { name: "You", content: strUserChatInput, timestamp: Date.now() }];
+      setobjArrayResponses([...objPriorResponsesAndUser]);
+      setBoolChatControlEnabled(false);
       ChangeboolAutoScrollFlag(true);
+      
+      const postURL = webapi.URL + "/chatsession/" + strActiveSession;
+      const response = await axios.post(postURL, { senderID: "User", message: strUserChatInput }, authHeader(sessionAuthToken));
+      const senderNameIndex = objArraypersonalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
       if (response.data.message) {
-        setobjArrayResponses([...objArrayResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }, { name: objArraypersonalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: objArraypersonalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
+        setobjArrayResponses([...objPriorResponsesAndUser, { name: objArraypersonalitiesList[senderNameIndex].name, content: response.data.message, timestamp: response.data.timestamp, avatarImg: objArraypersonalitiesList[senderNameIndex].avatarImg, messageID: response.data.messageID }]);
         playNewMessagSound();
         if (refTTSFlagInput.current.getAttribute("togglevalue") === "true") {
           getAndPlayTTS(response.data.message, objArraypersonalitiesList[senderNameIndex].voice, response.data.messageID);
         }
-      } else {
-        setobjArrayResponses([...objArrayResponses, { name: "You", content: refUserInput.current.value, timestamp: Date.now() }]);
-      }
-      refUserInput.current.value = "";
+      } 
+      setBoolChatControlEnabled(true);
+      refUserInput.current.focus();
     } catch (error) {
       alert(`HomePage.handleSendChat() request failed with error: ${error}`);
+      setBoolChatControlEnabled(true);
       return false;
     }
     return true;
@@ -379,6 +387,7 @@ export default function HomePage() {
       return obj;
     });
     try {
+      setBoolChatControlEnabled(false);
       const getURL = webapi.URL + "/chatsession/" + currentActiveSession + "/auto";
       const response = await axios.get(getURL, authHeader(sessionAuthToken));
       const senderNameIndex = objArraypersonalitiesList.findIndex((o) => o.personalityID === response.data.senderID);
@@ -390,8 +399,10 @@ export default function HomePage() {
           getAndPlayTTS(response.data.message, objArraypersonalitiesList[senderNameIndex].voice, response.data.messageID);
         }
       }
+      setBoolChatControlEnabled(true);
     } catch (error) {
       alert(`HomePage.handleSendSkip() request failed with error: ${error}`);
+      setBoolChatControlEnabled(true);
       return -1;
     }
   };
@@ -467,10 +478,11 @@ export default function HomePage() {
 
         <div className="HomePage__main__content">
           <ResponseList objArrayResponses={objArrayResponses} audioPlayCallBack={handleSingleAudioPlayback} />
+          {(boolChatControlEnabled)?(<></>):(<LoadAnimation/>)}
         </div>
       </div>
       <div className="HomePage__input">
-        <ChatInput sendChatCallBack={handleSendChat} refUserInput={refUserInput} skipCallBack={handleSendSkip} refTTSFlagInput={refTTSFlagInput} refAutoChatFlagInput={refAutoChatFlagInput} strActiveSession={strActiveSession} />
+        <ChatInput sendChatCallBack={handleSendChat} refUserInput={refUserInput} skipCallBack={handleSendSkip} refTTSFlagInput={refTTSFlagInput} refAutoChatFlagInput={refAutoChatFlagInput} strActiveSession={strActiveSession} boolChatControlEnabled={boolChatControlEnabled} />
       </div>
     </div>
   );

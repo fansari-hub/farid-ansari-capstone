@@ -1,9 +1,9 @@
+const chatSessionModel = require("../models/chatSession-model");
 const axios = require("axios");
 require("dotenv").config();
 
-
-const chatSend = async (tokens, floatTemp = 1) => {
-  console.log("****** OpenAI POST REQ: Sendng*****");
+const chatSend = async (tokens, floatTemp = 1, strSessionID, strPersonalityID) => {
+  console.log("****** OpenAI POST REQ: Sending*****");
   //console.log("***** Temperature: " + floatTemp);
   try {
     const response = await axios.post(
@@ -23,7 +23,13 @@ const chatSend = async (tokens, floatTemp = 1) => {
     const chatResponse = response.data.choices[0].message.content;
     console.log("****** OpenAI POST REQ: Received Response*****");
 
-    return { reply: chatResponse, timestamp: Date.now() };
+    const result = await chatSessionModel.setChatGlobal(strSessionID, strPersonalityID, chatResponse);
+
+    if (result === false) {
+      console.log("chatgpt-model.chatSend() : failed on SetChatGlobal model call");
+      return false;
+    }
+    return result;
   } catch (error) {
     console.error("chatgpt-model.chatSend(): Error communicating with OpenAI API: ", error);
     return false;
@@ -33,4 +39,3 @@ const chatSend = async (tokens, floatTemp = 1) => {
 module.exports = {
   chatSend,
 };
-
