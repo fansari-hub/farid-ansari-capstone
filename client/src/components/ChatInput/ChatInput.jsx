@@ -16,12 +16,18 @@ export default function ChatInput({ sendChatCallBack, refUserInput, refTTSFlagIn
     return <></>;
   }
 
+  function handlePressEnter(event){
+    if (event.key === "Enter"){
+      sendChatCallBack();
+    }
+  }
+
   return (
     <>
       <div className="ChatInput">
         <img src={logo} className="ChatInput__logo" alt="logo" />
         <div className="ChatInput__input">
-          <textarea className="ChatInput__input__textbox font-textbox" ref={refUserInput} id="refUserInput" rows="4" placeholder={boolChatControlEnabled?("Type your message to JanusGPT here."):("Please wait....")} disabled={!boolChatControlEnabled}></textarea>
+          <textarea className="ChatInput__input__textbox font-textbox" ref={refUserInput} id="refUserInput" rows="4" onKeyDown={handlePressEnter} placeholder={boolChatControlEnabled?("Type your message to JanusGPT here."):("Please wait....")} disabled={!boolChatControlEnabled}></textarea>
           <div className="ChatInput__input__buttons">
             <div className="ChatInput__input__buttons__button" onClick={boolChatControlEnabled?(sendChatCallBack):(() => {})}>
               <Icon iconIndex={3} strIconName={"Send"} strActionType="neutral"/>

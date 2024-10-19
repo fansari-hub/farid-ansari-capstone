@@ -11,6 +11,7 @@ import ChatInput from "../../components/ChatInput/ChatInput";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Participants from "../../components/Participants/Participants";
 import ToggleSwitch from "../../components/ToggleSwitch/ToggleSwitch";
+import LoadAnimation from "../../components/LoadAnimation/LoadAnimation";
 
 import axios from "axios";
 import webapi from "../../utils/webapi";
@@ -476,6 +477,7 @@ export default function HomePage() {
 
         <div className="HomePage__main__content">
           <ResponseList objArrayResponses={objArrayResponses} audioPlayCallBack={handleSingleAudioPlayback} />
+          {(boolChatControlEnabled)?(<></>):(<LoadAnimation/>)}
         </div>
       </div>
       <div className="HomePage__input">
