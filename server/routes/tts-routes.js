@@ -14,7 +14,7 @@ const rateLimiter = rateLimit({
 
 const speedLimiter = slowDown({
   windowMs: 1 * 60 * 1000, // 1 minutes window
-	delayAfter: 10, // Allow x requests per window
+	delayAfter: 15, // Allow x requests per window
 	delayMs: (hits) => hits * 1000, // Add delay to every request after the grace count
 })
 
