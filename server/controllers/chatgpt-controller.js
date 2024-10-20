@@ -46,14 +46,13 @@ async function generateGPTChat(strSessionID, res, req) {
 
     const currentPersonalityName = p.name;
     let promptInstructions = `
-    Engage with the user and others present, but focus on your own perspective and avoid focusing exclusively on any single individual.
-    Avoid engaging in prolonged one-on-one conversations.
+    Engage with others present, but focus on your own perspective and avoid focusing exclusively on any single individual.
     Do not adopt the speaking styles of others. 
     When speaking to one of the individuals directly, precede their name with the @ symbole. 
     Focus on delivering clear and natural responses.`
     if (sessionInformation.optionTopics === 1){
       promptInstructions += `
-      If the participants continue to discuss the same topics more than 20 responses in a row, suggest a new topic for discussion. `
+      If the participants continue to discuss the same topics more than 20 responses in a row, suggest a new topic for discussion.`
     }
     if (sessionInformation.optionEmojii === 1){
       promptInstructions += `
@@ -64,10 +63,10 @@ async function generateGPTChat(strSessionID, res, req) {
     }
     if (sessionInformation.optionShort === 1){
       promptInstructions += `
-      Try to keep your responses under 50 words, only use more words if it is required to express your idea.`
+      Try to keep your responses under 40 words, only use more words if it is required to express your idea.`
     }else{
       promptInstructions += `
-      Try to keep your responses under 1000 words, only use more words if it is required to express your idea.`
+      Try to keep your responses under 250 words, only use more words if it is required to express your idea.`
     }
     promptInstructions +=`    
     **Communication Guidelines**:
@@ -75,7 +74,8 @@ async function generateGPTChat(strSessionID, res, req) {
     - **Casual Language**: Communicate in a relaxed, conversational style, as people do in chat messages.
     - **Use Contractions and Informal Expressions**: Use words like "I'm," "you're," "don't," "can't," and expressions like "got it," "sounds good."
     - **Keep it Concise**: Write short sentences or phrases. Avoid lengthy explanations.
-    - **Engage Naturally**: Ask questions, acknowledge others, and keep the conversation flowing naturally.
+    - **Engage Naturally**: Ask questions, and keep the conversation flowing naturally. Do not attempt to engage the user unless you are directly responding to question.
+    - **Stay in character**: If you have been asked to pretend to be a character who's known to be evil, villanous or mean, don't reply with pleaseantries unless that is part of your character (such as sarcasm).
     - **Appropriate Slang**: Use common slang or colloquial terms where appropriate, but ensure they're widely understood.
     - **Avoid Formality**: Steer clear of overly formal or technical language unless necessary.
     - **Examples**:
@@ -83,7 +83,7 @@ async function generateGPTChat(strSessionID, res, req) {
       - *"Can't wait to see what happens next!"*
       - *"Yeah, that makes sense."*
 
-    Remember, the goal is to sound like a person (or the character you are instruted to behave like) chatting naturally.`;
+    Remember, the goal is to sound like a person (or the character you are instructed to behave like) chatting naturally.`;
     const systemPrompt = `Your are ${currentPersonalityName}. ${p.conditionPrompt} The following individuals are present in a group chat: ${membersPresent.replace(currentPersonalityName, "yourself")} and User. ${promptInstructions}`;
     personalChatHistory.push({ role: "system", content: systemPrompt });
 
@@ -123,25 +123,28 @@ async function conversationManager(gptData, strSessionID, personalityDataFiltere
   // Filter bots that have not spoken recently
   let availableBots = personalityDataFiltered.filter((bot) => !recentSpeakers.includes(bot.personalityID));
 
+  // Reset recentSpeakers if all bots have spoken recently
   if (availableBots.length === 0) {
-    // Reset recentSpeakers if all bots have spoken recently
     recentSpeakers = [];
     availableBots = [...personalityDataFiltered];
-    // console.log(`chatgpt-controller.conversationManager(): Random choice -> Recent speakers reset...All bots are free to speak again. `);
+    console.log(`chatgpt-controller.conversationManager(): Random choice -> Recent speakers reset...All bots are free to speak again. `);
   }
 
+  //Get information about anyone included in a @mention in the last message
   let directRecipientIndex = -1;
   const getlastMessage = gptData[0][gptData[0].length - 1].content;
   const directRecipientList = availableBots.filter((bot) => getlastMessage.toLowerCase().includes(`@${bot.name.toLowerCase()}`) === true);
 
+  //If there are more than 1 @ mentions in the last message, pick a recipient randomly.
   if (directRecipientList.length > 0) {
     directRecipientIndex = Math.floor(Math.random() * directRecipientList.length);
   }
 
-  //Select Bots randomly from available bots or based on @ mentions
+  
   let selectedBotIndex;
   let randomPick = 0;
 
+  //Select Bots randomly from available bots or based on @ mentions
   if (directRecipientIndex !== -1) {
     selectedBotIndex = personalityDataFiltered.findIndex((bot) => bot.personalityID === directRecipientList[directRecipientIndex].personalityID);
     console.log("chatgpt-controller.conversationManager(): @Mention detected with unspoken bots, sending to @recipient: ", personalityDataFiltered[selectedBotIndex].name);
@@ -158,21 +161,20 @@ async function conversationManager(gptData, strSessionID, personalityDataFiltere
   } else{
     randomChanceToRegisterSpoken = 0;
   }
-  
-
-  if (randomChanceToRegisterSpoken !== 0) {
+//Determine if a speaker is allowed to speak again based on chance (before take a turn is reset if they are more than 2 bots)
+  if (randomChanceToRegisterSpoken !== 0 || personalityDataFiltered.length <= 2) {
     recentSpeakers.push(personalityDataFiltered[selectedBotIndex].personalityID);
-    // console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name} will added to recent speakers `);
+    console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name} will added to recent speakers `);
   } else {
-    // console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name}  not added to recent speakers so might speak again `);
+    console.log(`chatgpt-controller.conversationManager(): Random choice -> ${personalityDataFiltered[selectedBotIndex].name}  not added to recent speakers so might speak again `);
     if (recentSpeakers.length > MAX_RECENT_SPEAKERS - 1) {
-      // console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
+      console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
       recentSpeakers.shift();
     }
   }
 
   if (recentSpeakers.length > MAX_RECENT_SPEAKERS) {
-    // console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
+    console.log("chatgpt-controller.conversationManager(): Shifted recentSpeakers");
     recentSpeakers.shift();
   }
 
