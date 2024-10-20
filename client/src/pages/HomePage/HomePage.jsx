@@ -467,10 +467,10 @@ export default function HomePage() {
         <h1 className="HomePage__main__title font-pageTitle">{objArraySessions[activeSessionIndex]?.sessionName}</h1>
         {strActiveSession ? (
           <div className="HomePage__main__sessionOptions">
-            <ToggleSwitch refToggleInput={refTakeTurnsFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionTurns} strIconName="Turns" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
-            <ToggleSwitch refToggleInput={refChangeTopicsFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionTopics} strIconName="Topics" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+            <ToggleSwitch refToggleInput={refTakeTurnsFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionTurns} strIconName="Take Turns" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+            <ToggleSwitch refToggleInput={refChangeTopicsFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionTopics} strIconName="Switch Topics" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
             <ToggleSwitch refToggleInput={refEmojiiFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionEmojii} strIconName="Emojiis" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
-            <ToggleSwitch refToggleInput={refShortResponseFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionShort} strIconName="Short" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
+            <ToggleSwitch refToggleInput={refShortResponseFlag} boolDefaultState={!!objArraySessions[activeSessionIndex]?.optionShort} strIconName="Short Reply" boolHideLabel={false} callback={handleChangeCurrentSessionOptions} />
           </div>
         ) : (
           <></>
