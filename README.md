@@ -86,6 +86,8 @@ To Run:
 You will only have to migrate the database, seeding is done automatically by the backend when a user is created. 
 
 ##Instructions on how to use the application
+![screenshot](./instruction1.png)
+
 
 
 
