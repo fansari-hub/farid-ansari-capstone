@@ -69,25 +69,53 @@ All Back-End API endpoints:
 ## Project Deployment Notes
 
 To Deploy, you need the additional setup (I will provide more information via Slack to BrainStation staff)
-* Server: .env file (with will include my OpenAI private key). Placed inside the server folder.
+* Server: .env file (with will include my OpenAI private key). To be placed inside the server folder.
 * Server: FireBaseServiceAccount.json (include my private Firebad admin keys). To be placed inside server/config folder.
 
 To Run:
 1) Server: Please migrate the database using npm run migrate in the server folder.
-2) Execute npm run dev in server folder.
+2) Execute npm run start in server folder.
 3) Execute npm run start in client folder.
 
 ## Known issues & missing features
-* User will get a 500 server error after session tokens expires due to inactivity (the application only refreshes session tokens when a back-end API call is made). To fix simply jump between pages to make a API call and refresh the token (I will fix this in the future.) Alternatively, you can just logout and logback in.
-* For manual password/email login, email verification and password reset is not implemented yet but you can still sign up using manual email/password and use the application immediatly. It would have taken too long to implement these futures. I am planning to implement these in the near future.
+* User will get a 500 server error after session tokens expires due to inactivity (the application only refreshes session tokens when a back-end API call is made). To fix, simply jump between pages to make a API call and refresh the token (I will fix this in the future.) Alternatively, you can just logout and logback in.
+* For manual password/email login, email verification and password reset is not implemented yet, but you can still sign up using manual email/password and use the application. It would have taken too long to implement these futures but I am planning to implement these in the near future.
 
 
 ## Database Migration
-You will only have to migrate the database, seeding is done automatically by the backend when a user is created. 
+You will only have to migrate the database, seeding is done automatically by the backend when a new user is created. 
 
-##Instructions on how to use the application
+## Instructions on how to use the application
 ![screenshot](./instruction1.png)
 
+A. Login to the application (preferred method using Google or GitHub)
+
+B. Choose an existing chat session by clicking on the session name (see 2 in screenshot). You may also create new sessions by clicking "New Session" or delete existing sessions or change existing session name by using the control buttons next to each session name.
+
+C. Once a chat session is "opened", you may start chatting with the bots (there should already be some personas in the chat if you are using one of the existing sessions). Here are how the controls work (see 3 in screenshot) :
+* Send: Sends the text that you typed.
+* Pass: Don't say anything but let the personas reply or say something instead.
+* TTS Flag: Enabling this will result in text to speeck playback after persona reply has been received (might take a few seconds).
+* Auto Flag: Personas will automatically chat with each other without user input.
+
+D. Session option: You can adjust the chat session option by setting the following flags:
+* Take Turns (If ON, it forces personas to take turns, with a small random chance they can speak out of turn)
+* Switch Topic (If ON, personas will automatically switch discussion topic after a while).
+* Emojiis: (If ON, personas will use emojiis, this might not work if you toggle it mid-chat due to LLM learning behaviour)
+* Short Reply (If ON, personas will use short reply instead of longer one, his might not work if you toggle it mid-chat due to LLM learning behaviour)
+
+E. Add / Remove personas from the current session by using the + or - buttons using the "persona bar" (see 1 in the screen shot).
+
+F. To customize/add/delete personas, click on "Personalities" link (see 5 in the screenshot). Once on that page, you may:
+* Add a new persona by clicking "Add New Slot" at the bottom of the page.
+* Delete existing personas
+* Edit information on existing persona and Save:
+  * Change/enter Display Name
+  * Temperature sets the creativity level from deterministic to most creative/random
+  * Prompt sets the behaviour/conditioning prompt
+  * TTS voice sets the voice for Text-to-speech.
+
+G. To generate image for personas, first enter the image generation prompt (next to the profile picture), then save to save your prompt. Once you are happy with the prompt press on "Generate Image" and wait 1-10 seconds. The page will refresh when the avatar is generated.
 
 
 
