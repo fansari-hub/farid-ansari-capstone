@@ -2,11 +2,12 @@
 ![screenshot](./janus-logo2.webp)
 
 ## OCT 22 - *** Submission Notes ****
-Please note that I have left the original project propsal further below with updated information about the release just below:
+Please note that I have left the original project proposal (see further below the document) and have updated this document with new information at the top. 
 
 ## About JanusGPT
 
-Did you ever wonder what Thanos and Emperor Palpatine would discuss over a business lunch? How about a rap battle between Harry Potter and Spider-Man?
+Did you ever wonder what Thanos and Emperor Palpatine would discuss over a business lunch? 
+How about a rap battle between Harry Potter and Spider-Man?
 
 Now you can!.....with JanusGPT
 
@@ -24,7 +25,7 @@ Powered by OpenAI.
 * Add / Remove personas from chat sessions
 * Each logged-in user will have their own chat sessions and personas.
 * Text-to-Speech support.
-Mobile and Desktop support with responsive design.
+* Mobile and Desktop support with responsive design.
 
 
 ## Tech Stack
@@ -54,7 +55,7 @@ Mobile and Desktop support with responsive design.
 
 ## API Information
 
-* Internal (Back-end) APIs:  17 total routes (routes will be different than the proposal)
+* Internal (Back-end) APIs:  17 total routes (release routes are different than the proposal)
 * External API - OpenAI: Chat Completion (gpt-4o-mini model), DALL-E and  Speech APIs
 * Firebase Auth: Admin and Authentication APIs
 
@@ -68,54 +69,54 @@ All Back-End API endpoints:
 
 ## Project Deployment Notes
 
-To Deploy, you need the additional setup (I will provide more information via Slack to BrainStation staff)
-* Server: .env file (with will include my OpenAI private key). To be placed inside the server folder.
-* Server: FireBaseServiceAccount.json (include my private Firebad admin keys). To be placed inside server/config folder.
+To Deploy, you need additional setup (I will provide more information via slack to BrainStation staff)
+* Server: .env file (will include my own private OpenAI API key). To be placed inside the server folder.
+* Server: FireBaseServiceAccount.json (will include my private Firebase admin keys). To be placed inside server/config folder.
 
 To Run:
-1) Server: Please migrate the database using npm run migrate in the server folder.
-2) Execute npm run start in server folder.
-3) Execute npm run start in client folder.
+1) Server: Please migrate the database using "npm run migrate" in the server folder.
+2) Execute "npm run start" in server folder.
+3) Execute "npm run start" in client folder.
 
 ## Known issues & missing features
-* User will get a 500 server error after session tokens expires due to inactivity (the application only refreshes session tokens when a back-end API call is made). To fix, simply jump between pages to make a API call and refresh the token (I will fix this in the future.) Alternatively, you can just logout and logback in.
-* For manual password/email login, email verification and password reset is not implemented yet, but you can still sign up using manual email/password and use the application. It would have taken too long to implement these futures but I am planning to implement these in the near future.
+* User will get a 500 server error after session tokens expires due to inactivity (the application currently only refreshes session tokens when a back-end API call is made). To fix, simply navigate between pages to refresh the token or simply refresh the page. (I will fix this in the future.) 
+* For manual password/email login, email verification and password reset is not implemented yet, but you can still sign up using manual email/password and use the application. It would have taken too long to implement these futures (everything has to be done manually even in FireBase), but I am planning to implement these in the near future.
 
 
 ## Database Migration
-You will only have to migrate the database, seeding is done automatically by the backend when a new user is created. 
+You will only have to migrate the database, seeding is done automatically by the back-end each time a new user is created. 
 
 ## Instructions on how to use the application
 ![screenshot](./instruction1.png)
 
-A. Login to the application (preferred method using Google or GitHub)
+A. Login to the application (preferred method is using Google or GitHub for convinence)
 
-B. Choose an existing chat session by clicking on the session name (see 2 in screenshot). You may also create new sessions by clicking "New Session" or delete existing sessions or change existing session name by using the control buttons next to each session name.
+B. Choose an existing chat session by clicking on the chat session name (see #2 in screenshot). You may also create new sessions by clicking "New Session", or delete existing sessions and change existing session names by using the control buttons next to each session name.
 
-C. Once a chat session is "opened", you may start chatting with the bots (there should already be some personas in the chat if you are using one of the existing sessions). Here are how the controls work (see 3 in screenshot) :
-* Send: Sends the text that you typed.
-* Pass: Don't say anything but let the personas reply or say something instead.
-* TTS Flag: Enabling this will result in text to speeck playback after persona reply has been received (might take a few seconds).
-* Auto Flag: Personas will automatically chat with each other without user input.
+C. Once a chat session is "opened", you may start chatting with the bots (there should already be some personas in the chat if you are using one of the seed sessions). Here's a description of the chat controls (see #3 in screenshot) :
+* Send: Sends the text that you typed and gets back a persona/bot reply.
+* Pass: Don't say anything but let the personas/bots reply or say something instead.
+* TTS toggle: Enabling this will result in text-to-speeck playback after persona reply has been received (might take a few seconds).
+* Auto toggle: Personas will automatically chat with each other without user input randomly.
 
-D. Session option: You can adjust the chat session option by setting the following flags:
+D. Session option: You can adjust chat session "options" by setting the following toggles (#4 in screenshot:
 * Take Turns (If ON, it forces personas to take turns, with a small random chance they can speak out of turn)
 * Switch Topic (If ON, personas will automatically switch discussion topic after a while).
 * Emojiis: (If ON, personas will use emojiis, this might not work if you toggle it mid-chat due to LLM learning behaviour)
 * Short Reply (If ON, personas will use short reply instead of longer one, his might not work if you toggle it mid-chat due to LLM learning behaviour)
 
-E. Add / Remove personas from the current session by using the + or - buttons using the "persona bar" (see 1 in the screen shot).
+E. Add or Remove personas from the current session by using the + or - buttons in the "persona bar" (see #1 in the screen shot).
 
-F. To customize/add/delete personas, click on "Personalities" link (see 5 in the screenshot). Once on that page, you may:
+F. To customize/add/delete personas, click on the "Personalities" link (see #5 in the screenshot). Once on that page, you may:
 * Add a new persona by clicking "Add New Slot" at the bottom of the page.
 * Delete existing personas
-* Edit information on existing persona and Save:
-  * Change/enter Display Name
-  * Temperature sets the creativity level from deterministic to most creative/random
-  * Prompt sets the behaviour/conditioning prompt
+* Edit information on existing persona (don't forget to press Save):
+  * Change/enter their name.
+  Set "Temperature" which controls the persona creativity level from deterministic to most creative/random.
+  * Prompt sets the behaviour/conditioning prompt.
   * TTS voice sets the voice for Text-to-speech.
 
-G. To generate image for personas, first enter the image generation prompt (next to the profile picture), then save to save your prompt. Once you are happy with the prompt press on "Generate Image" and wait 1-10 seconds. The page will refresh when the avatar is generated.
+G. To generate image for a persona, first enter the image generation prompt (next to the profile picture) & press save (to optionally save your profile picture prompt text). Once you are happy with the prompt, press on "Generate Image" and wait 1-10 seconds. The page will refresh when once profile avatar is generated.
 
 
 
