@@ -1,6 +1,97 @@
 # Janus GPT
 ![screenshot](./janus-logo2.webp)
 
+## OCT 22 - *** Submission Notes ****
+Please note that I have left the original project propsal further below with updated information about the release just below:
+
+## About JanusGPT
+
+Did you ever wonder what Thanos and Emperor Palpatine would discuss over a business lunch? How about a rap battle between Harry Potter and Spider-Man?
+
+Now you can!.....with JanusGPT
+
+Talk to multiple AI personas at the same time. 
+Powered by OpenAI.
+
+
+
+## Release Features
+
+* Chat with one or more AI personas at the same time.
+* AI personas can talk to each other.
+* Create & customize your own personas, including generating their avatar images.
+* Multiple chat sessions active at the same time.
+* Add / Remove personas from chat sessions
+* Each logged-in user will have their own chat sessions and personas.
+* Text-to-Speech support.
+Mobile and Desktop support with responsive design.
+
+
+## Tech Stack
+
+* Front-end: React
+* Back-end: Node.js
+* Data storage: MySQL
+* Deployment: Heroku
+
+## Used Libraries -- Front-end
+* Axios
+* Firebase-auth
+* React-router-dom
+
+ 
+## Used Libraries -- Back-end
+* Axios
+* Cors
+* Dotenv
+* Express
+* Express-rate-limit
+* Express-slow-down
+* Firebase-admin
+* Knex
+* Mysql2
+* Uuid
+
+## API Information
+
+* Internal (Back-end) APIs:  17 total routes (routes will be different than the proposal)
+* External API - OpenAI: Chat Completion (gpt-4o-mini model), DALL-E and  Speech APIs
+* Firebase Auth: Admin and Authentication APIs
+
+## API Security
+
+All Back-End API endpoints:
+* Perform user authentication before processing.
+* Perform user authorization against data before responding where relevant.
+* Have basic protection against repeated request attempts by enforcing rate limits and slow-downs.
+
+
+## Project Deployment Notes
+
+To Deploy, you need the additional setup (I will provide more information via Slack to BrainStation staff)
+* Server: .env file (with will include my OpenAI private key). Placed inside the server folder.
+* Server: FireBaseServiceAccount.json (include my private Firebad admin keys). To be placed inside server/config folder.
+
+To Run:
+1) Server: Please migrate the database using npm run migrate in the server folder.
+2) Execute npm run dev in server folder.
+3) Execute npm run start in client folder.
+
+## Known issues & missing features
+* User will get a 500 server error after session tokens expires due to inactivity (the application only refreshes session tokens when a back-end API call is made). To fix simply jump between pages to make a API call and refresh the token (I will fix this in the future.) Alternatively, you can just logout and logback in.
+* For manual password/email login, email verification and password reset is not implemented yet but you can still sign up using manual email/password and use the application immediatly. It would have taken too long to implement these futures. I am planning to implement these in the near future.
+
+
+## Database Migration
+You will only have to migrate the database, seeding is done automatically by the backend when a user is created. 
+
+##Instructions on how to use the application
+
+
+
+
+# ORIGINAL PROJECT PROPOSAL
+
 ## Overview
 
 Janus GPT: One AI, Multiple Perspectives -- Experience the power of multiple AI perspectives in one seamless chat!
