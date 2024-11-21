@@ -10,7 +10,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import PersonalitiesPage from "./pages/PersonalitiesPage/PersonalitiesPage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import React from "react";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import "./App.scss";
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup, signOut } from "firebase/auth";
@@ -18,12 +18,25 @@ import "./config/firebase-config";
 
 export const UserAuthorizedContext = createContext(null);
 
+let timerRefreshSession;
+let sessionAuthToken = sessionStorage.getItem("accessToken");
+
 function App() {
   const [authorizedUser, setAuthorizedUser] = useState(false || sessionStorage.getItem("accessToken"));
   const [userName, setUserName] = useState(false || sessionStorage.getItem("userName"));
   const [userEmail, setUserEmail] = useState(false || sessionStorage.getItem("userEmail"));
 
   const auth = getAuth();
+
+useEffect (() => {
+  timerRefreshSession = setInterval(() => {
+    refreshSessionToken();
+  }, 60000);
+  return () => {
+    //ensure any active intervals are cleared upon exit
+    clearInterval(timerRefreshSession);
+  };
+}, []);
 
   //FireBase login functionality via the popup method using selected provider.
   function invokeSignInWithPopup(providerIndex, provider){
@@ -144,11 +157,25 @@ function App() {
       .then(() => {
         sessionStorage.clear();
         setAuthorizedUser(false);
+        clearInterval(timerRefreshSession);
       })
       .catch((error) => {
         alert(error);
       });
   };
+
+  //function refreshes firebase sesion token upon request.
+  function refreshSessionToken() {
+    auth.currentUser
+    ?.getIdToken()
+      .then(function (idToken) {
+        sessionAuthToken = idToken;
+        sessionStorage.setItem("accessToken", idToken);
+      })
+      .catch(function (error) {
+        alert("Session Refresh Error");
+      });
+  }
 
   return (
     <UserAuthorizedContext.Provider value={{ authorizedUser, createAccountUsingEmail, signInWithEmail, signInWithGoogle, signInWithGitHub, logoutUser, userName, userEmail }}>
